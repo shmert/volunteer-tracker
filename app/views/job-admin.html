@@ -1,0 +1,98 @@
+<form role="form" name="form">
+    <div class="form-group">
+        <label for="name">Job Name</label>
+        <input type="text" class="form-control" required="true" id="name" placeholder="Description of the task" ng-model="job.name">
+    </div>
+
+    <div class="form-group">
+        <label for="name">Category</label>
+        <input type="text" class="form-control" id="category" placeholder="e.g. Smith Second Grade" ng-model="job.category">
+    </div>
+
+    <div class="form-group">
+        <label for="date">Date</label>
+        <input type="date" class="form-control" id="date" ng-model="job.date" style="width:12em;"/>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" ng-model="job.description" rows="3"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Repeating</label>
+
+        <div class="radio">
+            <label>
+                <input type="radio" name="recurRadio" id="recurRadio0" value="" ng-model="job.recurrence.type">
+                Non-Repeating (Single Occurrence)
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="recurRadio" id="recurRadio1" value="day" ng-model="job.recurrence.type">
+                Every Day
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="recurRadio" id="recurRadio2" value="week" ng-model="job.recurrence.type">
+                Every Week
+            </label>
+        </div>
+        <div class="radio disabled">
+            <label>
+                <input type="radio" name="recurRadio" id="recurRadio3" value="month" ng-model="job.recurrence.type">
+                Every Month
+            </label>
+        </div>
+    </div>
+
+    <div class="row" ng-show="job.recurrence.type">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="endDate">End On</label>
+                <input type="date" class="form-control date" id="endDate" ng-model="job.recurrence.endDate"/>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <label for="exceptions">Except On</label>
+                <input class="form-control" id="exceptions" ng-model="job.recurrence.exceptions" placeholder="e.g. 1/23/2015, 2/14/2015"/>
+            </div>
+        </div>
+    </div>
+
+    		<table class="table table-condensed">
+    					<thead>
+    					<tr>
+    						<th style="width:90%">Role</th>
+    						<th>People Needed</th>
+    						<th>Start Time</th>
+    						<th>End Time</th>
+    					</tr>
+    					</thead>
+    					<tbody>
+    					<tr ng-repeat="slot in job.timeSlots">
+    						<td><input type="text" class="form-control" ng-model="slot.name" required/></td>
+    						<td><input type="number" min="1" max="99" class="form-control integer" ng-model="slot.needed" required/></td>
+    						<td><input type="time" class="form-control time" ng-model="slot.startTime" required/></td>
+    						<td><input type="time" class="form-control time" ng-model="slot.endTime" required/></td>
+                            <td style="white-space: nowrap">
+                                <button ng-click="removeSlot($index)" class="btn btn-default" title="Remove this slot"><i class="glyphicon glyphicon-trash"></i></button>
+                                <button ng-click="duplicateSlot($index)" class="btn btn-default" title="Duplicate this slot"><i class="fa fa-files-o"></i></button>
+                            </td>
+    					</tr>
+                        <tr>
+                            <td colspan="5">
+                                <button class="btn btn-success" ng-click="addSlot()"><i class="glyphicon glyphicon-plus"></i> Add Role</button>
+                            </td>
+                        </tr>
+    					</tbody>
+
+    				</table>
+
+                    <button class="btn btn-primary" ng-click="save()">Save Changes</button>
+                    <button class="btn btn-danger" ng-click="delete()">Delete</button>
+
+</form>
