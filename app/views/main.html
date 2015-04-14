@@ -1,10 +1,12 @@
 <div class="jumbotron" style="text-align: center">
     <div>
-        <h2>Your volunteer hours: {{complete}} of {{target}} complete!</h2>
+        <h2>Your volunteer hours: {{completeVerified + completeUnverified}} of {{target}} done!</h2>
 
-        <div class="progress">
-            <div class="progress-bar progress-bar-success" role="progressbar" ng-style="{width:percentComplete + '%'}">
-                {{percentComplete | number}}%
+        <div class="progress" title="{{progressBarTitle()}}">
+            <div class="progress-bar progress-bar-primary" role="progressbar" ng-style="{width:percentCompleteVerified + '%'}">
+                {{percentCompleteVerified + percentCompleteUnverified | number}}%
+            </div>
+            <div class="progress-bar progress-bar-success" role="progressbar" ng-style="{width:percentCompleteUnverified + '%'}">
             </div>
         </div>
     </div>
@@ -15,12 +17,21 @@
 <div ng-show="mySignUps.length">
     <h3>You are signed up for:</h3>
     <div class="list-group">
-      <a ng-repeat="o in mySignUps" href="#job-detail/{{o.job.id}}" class="list-group-item">
-        <h4 class="list-group-item-heading"><i class="glyphicon glyphicon-calendar"></i> {{o.job.name}}<small> {{o.signUp.date|date}} {{o.timeSlot.startTime|time}}<span ng-show="o.timeSlot.startTime!=o.timeSlot.endTime"> - {{o.timeSlot.endTime|time}}</span></small></h4>
+      <a ng-repeat="o in mySignUps | filter:showingCompletedFilter" href="#job-detail/{{o.job.id}}" class="list-group-item" ng-class="{disabled:isInPast(o.signUp.date)}">
+        <h4 class="list-group-item-heading">
+            <i class="glyphicon glyphicon-calendar"></i>
+            {{o.job.name}}
+            <small> {{o.signUp.date|date}} {{o.timeSlot.startTime|time}}<span ng-show="o.timeSlot.startTime!=o.timeSlot.endTime"> - {{o.timeSlot.endTime|time}}</span></small>
+        </h4>
         <p class="list-group-item-text">{{o.timeSlot.name}}</p>
+          <div ng-show="o.signUp.userId!=user.id"><em class="text-muted">For another member of your household</em></div>
       </a>
     </div>
 
+    <div ng-show="isInPast(mySignUps[0].signUp.date)">
+        <button ng-click="toggleOldJobs()" ng-show="!showingCompletedJobs" class="btn btn-sm btn-default">Include Completed Jobs</button>
+        <button ng-click="toggleOldJobs()" ng-show="showingCompletedJobs" class="btn btn-sm btn-default">Hide Completed Jobs</button>
+    </div>
 </div>
 <br/>
 <br/>

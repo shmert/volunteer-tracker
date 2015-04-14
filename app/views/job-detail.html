@@ -4,41 +4,50 @@
 
 <h1>{{job.name}}
     <a ng-show="user.admin" role="button" class="btn btn-warning" href="#/job-admin/{{job.id}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
+    <a ng-show="user.admin" role="button" class="btn btn-warning" ng-click="export()"><i class="glyphicon glyphicon-download"></i> Export Signup Data</a>
 </h1>
 <p class="lead">{{job.description}}</p>
 
 <div ng-repeat="eachDate in dateOptions">
     <h3>{{eachDate | date}}</h3>
 
+    <div ng-repeat="task in job.tasks" style="margin-left:1em;">
+        <h3>{{task.name}}</h3>
+        <p class="lead"> {{task.description}}</p>
+
+        <div ng-repeat="slot in slotsForTask(task)" style="margin-left:1em;">
+            <span class="signup-buttons">
+                <button ng-show="slotCompleted(slot, eachDate) && myStatus(slot, eachDate)==-1"
+                        class="btn btn-sm btn-default disabled">
+                    <i class="glyphicon glyphicon-ok"></i> Done
+                </button>
+                <button ng-show="!slotCompleted(slot, eachDate) && myStatus(slot, eachDate)==-1"
+                        class="btn btn-sm btn-primary"
+                        ng-click="toggle(slot, eachDate)">
+                    <i class="glyphicon glyphicon-thumbs-up"></i> Sign Up
+                </button>
+                <button ng-show="myStatus(slot, eachDate)!=-1"
+                        ng-disabled="slot.locked"
+                        class="btn btn-sm btn-success"
+                        ng-click="toggle(slot, eachDate)">
+                    <i class="glyphicon glyphicon-ok"></i> You're On!
+                </button>
+            </span>
+    <span style="margin-right:1em;">&nbsp;{{slot.startTime | time}}<span ng-show="slot.startTime!=slot.endTime"> - {{slot.endTime | time}}</span></span>
+
+    <div class="progress progress-inline" ng-style="{width: slot.needed*32 + 'px'}" style="display:inline-block;margin-bottom:-4px">
+        <div class="progress-bar" role="progressbar" ng-class="{'progress-bar-success':slotCompleted(slot, eachDate)}" ng-style="{width:slotCompletePercent(slot, eachDate) + '%'}">
+            {{slotSignupCount(slot, eachDate)}}/{{slot.needed}}
+        </div>
+    </div>
+
+        </div>
+    </div>
 
     <div ng-repeat="(name,slots) in timeSlotGroups" style="margin-left:1em;">
         <h3 ng-show="name!='undefined'">{{name}}</h3>
 
         <div ng-repeat="slot in slots" style="margin-left:1em;">
-                    <span class="signup-buttons">
-                        <button ng-show="slotCompleted(slot, eachDate) && myStatus(slot, eachDate)==-1"
-                                class="btn btn-sm btn-default">
-                            <i class="glyphicon glyphicon-ok"></i> Booked
-                        </button>
-                        <button ng-show="!slotCompleted(slot, eachDate) && myStatus(slot, eachDate)==-1"
-                                class="btn btn-sm btn-primary"
-                                ng-click="toggle(slot, eachDate)">
-                            <i class="glyphicon glyphicon-thumbs-up"></i> Sign Up
-                        </button>
-                        <button ng-show="myStatus(slot, eachDate)!=-1"
-                                ng-disabled="slot.locked"
-                                class="btn btn-sm btn-success"
-                                ng-click="toggle(slot, eachDate)">
-                            <i class="glyphicon glyphicon-ok"></i> You're On!
-                        </button>
-                    </span>
-            <span style="margin-right:1em;">&nbsp;{{slot.startTime | time}}<span ng-show="slot.startTime!=slot.endTime"> - {{slot.endTime | time}}</span></span>
-
-            <div class="progress progress-inline" ng-style="{width: slot.needed*32 + 'px'}" style="display:inline-block">
-                <div class="progress-bar" role="progressbar" ng-class="{'progress-bar-success':slotCompleted(slot, eachDate)}" ng-style="{width:slotCompletePercent(slot, eachDate) + '%'}">
-                    {{slotSignupCount(slot, eachDate)}}/{{slot.needed}}
-                </div>
-            </div>
         </div>
     </div>
 </div>

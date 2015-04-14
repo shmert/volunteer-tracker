@@ -9,3 +9,5 @@
 ###
 angular.module('volunteerTrackerHtmlApp')
   .controller 'AdminCtrl', ($scope) ->
+
+

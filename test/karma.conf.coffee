@@ -1,7 +1,7 @@
 # Karma configuration
 # http://karma-runner.github.io/0.12/config/configuration-file.html
-# Generated on 2014-08-13 using
-# generator-karma 0.8.2
+# Generated on 2014-12-14 using
+# generator-karma 0.8.3
 
 module.exports = (config) ->
   config.set
@@ -19,6 +19,7 @@ module.exports = (config) ->
       'bower_components/angular-cookies/angular-cookies.js'
       'bower_components/angular-route/angular-route.js'
       'bower_components/angular-sanitize/angular-sanitize.js'
+      'bower_components/angular-touch/angular-touch.js'
       'app/scripts/**/*.coffee'
       'test/mock/**/*.coffee'
       'test/spec/**/*.coffee'

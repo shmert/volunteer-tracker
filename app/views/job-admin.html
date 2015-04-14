@@ -5,18 +5,23 @@
     </div>
 
     <div class="form-group">
-        <label for="name">Category</label>
-        <input type="text" class="form-control" id="category" placeholder="e.g. Smith Second Grade" ng-model="job.category">
+        <label for="name">Categories / Classes</label>
+        <p class="small how-to">Add classes or groups this task is relevant to. Users who can administer these classes/groups will be able to edit this task.</p>
+
+        <tags-input ng-model="job.categories" placeholder="Add…" add-from-autocomplete-only="true">
+          <auto-complete source="queryCategories($query)"></auto-complete>
+        </tags-input>
+
     </div>
 
     <div class="form-group">
         <label for="date">Date</label>
-        <input type="date" class="form-control" id="date" ng-model="job.date" style="width:12em;"/>
+        <input type="date" required class="form-control" id="date" ng-model="job.date" style="width:12em;"/>
     </div>
 
     <div class="form-group">
         <label for="description">Description</label>
-        <textarea class="form-control" id="description" ng-model="job.description" rows="3"></textarea>
+        <textarea class="form-control" id="description" ng-model="job.description" rows="3" placeholder="Optional description of job"></textarea>
     </div>
 
     <div class="form-group">
@@ -63,36 +68,66 @@
         </div>
     </div>
 
-    		<table class="table table-condensed">
-    					<thead>
-    					<tr>
-    						<th style="width:90%">Role</th>
-    						<th>People Needed</th>
-    						<th>Start Time</th>
-    						<th>End Time</th>
-    					</tr>
-    					</thead>
-    					<tbody>
-    					<tr ng-repeat="slot in job.timeSlots">
-    						<td><input type="text" class="form-control" ng-model="slot.name" required/></td>
-    						<td><input type="number" min="1" max="99" class="form-control integer" ng-model="slot.needed" required/></td>
-    						<td><input type="time" class="form-control time" ng-model="slot.startTime" required/></td>
-    						<td><input type="time" class="form-control time" ng-model="slot.endTime" required/></td>
-                            <td style="white-space: nowrap">
-                                <button ng-click="removeSlot($index)" class="btn btn-default" title="Remove this slot"><i class="glyphicon glyphicon-trash"></i></button>
-                                <button ng-click="duplicateSlot($index)" class="btn btn-default" title="Duplicate this slot"><i class="fa fa-files-o"></i></button>
-                            </td>
-    					</tr>
-                        <tr>
-                            <td colspan="5">
-                                <button class="btn btn-success" ng-click="addSlot()"><i class="glyphicon glyphicon-plus"></i> Add Role</button>
-                            </td>
-                        </tr>
-    					</tbody>
+    <h3>Task Definitions</h3>
 
-    				</table>
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="col-xs-2">Task Name</th>
+            <th class="col-xs-10">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="task in job.tasks">
+            <td><input type="text" ng-model="task.name" placeholder="Task name"/></td>
+            <td><textarea ng-model="task.description" style="width:100%" rows="4" placeholder="Detailed description of the task including where to go, etc, will be sent to volunteers in a reminder email"></textarea></td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="2">
+                <button class="btn btn-success" ng-click="addTask()"><i class="glyphicon glyphicon-plus"></i> Add Task</button>
+            </td>
+        </tr>
 
-                    <button class="btn btn-primary" ng-click="save()">Save Changes</button>
-                    <button class="btn btn-danger" ng-click="delete()">Delete</button>
+        </tfoot>
+    </table>
+
+
+    <h3>Role Openings</h3>
+
+    <table class="table table-condensed">
+        <thead>
+        <tr>
+            <th style="width:90%">Role</th>
+            <th>People Needed</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="slot in job.timeSlots">
+            <td><select class="form-control" ng-model="slot.taskId" required ng-options="task.id as task.name for task in job.tasks"></select></td>
+            <td><input type="number" min="1" max="99" class="form-control integer" ng-model="slot.needed" required/></td>
+            <td><input type="time" class="form-control time" ng-model="slot.startTime" required/></td>
+            <td><input type="time" class="form-control time" ng-model="slot.endTime" required/></td>
+            <td style="white-space: nowrap">
+                <button ng-click="removeSlot($index)" class="btn btn-default" title="Remove this slot"><i class="glyphicon glyphicon-trash"></i></button>
+                <button ng-click="duplicateSlot($index)" class="btn btn-default" title="Duplicate this slot"><i class="fa fa-files-o"></i></button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <button class="btn btn-success" ng-click="addSlot()"><i class="glyphicon glyphicon-plus"></i> Add Role</button>
+            </td>
+        </tr>
+        </tbody>
+
+    </table>
+
+
+
+    <button class="btn btn-primary" ng-click="save()">Save Changes</button>
+    <button class="btn btn-danger" ng-click="delete()">Delete</button>
 
 </form>

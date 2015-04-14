@@ -8,44 +8,55 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'MainCtrl', ($scope, $filter, allJobs) ->
+  .controller 'MainCtrl', ($scope, $filter, volunteerUtils, allJobs, users) ->
+    $scope.showingCompletedJobs = false
+
     recalculate = ->
       handleJob = (job) ->
         handleTimeSlot(job, slot) for slot in job.timeSlots
 
       handleTimeSlot = (job, timeSlot) ->
-        handleSignUp(job, timeSlot, signUp) for signUp in timeSlot.signUps when signUp.userId == $scope.user.id
+        handleSignUp(job, timeSlot, signUp) for signUp in timeSlot.signUps when (signUp.userId == $scope.user.id || $scope.user?.linkedUsers[signUp.userId])
 
       handleSignUp = (job, timeSlot, signUp) ->
-        $scope.complete += durationOf(timeSlot)
+        duration = volunteerUtils.durationOf(timeSlot)
+        if (signUp.verified)
+          $scope.completeVerified += duration
+        else
+          $scope.completeUnverified += duration
         $scope.mySignUps.push {
           job:job
           timeSlot:timeSlot
           signUp:signUp
+          duration:duration
         }
-
-      durationOf = (timeSlot) ->
-        end = moment(timeSlot.endTime, 'H:mm')
-        start = moment(timeSlot.startTime, 'H:mm')
-        return 1 if !end.isValid() || !start.isValid
-        return end.diff(start, 'minutes') / 60
 
       $scope.mySignUps = []
       $scope.target = 20
-      $scope.complete = 0
+      $scope.completeUnverified = 0
+      $scope.completeVerified = 0
+
       handleJob job for job in allJobs
       $scope.mySignUps = $filter('orderBy')($scope.mySignUps, ['signUp.date'])
-      $scope.percentComplete = Math.min(100, $scope.complete / $scope.target * 100);
+      $scope.percentCompleteVerified = Math.min(100, $scope.completeVerified / $scope.target * 100);
+      $scope.percentCompleteUnverified = Math.min(100, $scope.completeUnverified / $scope.target * 100);
 
 
     recalculate()
 
-    $scope.userOptions = [
-      {id: 1, fullName: 'Admin Person', admin:true}
-      {id: 123, fullName: 'Wendy Three'}
-      {id: 42, fullName: 'Ford E. Tou'}
-      {id: 456, fullName: 'Bob Dobbs'}
-    ]
+    $scope.progressBarTitle =->
+      result = []
+      result.push '' + $scope.completeVerified + ' completed' if $scope.completeVerified
+      result.push '' + $scope.completeUnverified + ' pending' if $scope.completeUnverified
+      return result.join(', ')
+
+    $scope.isInPast = (dateString) -> moment(dateString).isBefore(new Date())
+
+    $scope.showingCompletedFilter = (o) -> $scope.showingCompletedJobs || !$scope.isInPast(o.signUp.date)
+
+    $scope.toggleOldJobs =-> $scope.showingCompletedJobs = !$scope.showingCompletedJobs
+
+    $scope.userOptions = users
 
     $scope.switchUser = (u) ->
       $scope.$emit('su', u)

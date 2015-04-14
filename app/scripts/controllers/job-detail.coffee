@@ -8,7 +8,7 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'JobDetailCtrl', ($scope, $filter, job) ->
+  .controller 'JobDetailCtrl', ($scope, $filter, $window, userService, job) ->
     $scope.job = job
     userId = $scope.user.id;
 
@@ -34,6 +34,9 @@ angular.module('volunteerTrackerHtmlApp')
       $scope.dateOptions = [job.date]
 
     $scope.timeSlotGroups = _.groupBy(job.timeSlots, 'name')
+
+    $scope.slotsForTask = (task) ->
+      return _.filter($scope.job.timeSlots, (s)->s.taskId==task.id)
 
     # am i signed up for this slot on the currently selected date?
     $scope.myStatus = (slot, date) ->
@@ -62,3 +65,38 @@ angular.module('volunteerTrackerHtmlApp')
       $scope.$emit('save')
 
 
+
+    $scope.export = ->
+      tasksById = _.indexBy($scope.job.tasks, 'id')
+      usersById = _.indexBy(userService.allUsers(), 'id')
+      data = [
+        [
+          'Task',
+          'Date',
+          'Volunteer',
+          'Verified',
+          'Start Time',
+          'End Time']
+      ]
+      data.push([
+            tasksById[timeSlot.taskId].name
+            signUp.date
+            usersById[signUp.userId].fullName
+            signUp.verified
+            timeSlot.startTime
+            timeSlot.endTime
+          ]
+      ) for signUp in timeSlot.signUps for timeSlot in $scope.job.timeSlots
+      content = new CSV(data).encode();
+      blob = new Blob([content ], { type: 'text/plain' });
+      url = (window.URL || window.webkitURL).createObjectURL(blob, {type: 'text/csv'});
+
+      a = window.document.createElement('a');
+      a.href = url
+      a.download = $scope.job.name + '.csv';
+
+      document.body.appendChild(a)
+      a.click()
+
+      document.body.removeChild(a)
+      $window.URL.revokeObjectURL(url);

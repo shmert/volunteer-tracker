@@ -1,20 +1,23 @@
-<ul class="nav nav-pills">
-  <li><a href="#">Home</a></li>
-  <li><a href="#/job-list">Job List</a></li>
-  <li class="active"><a href="#/admin">Admin</a></li>
-</ul>
+<div class="header">
+    <ul class="nav nav-pills">
+        <li><a href="#/">Home</a></li>
+
+        <li><a href="#/job-list">Job List</a></li>
+        <li class="active"><a href="#/admin">Admin</a></li>
+    </ul>
+</div>
 
 <h1>Volunteer Tracker Administration</h1>
 
 <div>
     <button ng-click="add()" ng-show="user.admin" class="btn btn-warning"><i class="glyphicon glyphicon-plus"></i> Add Job</button>
+    <a href="#admin/addIndividualTime" ng-show="user.admin" class="btn btn-warning"><i class="glyphicon glyphicon-plus"></i> Add Individual Time</a>
 </div>
 
-<h3>Signups</h3>
-[list of all slots and their signup status]
+<h3>Sign Ups <a href="#admin/signups" class="btn btn-primary">Go</a></h3>
+List of all jobs and their signup status.
 
-<h3>Volunteer Hours</h3>
-[List of families and their progress toward target hours]
 
-<h3>???</h3>
-[What else is needed in the admin section?]
+<h3>Users <a class="btn btn-primary" href="#/admin/users">Go</a></h3>
+<p>See a list of all users, and their progress towards volunteer target hours.</p>
+
