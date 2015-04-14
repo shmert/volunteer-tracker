@@ -1,0 +1,33 @@
+<form novalidate="true" class="form" name="oneOffJobForm" ng-submit="oneOffJobForm.$valid && save()">
+    <div class="form-group">
+        <label>Date</label>
+        <input type="date" class="form-control date" ng-model="job.date" style="width:12em;" required/>
+    </div>
+
+    <div class="form-group">
+        <label>Hours</label>
+        <input class="form-control" type="number" ng-model="job.hours" style="width:5em;" min="1" max="12" required/>
+    </div>
+
+    <div class="form-group">
+        <label>Description</label>
+        <input class="form-control" ng-model="job.description" placeholder="Description of the volunteer activity" required/>
+    </div>
+
+    <label>Volunteer(s)</label>
+    <div class="input-group" ng-repeat="v in job.volunteers">
+        <select class="form-control" ng-options="u as u.fullName for u in userOptions" ng-model="v.user" ng-change="ensureEmptyVolunteerSlotExists()"></select>
+        <span class="input-group-btn">
+          <button ng-class="{disabled:!v.user}" class="btn btn-danger" type="button" ng-click="removeVolunteer($index)">&times;</button>
+        </span>
+    </div>
+
+
+    <br/>
+
+    <div>
+        <button ng-click="cancel()" class="btn btn-danger">Cancel</button>
+        <button type="submit" ng-class="{disabled:oneOffJobForm.$invalid}" class="btn btn-primary">Save</button>
+    </div>
+</form>
+

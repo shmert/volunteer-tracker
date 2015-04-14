@@ -50,5 +50,7 @@ angular.module('volunteerTrackerHtmlApp')
       $scope.$emit('save');
       $location.path('/job-list')
 
-    $scope.queryCategories = (q) -> $http.get('/rest/category_names.json', {params:{q:q}}).then (response)-> response.data
+    $scope.queryCategories = (q) -> $http.get(
+        'https://creativeartscharter.org/apps/directory/rest/index.php/groups',
+        {params:{q:q},withCredentials:true}).then (response)-> _.map(response.data, 'title')
 

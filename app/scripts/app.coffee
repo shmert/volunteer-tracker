@@ -119,7 +119,9 @@ angular
       $rootScope.$emit('save')
       alert('Data has been reset. Reload the page to refresh the display.')
     )
-  .config ($routeProvider) ->
+  .config ($routeProvider, $httpProvider) ->
+    $httpProvider.defaults.withCredentials = true;
+
     $routeProvider
       .when '/',
         templateUrl: 'views/main.html'
@@ -183,6 +185,9 @@ angular
       .when '/admin/signups',
         templateUrl: 'views/admin-signups.html'
         controller: 'AdminSignupsCtrl'
+      .when '/about',
+        templateUrl: 'views/about.html'
+        controller: 'AboutCtrl'
       .otherwise
         redirectTo: '/'
 

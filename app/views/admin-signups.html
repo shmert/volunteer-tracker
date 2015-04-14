@@ -1,0 +1,24 @@
+<h3>All Tasks</h3>
+<div>
+    <button ng-click="exportJobSignUps()" class="btn btn-primary"><i class="glyphicon glyphicon-download"></i> Export Job Signup Data</button>
+</div>
+
+        		<table class="table table-striped">
+        					<thead>
+        					<tr>
+        						<th>Job</th>
+        						<th>Date</th>
+        						<th>% Complete</th>
+        						<th></th>
+        					</tr>
+        					</thead>
+        					<tbody>
+        					<tr ng-repeat="job in allJobs">
+        						<td><a href="#/job-detail/{{job.id}}">{{job.name}}</a></td>
+        						<td>{{job.date}}</td>
+        						<td>{{percentComplete(job)}}</td>
+        						<td></td>
+        					</tr>
+        					</tbody>
+
+        				</table>
