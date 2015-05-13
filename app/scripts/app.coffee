@@ -57,7 +57,7 @@ angular
         templateUrl: 'views/job-admin.html'
         controller: 'JobAdminCtrl'
         resolve:{
-          job: -> {data:{id:null, name:'New Job', recurrence:{type:''}, timeSlots:[], tasks:[], categories:[]}}
+          job: -> {data:{id:null, name:'', recurrence:{type:''}, timeSlots:[], tasks:[{name:null,description:null,timeSlots:[{signUps:[],needed:1,startTime:moment('8:00:00', 'HH:mm:ss').toDate(),endTime:moment('9:00:00', 'HH:mm:ss').toDate()}]}], categories:[]}}
         }
       .when '/job-admin/:id',
         templateUrl: 'views/job-admin.html'

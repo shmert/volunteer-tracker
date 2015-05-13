@@ -20,6 +20,16 @@ angular.module('volunteerTrackerHtmlApp')
       needed *= occurrences
     return signedUp / needed * 100
 
+  dateTime: (datePart, timePart) ->
+    d = moment(@dateFor(datePart))
+    t = moment(@dateFor(timePart));
+    return moment(d.format('YYYY-MM-DD') + ' ' + t.format('HH:mm:ss'), 'YYYY-MM-DD HH:mm:ss').toDate()
+
+  dateFor: (dateOrString) ->
+    return dateOrString if !dateOrString || (angular.isDate(dateOrString))
+    return new Date(dateOrString)
+
+
   durationOf: (timeSlot) ->
     end = moment(new Date(timeSlot.endTime))
     start = moment(new Date(timeSlot.startTime))

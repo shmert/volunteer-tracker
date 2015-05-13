@@ -8,7 +8,7 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'JobDetailCtrl', ($scope, $filter, $window, userService, job, jobService, session) ->
+  .controller 'JobDetailCtrl', ($scope, $filter, $window, userService, job, jobService, volunteerUtils, session) ->
     $scope.job = job.data
     userId = session.userAccount.id.toString();
 
@@ -66,7 +66,25 @@ angular.module('volunteerTrackerHtmlApp')
 
 
     $scope.downloadIcs = ->
-      alert('Not yet implemented')
+      job = $scope.job
+      filename = $scope.job.name + 'ics'
+      dateOptions = $scope.dateOptions
+      cal = new ICS("360Works//VolunteerTracker")
+      cal.addEvent({
+          UID: 'vt' + job.id + task.id + timeSlot.id + eachDate
+          DTSTART: volunteerUtils.dateTime(eachDate, timeSlot.startTime),
+          DTEND: volunteerUtils.dateTime(eachDate, timeSlot.endTime),
+          SUMMARY: job.name,
+          DESCRIPTION: (task.name + '\n' + task.description).replace('\n', '\\n'),
+          LOCATION: "",
+          ORGANIZER: "",
+          URL: window.location.href,
+          #EXDATE: ICSFormatDate(new Date().getTime() - 1200000)+","+ICSFormatDate(new Date().getTime() + 4800000),
+          #RRULE: "FREQ=WEEKLY;UNTIL="+ICSFormatDate(new Date().getTime() + 3600000)
+      }) for eachDate in dateOptions when ($scope.myStatus(timeSlot, eachDate)!=-1) for timeSlot in task.timeSlots for task in $scope.job.tasks
+      return alert('Sign up for this job first') if (cal.events.length == 0)
+      cal.download(filename);
+
 
 
     $scope.export = ->
