@@ -8,49 +8,59 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'JobAdminCtrl', ($scope, $location, $filter, $http, job) ->
-    $scope.job = job
+  .controller 'JobAdminCtrl', ($scope, $location, $filter, $http, jobService, job, REST_URL) ->
+    $scope.job = job.data
+    $scope.job.date = new Date($scope.job.date) if typeof($scope.job.date) == 'string'
+    $scope.job.recurrence.endDate = new Date($scope.job.recurrence.endDate) if typeof($scope.job.recurrence.endDate) == 'string'
+    ts.startTime = new Date(ts.startTime) for ts in task.timeSlots for task in $scope.job.tasks
+    ts.endTime = new Date(ts.endTime) for ts in task.timeSlots for task in $scope.job.tasks
 
     $scope.addTask = ->
       maxId = 0
       maxId = Math.max(maxId, task.id) for task in $scope.job.tasks
-      newId = maxId+1
-      $scope.job.tasks.push {id:newId,name:'', description:''}
+      $scope.job.tasks.push {name:'', description:'', timeSlots:[{needed:1,signUps:[]}]}
 
-    $scope.addSlot =->
+    $scope.addSlot = (task) ->
       return alert('Please fix validation errors first') if $scope.form.$invalid
-      $scope.job.timeSlots.push({needed:1,signUps:[]})
+      task.timeSlots.push({needed:1,signUps:[]})
 
-    $scope.editTask = (taskId) ->
-      task = (task for task in $scope.job.tasks when task.id==taskId)[0]
-      alert('task is ' + task.name);
-
-    $scope.removeSlot = (index) ->
+    $scope.removeSlot = (task, slot) ->
       return if (!confirm('Are you sure you want to remove this slot?'))
-      $scope.job.timeSlots.splice(index, 1)
+      slot.deleted = true;
+      undeleted = slot for slot in task.timeSlots when !slot.deleted
+      if (!undeleted)
+        task.deleted = true
 
-    $scope.duplicateSlot = (index) ->
+    $scope.duplicateSlot = (task, index) ->
       return alert('Please fix validation errors first') if $scope.form.$invalid
-      oldSlot = job.timeSlots[index]
+      oldSlot = task.timeSlots[index]
       oldStart = moment(oldSlot.startTime, 'H:mm')
       oldEnd = moment(oldSlot.endTime, 'H:mm')
       newEnd = oldEnd.add(oldEnd.diff(oldStart)).format('H:mm')
       newSlot = {name:oldSlot.name, needed:oldSlot.needed, startTime:oldSlot.endTime, endTime:newEnd,signUps:[]}
-      $scope.job.timeSlots.splice(index+1, 0, newSlot)
+      task.timeSlots.splice(index+1, 0, newSlot)
 
     $scope.save = ->
-      $scope.job.timeSlots = $filter('orderBy')($scope.job.timeSlots, ['name','startTime'])
+      tasksToSave = task for task in $scope.job.tasks when !task.deleted
+      return alert('You must add at least one task') if (!tasksToSave)
+
+      task.timeSlots = $filter('orderBy')(task.timeSlots, ['name','startTime']) for task in $scope.job.tasks
       $scope.$emit('save');
+      jobService.push($scope.job).then( (saved) ->
+        $location.path('/job-detail/' + saved.data.id)
+      ).catch( (err) -> alert(err.data) )
       #alert('Not saving, because that\'s not implemented yet') #FIX!!!
-      $location.path('/job-detail/' + $scope.job.id)
 
     $scope.delete = ->
       return if !confirm 'Are you sure you want to delete this job?'
       $scope.job.deleted = true #FIX! actually delete it
       $scope.$emit('save');
-      $location.path('/job-list')
+      jobService.push($scope.job).then( (saved) ->
+        $location.path('/job-list')
+      ).catch( (err) -> alert(err.data) )
+
 
     $scope.queryCategories = (q) -> $http.get(
-        'https://creativeartscharter.org/apps/directory/rest/index.php/groups',
+        REST_URL + '/groups',
         {params:{q:q},withCredentials:true}).then (response)-> _.map(response.data, 'title')
 

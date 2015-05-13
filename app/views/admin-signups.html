@@ -1,3 +1,12 @@
+<div class="header">
+    <ul class="nav nav-pills">
+        <li><a href="#/">Home</a></li>
+
+        <li><a href="#/job-list">Job List</a></li>
+        <li><a href="#/admin">Admin</a></li>
+    </ul>
+</div>
+
 <h3>All Tasks</h3>
 <div>
     <button ng-click="exportJobSignUps()" class="btn btn-primary"><i class="glyphicon glyphicon-download"></i> Export Job Signup Data</button>
@@ -8,15 +17,22 @@
         					<tr>
         						<th>Job</th>
         						<th>Date</th>
-        						<th>% Complete</th>
+        						<th>Status</th>
         						<th></th>
         					</tr>
         					</thead>
         					<tbody>
         					<tr ng-repeat="job in allJobs">
         						<td><a href="#/job-detail/{{job.id}}">{{job.name}}</a></td>
-        						<td>{{job.date}}</td>
-        						<td>{{percentComplete(job)}}</td>
+        						<td>{{job.date | date}} <span ng-show="job.recurrence.endDate">-{{job.recurrence.endDate | date}}</span></td>
+        						<td>
+                                    <div class="progress progress-inline">
+                                        <div class="progress-bar" role="progressbar" ng-style="{width:percentDone(job)+'%'}">
+                                            <span class="sr-only">%</span>
+                                        </div>
+                                    </div>
+
+        						</td>
         						<td></td>
         					</tr>
         					</tbody>

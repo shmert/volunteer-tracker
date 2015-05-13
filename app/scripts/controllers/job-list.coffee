@@ -8,8 +8,20 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'JobListCtrl', ($scope, $filter, $location, jobs) ->
-    $scope.jobs = jobs
+  .controller 'JobListCtrl', ($scope, $filter, $location, $timeout, jobService, volunteerUtils) ->
+    $scope.jobs = null;
+    $scope.data = {showAll:$location.search().showAll}
+
+
+    $scope.fetch = ->
+      jobService.allJobs({upcoming:!$scope.data.showAll,filterByCategory:true}).success (jobs)->
+        $scope.jobs = jobs;
+
+
+    $scope.toggleShowAll = ->
+      $scope.data.showAll = !$scope.data.showAll;
+      $location.search 'showAll', $scope.data.showAll
+      $scope.fetch();
 
     $scope.dateDisplayFor = (job) ->
       if (!job.recurrence || !job.recurrence.type)
@@ -22,15 +34,7 @@ angular.module('volunteerTrackerHtmlApp')
         return 'Every Month'
 
     $scope.percentDone = (job) ->
-      signedUp = 0
-      needed = 0
-      signedUp += slot.signUps.length for slot in job.timeSlots
-      needed += slot.needed for slot in job.timeSlots
-      if (job.recurrence?.type)
-        occurrences = moment(job.recurrence.endDate).diff(moment(job.date), job.recurrence.type)
-        occurrences -= job.recurrence.exceptions.split(',').length if job.recurrence.exceptions
-        needed *= occurrences
-      return signedUp / needed * 100
+      return volunteerUtils.percentDone(job)
 
     $scope.showJobDetail = (job) ->
       $location.path('/job-detail/' + job.id)
@@ -39,3 +43,5 @@ angular.module('volunteerTrackerHtmlApp')
       $location.path('/job-add')
 
     $scope.notDeletedFilter = (job) -> !job.deleted
+
+    $scope.fetch()

@@ -8,6 +8,9 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'AdminCtrl', ($scope) ->
+  .controller 'AdminCtrl', ($scope, $location) ->
+
+    $scope.add = ->
+      $location.path('/job-add')
 
 

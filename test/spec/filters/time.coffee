@@ -10,6 +10,6 @@ describe 'Filter: time', ->
   beforeEach inject ($filter) ->
     time = $filter 'time'
 
-  it 'should return the input prefixed with "time filter:"', ->
-    text = 'angularjs'
-    expect(time text).toBe ('time filter: ' + text)
+  it 'should format date as am/pm time', ->
+    text = '12:34'
+    expect(time text).toBe ('12:34 PM')

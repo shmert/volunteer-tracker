@@ -6,14 +6,22 @@
  # @description
  # # AdminUsersCtrl
  # Controller of the volunteerTrackerHtmlApp
+  Sample user: {id: 53, fullName: 'Fitz Three', linkedUsers:{123:true}, targetHours:40}
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'AdminUsersCtrl', ($scope, $modal, volunteerUtils, users, allJobs) ->
+  .controller 'AdminUsersCtrl', ($scope, $modal, $location, volunteerUtils, allJobs, userService, session) ->
     $scope.q = ''
-    $scope.users = users;
+    $scope.users = [];
     $scope.selected = {}
     $scope.selectionKeys = []
     $scope.selectionDidChange = -> $scope.selectionKeys = _.chain($scope.selected).pick((v) -> v).keys().value()
+
+    $scope.search = ->
+      userService.quickSearch($scope.q).success (response) ->
+        #response.unshift($scope.users[userId]) for userId in $scope.selectionKeys # fix! only add if userId is not in response
+        $scope.users = response;
+        #$scope.users.unshift(selected) for selected in _.values($scope.selected) when not _.contains($scope.users, selected)
+        #$scope.users.unshift.apply($scope.users, _.values($scope.selected) )
 
     $scope.exportUserSignUps = ->
       alert('This will download a csv containing all sign ups for your users. Not yet implemented.') # FIX!!!
@@ -22,9 +30,9 @@ angular.module('volunteerTrackerHtmlApp')
       $scope.selected = {}
       $scope.selectionDidChange()
 
-    $scope.customFilter = (user) -> # always returns true for selected users, otherwise filters by name
-      return true if ($scope.selected[user.id])
-      return user.fullName.toLowerCase().indexOf($scope.q) != -1
+    #$scope.customFilter = (user) -> # always returns true for selected users, otherwise filters by name
+    #  return true if ($scope.selected[user.id])
+    #  return user.fullName.toLowerCase().indexOf($scope.q) != -1
 
     #$scope.families = {}
     #addOrAppendToFamily = (user) ->
@@ -64,3 +72,8 @@ angular.module('volunteerTrackerHtmlApp')
         templateUrl:'userAdminEditCategories.html'
       }).result.then ->
         alert('Saving user changes') # FIX!!!
+
+    $scope.switchUser = (u) ->
+      session.switchUser(u.id).then( -> $location.path('/'));
+
+    return this

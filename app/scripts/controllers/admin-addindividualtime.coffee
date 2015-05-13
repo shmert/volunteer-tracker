@@ -8,7 +8,7 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module 'volunteerTrackerHtmlApp'
-.controller 'AdminAddindividualtimeCtrl', ($scope, users, jobService, $location) ->
+.controller 'AdminAddindividualtimeCtrl', ($scope, userService, users, jobService, $location, $q) ->
   $scope.userOptions = users
 
   $scope.job = {
@@ -16,6 +16,10 @@ angular.module 'volunteerTrackerHtmlApp'
       {user: null}
     ]
   }
+
+  $scope.findUsers = (q) ->
+    userService.quickSearch(q).then (found) ->
+      return found.data
 
   $scope.ensureEmptyVolunteerSlotExists = ->
     if ($scope.job.volunteers.length == 0 || $scope.job.volunteers[$scope.job.volunteers.length - 1].user != null)
@@ -32,9 +36,9 @@ angular.module 'volunteerTrackerHtmlApp'
 
     return alert('Please choose at least one volunteer') if signUps.length == 0
 
-    endTime = moment('8:00:00', 'HH:mm:ss').add($scope.job.hours, 'h').format('HH:mm:ss')
+    startTime = moment('8:00:00', 'HH:mm:ss').toDate()
+    endTime = moment('8:00:00', 'HH:mm:ss').add($scope.job.hours, 'h').toDate()
 
-    newTaskId = Math.random()
 
     newJob = {
       id: null,
@@ -44,15 +48,19 @@ angular.module 'volunteerTrackerHtmlApp'
       categories: [],
       recurrence: {type: ''},
       tasks: [
-        {id: newTaskId, name: $scope.job.description, description: 'One-off job item'}
-      ]
-      timeSlots: [
         {
-          signUps:signUps
-          needed:signUps.length
-          startTime:'8:00:00'
-          endTime:endTime
-          taskId:newTaskId # FIX!!! how to get this before it has an ID? Do we assign a UUID ourselves? Inline a reference?
+          id: null,
+          name: $scope.job.description,
+          description: 'One-off job item'
+          timeSlots: [
+            {
+              signUps:signUps
+              needed:signUps.length
+              startTime:startTime
+              endTime:endTime
+            }
+          ]
+
         }
       ]
 

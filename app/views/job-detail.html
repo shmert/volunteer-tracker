@@ -1,11 +1,18 @@
-<p>
-    <a role="button" class="btn btn-primary" href="#/job-list"><i class="glyphicon glyphicon-chevron-left"></i> Back to List</a>
-</p>
+<div class="header">
+    <ul class="nav nav-pills">
+        <li><a href="#/">Home</a></li>
+        <li><a href="#/job-list">Job List</a></li>
+        <li ng-show="isAdmin()"><a href="#/admin">Admin</a></li>
+    </ul>
+</div>
 
 <h1>{{job.name}}
-    <a ng-show="user.admin" role="button" class="btn btn-warning" href="#/job-admin/{{job.id}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
-    <a ng-show="user.admin" role="button" class="btn btn-warning" ng-click="export()"><i class="glyphicon glyphicon-download"></i> Export Signup Data</a>
+    <a ng-show="isAdmin()" role="button" class="btn btn-warning" href="#/job-admin/{{job.id}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
+    <a ng-show="isAdmin()" role="button" class="btn btn-warning" ng-click="export()"><i class="glyphicon glyphicon-download"></i> Export Signup Data</a>
+    <a ng-show="true" role="button" class="btn btn-default" ng-click="downloadIcs()"><i class="glyphicon glyphicon-calendar"></i> Save to Calendar</a>
 </h1>
+<div><span class="label label-info" ng-repeat="category in job.categories" style="margin-right:5px">{{category.text}}</span></div>
+        <br/>
 <p class="lead">{{job.description}}</p>
 
 <div ng-repeat="eachDate in dateOptions">
@@ -15,7 +22,7 @@
         <h3>{{task.name}}</h3>
         <p class="lead"> {{task.description}}</p>
 
-        <div ng-repeat="slot in slotsForTask(task)" style="margin-left:1em;">
+        <div ng-repeat="slot in task.timeSlots" style="margin-left:1em;">
             <span class="signup-buttons">
                 <button ng-show="slotCompleted(slot, eachDate) && myStatus(slot, eachDate)==-1"
                         class="btn btn-sm btn-default disabled">
@@ -33,7 +40,7 @@
                     <i class="glyphicon glyphicon-ok"></i> You're On!
                 </button>
             </span>
-    <span style="margin-right:1em;">&nbsp;{{slot.startTime | time}}<span ng-show="slot.startTime!=slot.endTime"> - {{slot.endTime | time}}</span></span>
+    <span style="margin-right:1em;">&nbsp;{{slot.startTime | date:'hh:mm a'}}<span ng-show="slot.startTime!=slot.endTime"> - {{slot.endTime | date:'hh:mm a'}}</span></span>
 
     <div class="progress progress-inline" ng-style="{width: slot.needed*32 + 'px'}" style="display:inline-block;margin-bottom:-4px">
         <div class="progress-bar" role="progressbar" ng-class="{'progress-bar-success':slotCompleted(slot, eachDate)}" ng-style="{width:slotCompletePercent(slot, eachDate) + '%'}">
@@ -44,10 +51,4 @@
         </div>
     </div>
 
-    <div ng-repeat="(name,slots) in timeSlotGroups" style="margin-left:1em;">
-        <h3 ng-show="name!='undefined'">{{name}}</h3>
-
-        <div ng-repeat="slot in slots" style="margin-left:1em;">
-        </div>
-    </div>
 </div>

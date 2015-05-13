@@ -10,8 +10,8 @@
 <h1>Volunteer Tracker Administration</h1>
 
 <div>
-    <button ng-click="add()" ng-show="user.admin" class="btn btn-warning"><i class="glyphicon glyphicon-plus"></i> Add Job</button>
-    <a href="#admin/addIndividualTime" ng-show="user.admin" class="btn btn-warning"><i class="glyphicon glyphicon-plus"></i> Add Individual Time</a>
+    <button ng-click="add()" ng-show="isAdmin()" class="btn btn-warning"><i class="glyphicon glyphicon-plus"></i> Add Job</button>
+    <a href="#admin/addIndividualTime" ng-show="isAdmin()" class="btn btn-warning"><i class="glyphicon glyphicon-plus"></i> Add Individual Time</a>
 </div>
 
 <h3>Sign Ups <a href="#admin/signups" class="btn btn-primary">Go</a></h3>

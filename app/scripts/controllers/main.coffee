@@ -8,17 +8,19 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'MainCtrl', ($scope, $filter, volunteerUtils, allJobs, users) ->
+  .controller 'MainCtrl', ($scope, $filter, volunteerUtils, myJobs, session) ->
     $scope.showingCompletedJobs = false
+
+    $scope.session = session
 
     recalculate = ->
       handleJob = (job) ->
-        handleTimeSlot(job, slot) for slot in job.timeSlots
+        handleTimeSlot(job, task, slot) for slot in task.timeSlots for task in job.tasks
 
-      handleTimeSlot = (job, timeSlot) ->
-        handleSignUp(job, timeSlot, signUp) for signUp in timeSlot.signUps when (signUp.userId == $scope.user.id || $scope.user?.linkedUsers[signUp.userId])
+      handleTimeSlot = (job, task, timeSlot) ->
+        handleSignUp(job, task, timeSlot, signUp) for signUp in timeSlot.signUps when (signUp.userId.toString() == session.userAccount.id.toString() || session.userAccount.linkedUsers[signUp.userId])
 
-      handleSignUp = (job, timeSlot, signUp) ->
+      handleSignUp = (job, task, timeSlot, signUp) ->
         duration = volunteerUtils.durationOf(timeSlot)
         if (signUp.verified)
           $scope.completeVerified += duration
@@ -26,6 +28,7 @@ angular.module('volunteerTrackerHtmlApp')
           $scope.completeUnverified += duration
         $scope.mySignUps.push {
           job:job
+          task:task
           timeSlot:timeSlot
           signUp:signUp
           duration:duration
@@ -36,18 +39,18 @@ angular.module('volunteerTrackerHtmlApp')
       $scope.completeUnverified = 0
       $scope.completeVerified = 0
 
-      handleJob job for job in allJobs
+      handleJob job for job in myJobs.data
       $scope.mySignUps = $filter('orderBy')($scope.mySignUps, ['signUp.date'])
-      $scope.percentCompleteVerified = Math.min(100, $scope.completeVerified / $scope.target * 100);
-      $scope.percentCompleteUnverified = Math.min(100, $scope.completeUnverified / $scope.target * 100);
+      $scope.percentCompleteVerified = Math.round(Math.min(100, $scope.completeVerified / $scope.target * 100));
+      $scope.percentCompleteUnverified = Math.round(Math.min(100, $scope.completeUnverified / $scope.target * 100));
 
 
     recalculate()
 
     $scope.progressBarTitle =->
       result = []
-      result.push '' + $scope.completeVerified + ' completed' if $scope.completeVerified
-      result.push '' + $scope.completeUnverified + ' pending' if $scope.completeUnverified
+      result.push '' + Math.round($scope.completeVerified) + ' hrs completed' if $scope.completeVerified
+      result.push '' + Math.round($scope.completeUnverified) + ' hrs pending' if $scope.completeUnverified
       return result.join(', ')
 
     $scope.isInPast = (dateString) -> moment(dateString).isBefore(new Date())
@@ -56,11 +59,6 @@ angular.module('volunteerTrackerHtmlApp')
 
     $scope.toggleOldJobs =-> $scope.showingCompletedJobs = !$scope.showingCompletedJobs
 
-    $scope.userOptions = users
-
-    $scope.switchUser = (u) ->
-      $scope.$emit('su', u)
-      recalculate()
     $scope.resetData = ->
       return if !confirm('Are you sure you want to reset? All your changes will be lost')
       $scope.$emit('resetData')

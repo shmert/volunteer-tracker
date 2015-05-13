@@ -1,5 +1,27 @@
+<div class="header">
+    <ul class="nav nav-pills">
+        <li><a href="#/">Home</a></li>
+
+        <li><a href="#/job-list">Job List</a></li>
+        <li><a href="#/admin">Admin</a></li>
+    </ul>
+</div>
+
+
 <h3>Admin / User List</h3>
-<input type="search" class="form-control" ng-model="q" class="pull-left" style="width:8em;"/>
+
+<div class="alert alert-danger" role="alert"><strong>Note!</strong> This section is not yet functional, still working on database persistence. Search is working.</div>
+
+<form ng-submit="search()"><div class="input-group">
+  <input type="text" class="form-control" placeholder="Search for..." ng-model="q" autofocus="true">
+  <span class="input-group-btn">
+    <button class="btn btn-default" type="button" type="submit">Go!</button>
+  </span>
+</div><!-- /input-group -->
+</form>
+
+        <div>&nbsp;</div>
+
 <button ng-click="clearSelection()" class="btn btn-default" ng-disabled="selectionKeys.length==0">Clear Selection</button>
 <button ng-click="linkSelectedUsers()" ng-disabled="selectionKeys.length<2" class="btn btn-primary"><i class="glyphicon glyphicon-link"></i>Link Selected Users</button>
 <button ng-click="exportUserSignUps()" class="btn btn-primary"><i class="glyphicon glyphicon-download"></i> Export User Signup Data</button>
@@ -13,7 +35,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="user in users|filter:customFilter" ng-class="{info:selected[user.id]}">
+    <tr ng-repeat="user in users" ng-class="{info:selected[user.id]}">
         <td>
                 <label class="checkbox-inline">
                     <input type="checkbox" ng-model="selected[user.id]" ng-change="selectionDidChange()"/>
@@ -35,6 +57,17 @@
                 <li>
                     <button ng-click="editCategories(user)" class="btn btn-primary btn-xs">Edit</button></li>
             </ul>
+        </td>
+        <td>
+            <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                    Actions <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a ng-click="switchUser(user)">Log in as this user</a></li>
+                </ul>
+            </div>
+
         </td>
     </tr>
     </tbody>
