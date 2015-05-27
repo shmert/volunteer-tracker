@@ -8,66 +8,34 @@
 </div>
 
 
-<h3>Admin / User List</h3>
+<h3><a href="#/admin">Admin</a> / User List</h3>
 
-<div class="alert alert-danger" role="alert"><strong>Note!</strong> This section is not yet functional, still working on database persistence. Search is working.</div>
-
-<form ng-submit="search()"><div class="input-group">
-  <input type="text" class="form-control" placeholder="Search for..." ng-model="q" autofocus="true">
+<form ng-submit="search()">
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search for..." ng-model="q" autofocus="true">
   <span class="input-group-btn">
     <button class="btn btn-default" type="button" type="submit">Go!</button>
   </span>
-</div><!-- /input-group -->
+    </div>
+    <!-- /input-group -->
 </form>
 
-        <div>&nbsp;</div>
-
-<button ng-click="clearSelection()" class="btn btn-default" ng-disabled="selectionKeys.length==0">Clear Selection</button>
-<button ng-click="linkSelectedUsers()" ng-disabled="selectionKeys.length<2" class="btn btn-primary"><i class="glyphicon glyphicon-link"></i>Link Selected Users</button>
-<button ng-click="exportUserSignUps()" class="btn btn-primary"><i class="glyphicon glyphicon-download"></i> Export User Signup Data</button>
-<table class="table table-striped">
+<table class="table table-striped" ng-show="users.length">
     <thead>
     <tr>
-        <th>Parent/Family Name</th>
-        <th>Hours</th>
-        <th>Linked People</th>
-        <th>Admin of Categories</th>
+        <th>Name</th>
+        <th>Section/Group</th>
+        <th>&nbsp;</th>
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="user in users" ng-class="{info:selected[user.id]}">
+    <tr ng-repeat="user in users track by user.id">
         <td>
-                <label class="checkbox-inline">
-                    <input type="checkbox" ng-model="selected[user.id]" ng-change="selectionDidChange()"/>
-                    {{user.fullName}}
-                </label>
-            <span class="label label-warning" ng-show="user.admin">Admin</span>
+            {{user.fullName}}
         </td>
-        <td>{{hoursFor(user)}} of <input ng-model="user.targetHours" maxlength="3" size="3" style="width:3em;"/></td>
+        <td>{{user.sectionName}}{{user.groupName}}</td>
         <td>
-            <ul class="list-unstyled">
-                <li ng-repeat="linkedUser in linkedUsers(user)">{{linkedUser.fullName}}
-                    <button ng-click="unlink(user, linkedUser)" class="btn btn-danger btn-xs" title="Remove this link">&times;</button>
-                </li>
-            </ul>
-        </td>
-        <td>
-            <ul class="list-unstyled">
-                <li ng-repeat="c in user.categories">{{c.name}}</li>
-                <li>
-                    <button ng-click="editCategories(user)" class="btn btn-primary btn-xs">Edit</button></li>
-            </ul>
-        </td>
-        <td>
-            <div class="btn-group">
-                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-                    Actions <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a ng-click="switchUser(user)">Log in as this user</a></li>
-                </ul>
-            </div>
-
+            <a href="#/admin/users/{{user.id}}" class="btn btn-primary">Edit</a>
         </td>
     </tr>
     </tbody>

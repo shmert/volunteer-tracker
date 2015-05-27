@@ -73,6 +73,7 @@ angular
         controller: 'AdminUsersCtrl'
         resolve:{
           allJobs:(jobService)->jobService.allJobs()
+          #allUsers:(userService) -> userService.allUsers({max:10000})
         }
       .when '/about',
         templateUrl: 'views/about.html'
@@ -96,6 +97,12 @@ angular
       .when '/not-logged-in',
         templateUrl: 'views/not-logged-in.html'
         controller: 'NotLoggedInCtrl'
+      .when '/admin/users/:id',
+        templateUrl: 'views/admin-user-edit.html'
+        controller: 'AdminUserEditCtrl'
+        resolve: {
+          user: ($route, userService) -> userService.findById($route.current.params.id)
+        }
       .otherwise
         redirectTo: '/'
 

@@ -31,6 +31,16 @@ angular.module('volunteerTrackerHtmlApp')
       if (!undeleted)
         task.deleted = true
 
+    $scope.openDatePicker = ($event) ->
+      $event.preventDefault();
+      $event.stopPropagation();
+      $scope.opened = true;
+
+    $scope.datePickerOptions = {
+      formatYear: 'yy',
+      startingDay: 1
+    };
+
     $scope.duplicateSlot = (task, index) ->
       return alert('Please fix validation errors first') if $scope.form.$invalid
       oldSlot = task.timeSlots[index]

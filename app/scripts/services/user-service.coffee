@@ -17,11 +17,25 @@ angular.module 'volunteerTrackerHtmlApp'
     #  {id: 456, fullName: 'Lonesome Lou', linkedUsers:{}, targetHours:20}
     #]
 
-    @allUsers = -> $http.get(REST_URL + '/users')
+    @allUsers = (params) ->
+      $http.get(REST_URL + '/users', {params:params})
 
-    @allUserNames = -> $http.get(REST_URL + '/user-names')
+    @allUserNames = ->
+      $http.get(REST_URL + '/user-names')
+
+    @findById = (id) ->
+      $http.get(REST_URL + '/users/' + id)
 
     @quickSearch = (q) ->
       $http.get(REST_URL + '/users', {params:{q:q}})
+
+    @save = (u) ->
+      payload = {
+        id:u.id
+        targetHours:u.targetHours
+        adminOfCategories:_.chain(u.adminOfCategories).map((v,k)->return k if v).filter().value()
+        linkedUserIds:_.chain(u.linkedUsers).filter('user').map('user').map('id').value()
+      }
+      $http.post(REST_URL + '/users-volunteer-settings', payload)
 
     return this;

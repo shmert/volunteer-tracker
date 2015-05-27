@@ -23,15 +23,13 @@ angular.module('volunteerTrackerHtmlApp')
         registeredCount:signUpsOnDate.length
       }
 
-    $scope.dateOptions = []
+    $scope.dateOptions = [$scope.job.date]
     if ($scope.job.recurrence?.type && $scope.job.date)
       tmpDate = moment($scope.job.date)
       endDate = if ($scope.job.recurrence.endDate) then moment($scope.job.recurrence.endDate) else tmpDate.clone().add(40, $scope.job.recurrence.type)
       $scope.dateOptions.push(tmpDate.format('YYYY-MM-DD')) while ((tmpDate = tmpDate.add(1, $scope.job.recurrence.type)) <= endDate)
       exceptions = $scope.job.recurrence.exceptions?.split(/\s*,\s*/) || []
       _.pull($scope.dateOptions, moment(eachException, 'MM/DD/YYYY').format('YYYY-MM-DD')) for eachException in exceptions
-    else
-      $scope.dateOptions = [$scope.job.date]
 
     #$scope.timeSlotGroups = _.groupBy($scope.job.timeSlots, 'name')
 
