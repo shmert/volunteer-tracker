@@ -1,1 +1,7 @@
 http://localhost/directory/rest/index.php?ssb-backdoor=true to log in while in dev
+
+
+Your app has been created. Your oauth consumer key and secret are listed below. You can access them at any time from the gear dropdown of your application.
+OAuth Consumer Key: c6dab36384a92aa72fca48cbbe34abab055678e31
+OAuth Consumer Secret: 74f3b981f75e2a4570086bad8e833367
+

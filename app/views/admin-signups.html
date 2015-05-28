@@ -17,6 +17,7 @@
         					<tr>
         						<th>Job</th>
         						<th>Date</th>
+        						<th>Categories</th>
         						<th>Status</th>
         						<th></th>
         					</tr>
@@ -25,6 +26,7 @@
         					<tr ng-repeat="job in allJobs">
         						<td><a href="#/job-detail/{{job.id}}">{{job.name}}</a></td>
         						<td>{{job.date | date}} <span ng-show="job.recurrence.endDate">-{{job.recurrence.endDate | date}}</span></td>
+        						<td><span class="label label-info" ng-repeat="c in job.categories" style="margin-right:5px">{{c.text}}</span><span class="label label-warning" ng-show="job.private">Private</span></td>
         						<td>
                                     <div class="progress progress-inline">
                                         <div class="progress-bar" role="progressbar" ng-style="{width:percentDone(job)+'%'}">

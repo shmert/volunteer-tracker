@@ -15,3 +15,9 @@ angular.module 'volunteerTrackerHtmlApp'
       console.log('Showing main app content') if (loggedIn)
     )
     $scope.isAdmin =-> session.schoologyAccount.admin
+
+    $scope.isAdminForJob = (job) ->
+      return true if $scope.isAdmin()
+      userCategories = _.values(session.userAccount.adminOfCategories)
+      jobCategories = _.map(job.categories, 'id')
+      return _.intersection(userCategories, jobCategories ).length != 0

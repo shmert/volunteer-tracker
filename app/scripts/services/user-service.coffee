@@ -29,12 +29,15 @@ angular.module 'volunteerTrackerHtmlApp'
     @quickSearch = (q) ->
       $http.get(REST_URL + '/users', {params:{q:q}})
 
+    @fetchById = (ids) ->
+      $http.get(REST_URL + '/users-by-id', {params:{ids:ids.join(',')}})
+
     @save = (u) ->
       payload = {
         id:u.id
         targetHours:u.targetHours
         adminOfCategories:_.chain(u.adminOfCategories).map((v,k)->return k if v).filter().value()
-        linkedUserIds:_.chain(u.linkedUsers).filter('user').map('user').map('id').value()
+        linkedUserIds:_.keys(u.linkedUsers)
       }
       $http.post(REST_URL + '/users-volunteer-settings', payload)
 

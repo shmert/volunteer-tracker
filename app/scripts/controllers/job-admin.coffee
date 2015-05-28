@@ -53,6 +53,7 @@ angular.module('volunteerTrackerHtmlApp')
     $scope.save = ->
       tasksToSave = task for task in $scope.job.tasks when !task.deleted
       return alert('You must add at least one task') if (!tasksToSave)
+      return alert('You must add at least one category') if ($scope.job.categories.length==0)
 
       task.timeSlots = $filter('orderBy')(task.timeSlots, ['name','startTime']) for task in $scope.job.tasks
       $scope.$emit('save');
@@ -70,7 +71,8 @@ angular.module('volunteerTrackerHtmlApp')
       ).catch( (err) -> alert(err.data) )
 
 
-    $scope.queryCategories = (q) -> $http.get(
-        REST_URL + '/groups',
-        {params:{q:q},withCredentials:true}).then (response)-> _.map(response.data, 'title')
+    $scope.queryCategories = (q) ->
+      url = REST_URL + '/groups'
+      url = REST_URL + '/groups-mine' if !$scope.isAdmin()
+      $http.get(url, {params:{q:q,},withCredentials:true}).then (response)-> _.map(response.data, 'title')
 

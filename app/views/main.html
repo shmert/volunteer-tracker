@@ -41,6 +41,7 @@
         <h3 class="panel-title">Development-Only: Signed in as {{session.userAccount.name_display}}</h3>
     </div>
     <div class="panel-body">
+        <button ng-show="session.schoologyAccount.su" ng-click="session.stopSwitchUser()" class="btn btn-warning">Logout from {{session.userAccount.name_display}} account</button>
 
         <p>You are linked to the following groups:</p>
         <ul>

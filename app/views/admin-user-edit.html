@@ -27,21 +27,21 @@
 
     <div class="form-group">
         <label><i class="glyphicon glyphicon-link"></i> Linked To User Account(s)</label>
-        <div class="input-group" ng-repeat="v in user.linkedUsers">
-            <input class="form-control" ng-model="v.user" ng-change="ensureEmptyVolunteerSlotExists()"
-                   typeahead="u as u.fullName for u in findUsers($viewValue)"
-                   typeahead-min-length="3"
-                    />
-            <span class="input-group-btn">
-              <button ng-class="{disabled:!v.user}" class="btn btn-danger" type="button" ng-click="removeVolunteer($index)">&times;</button>
-            </span>
-        </div>
+        <ul>
+            <li ng-repeat="u in linkedUsers track by u.id">
+                {{u.fullName}}
+                <button ng-click="removeLinkedUser($index)" class="btn btn-danger btn-xs">&times;</button></li>
+            <li>
+                <input class="" ng-model="newUser" typeahead-on-select="didChooseLinkedUser()"
+                       typeahead="u as u.fullName for u in findUsers($viewValue)"
+                       typeahead-min-length="3"
+                        />
+            </li>
+        </ul>
     </div>
 
     <button class="btn btn-primary" ng-click="save()">Save Changes</button>
     <button class="btn btn-primary" ng-click="loginAsThisUser()">Log In as This User</button>
 
 
-    <p></p>
-    <pre>{{user | json}}</pre>
 </form>

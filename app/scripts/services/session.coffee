@@ -30,14 +30,19 @@ angular.module 'volunteerTrackerHtmlApp'
     )
 
     @switchUser = (userId) ->
-      $http.get(REST_URL + '/users/' + userId, {su:true}).success (user) ->
+      $http.get(REST_URL + '/users/' + userId, {params:{su:true}}).success (user) ->
         that.userAccount = user
         $rootScope.$broadcast('su', user)
+        $http.get(REST_URL + '/schoology-account').success (acctResponse) ->
+          that.schoologyAccount = acctResponse
+
 
     @stopSwitchUser = ->
-      $http.get(REST_URL + '/stop-switch-user').success(user) ->
+      $http.get(REST_URL + '/stop-switch-user').success (user) ->
         that.userAccount = user
         $rootScope.$broadcast('su', user)
+        $http.get(REST_URL + '/schoology-account').success (acctResponse) ->
+          that.schoologyAccount = acctResponse
 
     return this
 
