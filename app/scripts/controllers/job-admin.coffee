@@ -41,6 +41,9 @@ angular.module('volunteerTrackerHtmlApp')
       startingDay: 1
     };
 
+    $scope.didChangeSlotNeeded = (slot) ->
+      slot.neededMax = Math.max(slot.neededMax || 0, slot.needed) if slot.neededMax and slot.needed
+
     $scope.duplicateSlot = (task, index) ->
       return alert('Please fix validation errors first') if $scope.form.$invalid
       oldSlot = task.timeSlots[index]

@@ -8,7 +8,7 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module 'volunteerTrackerHtmlApp'
-  .controller 'VolunteerAppCtrl', ($scope, session) ->
+  .controller 'VolunteerAppCtrl', ($scope, session, $location) ->
     $scope.loggedIn = false;
     $scope.$on('loggedIn', (loggedIn) ->
       $scope.loggedIn = loggedIn
@@ -21,3 +21,11 @@ angular.module 'volunteerTrackerHtmlApp'
       userCategories = _.values(session.userAccount.adminOfCategories)
       jobCategories = _.map(job.categories, 'id')
       return _.intersection(userCategories, jobCategories ).length != 0
+
+    $scope.reportProblem = ->
+      $scope.problemReport = {
+        url: window.location.href
+        userAgent: window.navigator.userAgent
+        notes: ''
+      }
+      $location.path('bug-report')

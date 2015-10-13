@@ -103,6 +103,10 @@ angular
         resolve: {
           user: ($route, userService) -> userService.findById($route.current.params.id)
         }
+      .when '/bug-report',
+        templateUrl: 'views/bug-report.html'
+        controller: 'BugReportCtrl'
+        controllerAs: 'bugReport'
       .otherwise
         redirectTo: '/'
 

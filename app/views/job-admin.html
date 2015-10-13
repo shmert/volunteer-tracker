@@ -17,8 +17,8 @@
     <div class="form-group">
         <label for="date">Date</label>
 
-        <input type="date" id="date" ng-model="job.date"/>
-        <small> (enter as 2015-12-25)</small>
+        <input class="dateField date-field" id="date" ng-model="job.date"/>
+        <small> ({{job.date | date}})</small>
         <!--
         <p class="input-group"  style="width:12em;">
           <input id="date" type="date" class="form-control" datepicker-popup="yyyy-MM-dd" datepicker-options="datePickerOptions" ng-model="job.date" is-open="opened" ng-required="true" close-text="Close" />
@@ -105,9 +105,12 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="slot in task.timeSlots" ng-hide="slot.deleted">
-                        <td><input type="number" min="1" max="99" class="form-control integer" ng-model="slot.needed" required/></td>
-                        <td><input type="time" class="form-control time" ng-model="slot.startTime" required/></td>
-                        <td><input type="time" class="form-control time" ng-model="slot.endTime" required/></td>
+                        <td valign="middle">
+                            <input type="number" min="1" max="99" class="form-control-static integer" ng-model="slot.needed" ng-change="didChangeSlotNeeded(slot)" required/>
+                            <small> to </small>
+                            <input type="number" min="1" max="99" class="form-control-static integer" ng-model="slot.neededMax" ng-change="didChangeSlotNeeded(slot)" placeholder="{{slot.needed}}"/></td>
+                        <td><input type="time" class="time-input" ng-model="slot.startTime" required/></td>
+                        <td><input type="time" class="time-input" ng-model="slot.endTime" required/></td>
                         <td style="white-space: nowrap">
                             <button ng-click="removeSlot(task, slot)" class="btn btn-default" title="Remove this slot"><i class="glyphicon glyphicon-trash"></i></button>
                             <button ng-click="duplicateSlot(task, $index)" class="btn btn-default" title="Duplicate this slot"><i class="fa fa-files-o"></i></button>

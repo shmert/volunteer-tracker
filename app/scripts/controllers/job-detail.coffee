@@ -45,7 +45,7 @@ angular.module('volunteerTrackerHtmlApp')
     # what percent complete is this slot on the currently selected date
     $scope.slotCompletePercent = (slot, date) ->
       signUpsOnDate = _.filter(slot.signUps, (signUp)->signUp.date==date && !signUp.deleted)
-      return signUpsOnDate.length / slot.needed * 100
+      return Math.min(100.1, signUpsOnDate.length / slot.needed * 100)
 
     $scope.slotCompleted = (slot, date) ->
       return $scope.slotCompletePercent(slot, date) >= 100
