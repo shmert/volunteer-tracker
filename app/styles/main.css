@@ -78,7 +78,7 @@ body {
   }
 }
 
-input.ng-invalid-required {
+input.ng-invalid-required, textarea.ng-invalid-required {
 	background-color:#FFEEEE;
 }
 input.ng-dirty.ng-invalid {

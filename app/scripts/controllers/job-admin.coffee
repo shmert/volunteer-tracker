@@ -104,7 +104,25 @@ angular.module('volunteerTrackerHtmlApp')
     $scope.composeMessage = ->
       modalInstance = $uibModal.open({
         animation: true,
-        templateUrl: 'message-compose.html',
+        templateUrl: 'views/message-compose.html',
         controller: 'MessageComposeCtrl',
         size: 'lg',
-      })
+        resolve: {
+          job: $scope.job
+          message: {subject:$scope.job.name, body:'', recipients:({text:task.name} for task in $scope.job.tasks)}
+        }
+      }).result.then (msg) ->
+        recipientIds = []
+        checkedRecipients = _.pluck(msg.recipients, 'text')
+        recipientIds.push(signUp.userId) for signUp in timeSlot.signUps for timeSlot in task.timeSlots for task in $scope.job.tasks when checkedRecipients.indexOf(task.name)!=-1
+        return alert('No recipients were specified') if !recipientIds.length
+        payload =
+          subject:msg.subject
+          message:msg.body
+          recipient_ids:_.uniq(recipientIds)
+
+        $http.post(REST_URL + '/messages', payload).then ->
+          alert('Message was sent to ' + recipientIds.length + ' recipient(s)')
+        ,(error) ->
+          alert('Unable to send your message: ' + error.data);
+

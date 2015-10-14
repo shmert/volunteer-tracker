@@ -52,15 +52,19 @@ angular.module('volunteerTrackerHtmlApp')
 
     $scope.toggle = (slot, date) ->
       myIndex = $scope.myStatus(slot, date)
+      slot.locked = true
+      promise = null;
       if (myIndex != -1)
         return if (!confirm('Are you sure you want to remove yourself for this job?'))
-        slot.signUps[myIndex].deleted = true
-        #slot.signUps.splice(myIndex, 1)
+        signUp = slot.signUps[myIndex]
+        promise = jobService.updateSignUp({id:signUp.id, deleted:true}).then( (updatedSignUp) ->
+          slot.signUps.splice(myIndex, 1))
       else
-        slot.signUps.push({userId:userId,date:date,verified:false})
+        promise = jobService.updateSignUp({userId:userId,date:date,verified:false, timeSlotId:slot.id}).then (updatedSignUp) ->
+          slot.signUps.push(updatedSignUp.data);
       $scope.$emit('save')
-      modifiedSlot = jobService.push($scope.job).then( (updatedJob) ->
-      ).catch( (err) -> alert('There was an error while saving your changes, please reload and try again'));
+      promise.catch( (err) -> alert('There was an error while saving your changes, please reload and try again'))
+      .finally -> slot.locked = false
 
 
     $scope.downloadIcs = ->

@@ -15,13 +15,18 @@ angular.module 'volunteerTrackerHtmlApp'
     #this.allJobs = -> dummyJobs
     this.allJobs = (params)->
       $http.get(REST_URL + '/jobs', {params:params})
-      
+
     this.myJobs = (params)->
       $http.get(REST_URL + '/jobs', {params:{upcoming:'false', for:'me'}})
 
     this.findById = (id) ->
       $http.get(REST_URL + '/jobs/' + id)
       #dummyJobs[id]
+
+    this.updateSignUp = (signUp) ->
+      $http.post(REST_URL + '/signUps', signUp, {withCredentials:true}).then ( saved) ->
+        $rootScope.$broadcast('save')
+        return saved;
 
     this.push = (job) ->
       $http.post(REST_URL + '/jobs', job, {withCredentials:true}).then( (saved) ->
