@@ -22,29 +22,38 @@ function ICS(PRODID){
 	this.header += "PRODID:-"+this.PRODID+"\n";
 	this.events = "";
 	this.footer = "END:VCALENDAR";
+
+  function wrap(s, maxLength) {
+    if (!maxLength) maxLength = 75;
+    if (!s || s.length < maxLength) {
+      return s;
+    } else {
+      return s.substring(0, maxLength) + "\r\n " + wrap(s.substring(maxLength), 75);
+    }
+  }
 	this.addEvent = function(options){
 		var currentTime = new Date();
 		var currentEvent = "BEGIN:VEVENT\n";
 		currentEvent += "CREATED:"+ICSFormatDate(new Date())+"\n";
 		if(typeof options.UID == 'string'){
-			currentEvent += "UID:"+options.UID+"\n"; 
+			currentEvent += "UID:"+options.UID+"\n";
 		}else{
 			currentEvent += "UID:"+("0000" + (Math.random()*Math.pow(36,4) << 0).toString(36)).substr(-4);
 			currentEvent += "\n";
 		}
 		if(Object.prototype.toString.call(options.DTSTART) == '[object Date]'){
-			currentEvent += "DTSTART:"+ICSFormatDate(options.DTSTART)+"\n"; 
+			currentEvent += "DTSTART:"+ICSFormatDate(options.DTSTART)+"\n";
 		}else{
 			console.log("Start time has either not been set or is not a date object");
 		}
 		if(Object.prototype.toString.call(options.DTEND) == '[object Date]'){
-			currentEvent += "DTEND:"+ICSFormatDate(options.DTEND)+"\n"; 
+			currentEvent += "DTEND:"+ICSFormatDate(options.DTEND)+"\n";
 		}else{
 			console.log("End time has either not been set or is not a date object");
 		}
 		currentEvent += "DTSTAMP:"+ICSFormatDate(new Date())+"\n";
 		if(typeof options.SUMMARY == 'string'){
-			currentEvent += "SUMMARY:"+options.SUMMARY+"\n";
+			currentEvent += "SUMMARY:"+wrap(options.SUMMARY, 65)+"\n";
 		}else if(typeof options.SUMMARY != 'undefined'){
 			console.log("Summary is not a string");
 		}
@@ -54,17 +63,17 @@ function ICS(PRODID){
 			console.log("Location is not a string");
 		}
 		if(typeof options.DESCRIPTION == 'string'){
-			currentEvent += "DESCRIPTION:"+options.DESCRIPTION+"\n";
+			currentEvent += "DESCRIPTION:"+wrap(options.DESCRIPTION, 62)+"\n";
 		}else if(typeof options.DESCRIPTION != 'undefined'){
 			console.log("Description is not a string");
 		}
 		if(typeof options.URL == 'string'){
-			currentEvent += "URL:"+options.URL+"\n";
+			currentEvent += "URL:"+wrap(options.URL, 65)+"\n";
 		}else if(typeof options.URL != 'undefined'){
 			console.log("URL is not a string");
 		}
 		if(typeof options.ORGANIZER == 'string'){
-			currentEvent += "ORGANIZER:"+options.ORGANIZER+"\n";
+			currentEvent += "ORGANIZER:"+wrap(options.ORGANIZER, 60)+"\n";
 		}else if(typeof options.ORGANIZER != 'undefined'){
 			console.log("Organizer is not a string");
 		}

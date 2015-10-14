@@ -8,7 +8,7 @@
 </div>
 
 <h1>{{job.name}}
-    <a ng-show="isAdminForJob(job)" role="button" class="btn btn-warning" href="#/job-admin/{{job.id}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
+    <a ng-show="isAdminForJob(job)" role="button" class="btn btn-warning" href="#/job-admin/{{job.id}}"><i class="glyphicon glyphicon-edit"></i> Administer Job</a>
     <a ng-show="isAdminForJob(job)" role="button" class="btn btn-warning" ng-click="export()"><i class="glyphicon glyphicon-download"></i> Export Signup Data</a>
     <a ng-show="true" role="button" class="btn btn-default" ng-click="downloadIcs()"><i class="glyphicon glyphicon-calendar"></i> Save to Calendar</a>
 </h1>

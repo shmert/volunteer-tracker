@@ -2,10 +2,12 @@
 
 ###*
  # @ngdoc function
- # @name volunteerTrackerHtmlApp.controller:NotLoggedInCtrl
+ # @name volunteerTrackerHtmlApp.controller:MessageComposeCtrl
  # @description
- # # NotLoggedInCtrl
+ # # MessageComposeCtrl
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module 'volunteerTrackerHtmlApp'
-  .controller 'NotLoggedInCtrl', () ->
+  .controller 'MessageComposeCtrl', ->
+
+    return

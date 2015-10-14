@@ -93,6 +93,7 @@ angular.module('volunteerTrackerHtmlApp')
             'Task',
             'Date',
             'Volunteer',
+            'Email',
             'Verified',
             'Start Time',
             'End Time']
@@ -101,21 +102,24 @@ angular.module('volunteerTrackerHtmlApp')
               task.name
               moment(signUp.date).format('MM/DD/YYYY')
               usersById[signUp.userId]?.fullName
+              usersById[signUp.userId]?.email
               signUp.verified
               moment(timeSlot.startTime).format('hh:mm A')
               moment(timeSlot.endTime).format('hh:mm A')
             ]
         ) for signUp in timeSlot.signUps for timeSlot in task.timeSlots for task in $scope.job.tasks
         content = new CSV(data).encode();
-        blob = new Blob([content ], { type: 'text/plain' });
-        url = (window.URL || window.webkitURL).createObjectURL(blob, {type: 'text/csv'});
+        blob = new Blob([content ], { type: 'text/plain;charset=utf-8' });
+#        url = (window.URL || window.webkitURL).createObjectURL(blob, {type: 'text/csv'});
 
-        a = window.document.createElement('a');
-        a.href = url
-        a.download = $scope.job.name + '.csv';
+        saveAs(blob, $scope.job.name + ".csv");
 
-        document.body.appendChild(a)
-        a.click()
-
-        document.body.removeChild(a)
-        $window.URL.revokeObjectURL(url);
+#        a = window.document.createElement('a');
+#        a.href = url
+#        a.download = $scope.job.name + '.csv';
+#
+#        document.body.appendChild(a)
+#        a.click()
+#
+#        document.body.removeChild(a)
+#        $window.URL.revokeObjectURL(url);

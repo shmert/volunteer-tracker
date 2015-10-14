@@ -85,3 +85,14 @@ input.ng-dirty.ng-invalid {
 	background-color:pink;
 	border-color:red;
 }
+
+input.time-field {
+  width:6.5em;
+}
+input.integer {
+  width:3em;
+}
+
+button.dummy {
+
+}
