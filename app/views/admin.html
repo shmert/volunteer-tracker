@@ -1,18 +1,19 @@
 <div class="header">
-    <ul class="nav nav-pills">
-        <li><a href="#/">Home</a></li>
+  <ul class="nav nav-pills">
+    <li><a href="#/">Home</a></li>
 
-        <li><a href="#/job-list">Job List</a></li>
-        <li class="active"><a href="#/admin">Admin</a></li>
-        <li><a ng-click="reportProblem()">Report a Problem</a></li>
-    </ul>
+    <li><a href="#/job-list">Job List</a></li>
+    <li class="active"><a href="#/admin">Admin</a></li>
+    <li><a ng-click="reportProblem()">Report a Problem</a></li>
+  </ul>
 </div>
 
 <h1>Volunteer Tracker Administration</h1>
 
 <div>
-    <button ng-click="add()" class="btn btn-warning"><i class="glyphicon glyphicon-plus"></i> Add Job</button>
-    <a href="#admin/addIndividualTime" ng-show="isAdmin()" class="btn btn-warning"><i class="glyphicon glyphicon-plus"></i> Add Individual Time</a>
+  <button ng-click="add()" class="btn btn-warning"><i class="glyphicon glyphicon-plus"></i> Add Job</button>
+  <a href="#admin/addIndividualTime" ng-show="isAdmin()" class="btn btn-warning"><i
+    class="glyphicon glyphicon-plus"></i> Add Individual Time</a>
 </div>
 
 <h3>Sign Ups <a href="#admin/signups" class="btn btn-primary">Go</a></h3>
@@ -20,6 +21,13 @@ List of all jobs and their signup status.
 
 
 <div ng-show="isAdmin()"><h3>Users <a class="btn btn-primary" href="#/admin/users">Go</a></h3>
-<p>See a list of all users, and their progress towards volunteer target hours.</p>
+
+  <p>See a list of all users, and their progress towards volunteer target hours.</p>
+
+</div>
+
+<div><h3>Groups <a class="btn btn-primary" href="#/admin/groups">Go</a></h3>
+
+  <p>Manage any groups you are an administrator of.</p>
 
 </div>

@@ -16,6 +16,7 @@ angular
     'ngCookies',
     'ngRoute',
     'ui.bootstrap'
+    'jshor.angular-addtocalendar'
     'ngTagsInput'
   ])
   .run ($rootScope, jobService) ->
@@ -107,6 +108,20 @@ angular
         templateUrl: 'views/bug-report.html'
         controller: 'BugReportCtrl'
         controllerAs: 'bugReport'
+      .when '/admin/groups',
+        templateUrl: 'views/groups.html'
+        controller: 'GroupsCtrl'
+        controllerAs: 'groups'
+        resolve: {
+          groups: (groupService) -> groupService.findMyGroups()
+        }
+      .when '/admin/groups/:id',
+        templateUrl: 'views/groups-detail.html'
+        controller: 'GroupsDetailCtrl'
+        controllerAs: 'groupsDetail'
+        resolve:{
+          group: ($route, groupService) -> groupService.findById($route.current.params.id)
+        }
       .otherwise
         redirectTo: '/'
 

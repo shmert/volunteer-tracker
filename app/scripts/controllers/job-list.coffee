@@ -8,7 +8,7 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'JobListCtrl', ($scope, $filter, $location, $timeout, jobService, volunteerUtils) ->
+  .controller 'JobListCtrl', ($scope, $filter, $location, $timeout, session, jobService, volunteerUtils) ->
     $scope.jobs = null;
     $scope.data = {showAll:$location.search().showAll}
 
@@ -43,5 +43,8 @@ angular.module('volunteerTrackerHtmlApp')
       $location.path('/job-add')
 
     $scope.notDeletedFilter = (job) -> !job.deleted
+
+    $scope.canAddJob = () ->
+      $scope.isAdmin() || session.userAccount.adminOfCategories?.length
 
     $scope.fetch()

@@ -16,7 +16,8 @@
     "angular-bootstrap": "~0.14.2",
     "ng-tags-input": "~2.1.1",
     "comma-separated-values": "~3.6.1",
-    "FileSaver": "*"
+    "FileSaver": "*",
+    "angular-addtocalendar": "~1.1.2"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.7"
@@ -25,6 +26,7 @@
   "moduleName": "volunteerTrackerHtmlApp",
   "resolutions": {
     "angular": "^1.4.7",
-    "lodash": "~3.10.1"
+    "lodash": "~3.10.1",
+    "angular-bootstrap": "~0.14.2"
   }
 }

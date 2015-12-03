@@ -29,6 +29,8 @@ module.exports = (config) ->
       'bower_components/ng-tags-input/ng-tags-input.min.js'
       'bower_components/comma-separated-values/csv.js'
       'bower_components/FileSaver/FileSaver.js'
+      'bower_components/downloadjs/download.js'
+      'bower_components/angular-addtocalendar/addtocalendar.min.js'
       'bower_components/angular-mocks/angular-mocks.js'
       # endbower
       # bower:coffee

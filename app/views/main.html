@@ -36,9 +36,9 @@
 <br/>
 <br/>
 <br/>
-<div class="panel panel-danger">
+<div class="panel panel-danger" ng-show="isAdmin()">
     <div class="panel-heading">
-        <h3 class="panel-title">Development-Only: Signed in as {{session.userAccount.name_display}}</h3>
+        <h3 class="panel-title">Admin-Only: Signed in as {{session.userAccount.name_display}}</h3>
     </div>
     <div class="panel-body">
         <button ng-show="session.schoologyAccount.su" ng-click="session.stopSwitchUser()" class="btn btn-warning">Logout from {{session.userAccount.name_display}} account</button>

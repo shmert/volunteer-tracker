@@ -26,6 +26,9 @@ angular.module 'volunteerTrackerHtmlApp'
     @findById = (id) ->
       $http.get(REST_URL + '/users/' + id)
 
+    @findByGroupId = (id) ->
+      $http.get(REST_URL + '/groups/' + id + '/users')
+
     @quickSearch = (q) ->
       $http.get(REST_URL + '/users', {params:{q:q}})
 

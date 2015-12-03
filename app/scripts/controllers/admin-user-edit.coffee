@@ -43,4 +43,4 @@ angular.module 'volunteerTrackerHtmlApp'
       $scope.user.linkedUsers = _.chain($scope.linkedUsers).map('id').indexBy().value()
       userService.save($scope.user).then(
         -> $window.history.back()
-      ).catch( (err) -> alert("Error while saving! " + err) )
+      ).catch( (err) -> alert("Error while saving! " + err.data) )

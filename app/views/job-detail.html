@@ -11,6 +11,7 @@
     <a ng-show="isAdminForJob(job)" role="button" class="btn btn-warning" href="#/job-admin/{{job.id}}"><i class="glyphicon glyphicon-edit"></i> Administer Job</a>
     <a ng-show="isAdminForJob(job)" role="button" class="btn btn-warning" ng-click="export()"><i class="glyphicon glyphicon-download"></i> Export Signup Data</a>
     <a ng-show="true" role="button" class="btn btn-default" ng-click="downloadIcs()"><i class="glyphicon glyphicon-calendar"></i> Save to Calendar</a>
+
 </h1>
 <div><span class="label label-info" ng-repeat="category in job.categories" style="margin-right:5px">{{category.text}}</span></div>
         <br/>
@@ -48,6 +49,18 @@
             {{slotSignupCount(slot, eachDate)}}/{{slot.needed}}
         </div>
     </div>
+
+<!--
+          <addtocalendar
+            ng-show="myStatus(slot, eachDate)!=-1"
+              start-date="{{slot.startTime}}"
+              end-date="{{slot.endTime}}"
+              title="{{task.description}}"
+              location=""
+              description="{{job.description}}"
+              btn-text="Add to calendar">
+          </addtocalendar>
+-->
 
         </div>
     </div>
