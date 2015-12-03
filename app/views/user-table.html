@@ -14,7 +14,7 @@
         </td>
         <td>{{user.sectionName}}{{user.groupName}}</td>
         <td>
-          <div class="progress progress-inline" ng-style="{width: user.targetHours*10 + 'px'}" style="display:inline-block;margin-bottom:-4px;max-width:210px;">
+          <div class="progress progress-inline" ng-class="{'progress-bar-empty':!user.volHours}" ng-style="{width: user.targetHours*10 + 'px'}" style="display:inline-block;margin-bottom:-4px;max-width:210px;">
               <div class="progress-bar" role="progressbar progress-bar-success" ng-style="{width:(100*user.volHours/user.targetHours) + '%'}">
                 {{user.volHours || 0 | number}} of {{user.targetHours}}
               </div>

@@ -45,7 +45,7 @@
     <span style="margin-right:1em;">&nbsp;{{slot.startTime | date:'hh:mm a'}}<span ng-show="slot.startTime!=slot.endTime"> - {{slot.endTime | date:'hh:mm a'}}</span></span>
 
     <div class="progress progress-inline" ng-style="{width: slot.needed*32 + 'px'}" style="display:inline-block;margin-bottom:-4px">
-        <div class="progress-bar" role="progressbar" ng-class="{'progress-bar-success':slotCompleted(slot, eachDate)}" ng-style="{width:slotCompletePercent(slot, eachDate) + '%'}">
+        <div class="progress-bar" role="progressbar" ng-class="{'progress-bar-success':slotCompleted(slot, eachDate),'progress-bar-empty':slotCompletePercent(slot, eachDate) == 0}" ng-style="{width:slotCompletePercent(slot, eachDate) + '%'}">
             {{slotSignupCount(slot, eachDate)}}/{{slot.needed}}
         </div>
     </div>

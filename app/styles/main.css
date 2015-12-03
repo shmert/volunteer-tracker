@@ -96,3 +96,7 @@ input.integer {
 button.dummy {
 
 }
+
+.progress-bar-empty, .progress-bar-empty > .progress-bar {
+  color:darkred;
+}
