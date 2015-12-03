@@ -1,0 +1,27 @@
+<div class="header">
+  <ul class="nav nav-pills">
+    <li><a href="#/">Home</a></li>
+
+    <li><a href="#/job-list">Job List</a></li>
+    <li><a href="#/admin">Admin</a></li>
+    <li><a ng-click="reportProblem()">Report a Problem</a></li>
+  </ul>
+</div>
+
+
+<h3><a href="#/admin">Admin</a> / Groups</h3>
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>title</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="group in foo track by group.id">
+    <td><a href="#/admin/groups/{{group.id}}">{{group.title}}</a></td>
+  </tr>
+  </tbody>
+
+</table>
+

@@ -1,0 +1,17 @@
+<div class="header">
+    <ul class="nav nav-pills">
+        <li><a href="#/">Home</a></li>
+
+        <li><a href="#/job-list">Job List</a></li>
+        <li><a href="#/admin">Admin</a></li>
+        <li><a ng-click="reportProblem()">Report a Problem</a></li>
+    </ul>
+</div>
+
+
+<h3><a href="#/admin">Admin</a> / <a href="#/admin/groups">Groups</a> / {{group.title}}</h3>
+
+<h4>Users</h4>
+
+<div class="loading" ng-show="!users">Loading users&hellip;</div>
+<div class="user-table" users="users" ng-show="users"></div>
