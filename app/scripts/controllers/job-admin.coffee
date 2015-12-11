@@ -102,6 +102,7 @@ angular.module('volunteerTrackerHtmlApp')
 
 
     $scope.composeMessage = ->
+      publicUrl = "https://creativeartscharter.schoology.com/apps/286928878/run/group/49660907?destination=https%3A%2F%2Fcreativeartscharter.org%2Fapps%2Fvolunteer%2F%23%2Fjob-detail%2F" + $scope.job.id;
       modalInstance = $uibModal.open({
         animation: true,
         templateUrl: 'views/message-compose.html',
@@ -109,7 +110,7 @@ angular.module('volunteerTrackerHtmlApp')
         size: 'lg',
         resolve: {
           job: $scope.job
-          message: {subject:$scope.job.name, body:'', recipients:({text:task.name} for task in $scope.job.tasks)}
+          message: {subject:$scope.job.name, body:'\n\n\nView the job at <' + publicUrl + '>', recipients:({text:task.name} for task in $scope.job.tasks)}
         }
       }).result.then (msg) ->
         recipientIds = []

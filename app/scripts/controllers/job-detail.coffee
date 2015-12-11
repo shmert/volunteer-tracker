@@ -87,7 +87,24 @@ angular.module('volunteerTrackerHtmlApp')
       return alert('Sign up for this job first') if (cal.events.length == 0)
       cal.download(filename);
 
+    $scope.publicUrl = ->
+      "https://creativeartscharter.schoology.com/apps/286928878/run/group/49660907?destination=https%3A%2F%2Fcreativeartscharter.org%2Fapps%2Fvolunteer%2F%23%2Fjob-detail%2F" + $scope.job.id;
 
+    $scope.viewWithinSchoology = ->
+      top.location.href = $scope.publicUrl();
+
+    $scope.alreadyViewingWithinSchoology = ->
+      top.location.href == $scope.publicUrl();
+
+    $scope.viewOutsideSchoology = ->
+      if(window != top)
+        top.location.href = window.location.href
+
+    $scope.alreadyOutsideSchoology = ->
+      window == top
+
+    $scope.repeatingDateTime = (date, time) ->
+      volunteerUtils.dateTime(moment(date,'YYYY-MM-DD').toDate(), moment(time).toDate())
 
     $scope.export = ->
       userService.allUserNames().success (allUsers) ->

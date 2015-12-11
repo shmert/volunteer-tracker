@@ -100,3 +100,7 @@ button.dummy {
 .progress-bar-empty, .progress-bar-empty > .progress-bar {
   color:darkred;
 }
+
+.btn-signup {
+  width: 8em;
+}

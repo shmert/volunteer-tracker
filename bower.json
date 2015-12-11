@@ -17,7 +17,7 @@
     "ng-tags-input": "~2.1.1",
     "comma-separated-values": "~3.6.1",
     "FileSaver": "*",
-    "angular-addtocalendar": "~1.1.2"
+    "angular-addtocalendar": "~1.1.3"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.7"
