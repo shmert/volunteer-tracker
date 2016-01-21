@@ -29,6 +29,8 @@ angular
         alert('Could not load job ' + error.params.id + ', it may have been deleted from the database.');
     )
 
+  .config ($compileProvider) ->
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
 
   .config ($routeProvider, $httpProvider) ->
     $httpProvider.defaults.withCredentials = true;
@@ -58,7 +60,7 @@ angular
         templateUrl: 'views/job-admin.html'
         controller: 'JobAdminCtrl'
         resolve:{
-          job: -> {data:{id:null, name:'', recurrence:{type:''}, timeSlots:[], tasks:[{name:null,description:null,timeSlots:[{signUps:[],needed:1,startTime:moment('8:00:00', 'HH:mm:ss').toDate(),endTime:moment('9:00:00', 'HH:mm:ss').toDate()}]}], categories:[]}}
+          job: -> {data:{id:null, name:'', recurrence:{type:'',daysOfWeek:{1:true,2:true,3:true,4:true,5:true}}, timeSlots:[], tasks:[{name:null,description:null,timeSlots:[{signUps:[],needed:1,startTime:moment('8:00:00', 'HH:mm:ss').toDate(),endTime:moment('9:00:00', 'HH:mm:ss').toDate()}]}], categories:[]}}
         }
       .when '/job-admin/:id',
         templateUrl: 'views/job-admin.html'
@@ -122,6 +124,10 @@ angular
         resolve:{
           group: ($route, groupService) -> groupService.findById($route.current.params.id)
         }
+      .when '/signup-list',
+        templateUrl: 'views/signup-list.html'
+        controller: 'SignupListCtrl'
+        controllerAs: 'signupList'
       .otherwise
         redirectTo: '/'
 

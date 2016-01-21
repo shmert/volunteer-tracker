@@ -9,7 +9,7 @@
   Sample user: {id: 53, fullName: 'Fitz Three', linkedUsers:{123:true}, targetHours:40}
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'AdminUsersCtrl', ($scope, $modal, $location, volunteerUtils, allJobs, userService, session) ->
+  .controller 'AdminUsersCtrl', ($scope, $uibModal, $location, volunteerUtils, allJobs, userService, session) ->
     $scope.q = ''
     $scope.users = [];
     $scope.selected = {}

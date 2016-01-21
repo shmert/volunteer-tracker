@@ -59,6 +59,10 @@ angular.module('volunteerTrackerHtmlApp')
 
     $scope.toggleOldJobs =-> $scope.showingCompletedJobs = !$scope.showingCompletedJobs
 
+    $scope.isAdminForGroupId = (groupId) ->
+      return true if $scope.isAdmin();
+      _.indexOf(session.userAccount.adminOfCategories, groupId) != -1;
+
     $scope.resetData = ->
       return if !confirm('Are you sure you want to reset? All your changes will be lost')
       $scope.$emit('resetData')

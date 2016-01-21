@@ -1,3 +1,5 @@
+<div class="volunteer-nav"></div>
+
 <div class="jumbotron" style="text-align: center">
     <div>
         <h2>Your volunteer hours: {{completeVerified + completeUnverified | number:1}} of {{target}} done!</h2>
@@ -36,7 +38,7 @@
 <br/>
 <br/>
 <br/>
-<div class="panel panel-danger" ng-show="isAdmin()">
+<div class="panel panel-danger" ng-show="session.schoologyAccount.su ||  isAdmin()">
     <div class="panel-heading">
         <h3 class="panel-title">Admin-Only: Signed in as {{session.userAccount.name_display}}</h3>
     </div>
@@ -45,12 +47,8 @@
 
         <p>You are linked to the following groups:</p>
         <ul>
-            <li ng-repeat="group in session.userAccount.groups">{{group.title}}</li>
+            <li ng-repeat="group in session.userAccount.groups">{{group.title}} <span class="label label-warning" ng-show="isAdminForGroupId(group.id)">Admin</span> </li>
         </ul>
-
-        <a class="btn btn-danger" ng-click="resetData()">Reset Data</a>
-
-        <a class="btn btn-info" href="#/admin">Admin View</a>
 
     </div>
 

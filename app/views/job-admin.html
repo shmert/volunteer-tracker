@@ -19,7 +19,7 @@
 
     <tags-input ng-model="job.categories" placeholder="Add…" add-from-autocomplete-only="true"
                 replace-spaces-with-dashes="false">
-      <auto-complete source="queryCategories($query)"></auto-complete>
+      <auto-complete source="queryCategories($query)" load-on-focus="true" load-on-empty="true" max-results-to-show="25" min-length="1"></auto-complete>
     </tags-input>
 
   </div>
@@ -27,7 +27,7 @@
   <div class="form-group">
     <label for="date">Date</label>
 
-    <input class="dateField date-field" id="date" ng-model="job.date" placeholder="m/d/y"/>
+    <input class="dateField date-field" id="date" ng-model="job.date" placeholder="mm/dd/yyyy"/>
     <small ng-show="job.date"> ({{job.date | date}})</small>
     <!--
     <p class="input-group"  style="width:12em;">
@@ -70,12 +70,23 @@
       <label>
         <input type="radio" name="recurRadio" id="recurRadio2" value="week" ng-model="job.recurrence.type">
         Every Week
+
       </label>
     </div>
-    <div class="radio disabled">
+    <div class="radio">
       <label>
         <input type="radio" name="recurRadio" id="recurRadio3" value="month" ng-model="job.recurrence.type">
         Every Month
+      </label>
+    </div>
+    <div class="radio">
+      <label>
+        <input type="radio" name="recurRadio" id="recurRadio4" value="custom-weekly" ng-model="job.recurrence.type">
+        Every
+        <div class="btn-group">
+          <label class="btn btn-default btn-xs dayOfWeek" ng-model="job.recurrence.daysOfWeek[$index+1]" uib-btn-checkbox ng-repeat="d in dayOfWeekOptions" ng-disabled="job.recurrence.type!='custom-weekly'">{{d}}</label>
+        </div>
+
       </label>
     </div>
   </div>
@@ -84,7 +95,8 @@
     <div class="col-sm-3">
       <div class="form-group">
         <label for="endDate">End On</label>
-        <input type="date" class="form-control date" id="endDate" ng-model="job.recurrence.endDate"/>
+        <input class="dateField date-field" id="endDate" ng-model="job.recurrence.endDate" placeholder="mm/dd/yyyy"/>
+
       </div>
     </div>
     <div class="col-sm-9">

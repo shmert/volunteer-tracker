@@ -1,11 +1,5 @@
-<div class="header">
-    <ul class="nav nav-pills">
-        <li><a href="#/">Home</a></li>
-        <li><a href="#/job-list">Job List</a></li>
-        <li ng-show="isAdmin()"><a href="#/admin">Admin</a></li>
-        <li><a ng-click="reportProblem()">Report a Problem</a></li>
-    </ul>
-</div>
+<div class="volunteer-nav"></div>
+
 
 <h1>{{job.name}}
     <a ng-show="isAdminForJob(job)" role="button" class="btn btn-warning" href="#/job-admin/{{job.id}}"><i class="glyphicon glyphicon-edit"></i> Administer Job</a>
@@ -16,7 +10,7 @@
     <button id="viewOptionsButton" type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="disabled">
       View Options <span class="caret"></span>
     </button>
-    <ul class="uib-dropdown-menu" role="menu" aria-labelledby="viewOptionsButton">
+    <ul uib-dropdown-menu role="menu" aria-labelledby="viewOptionsButton">
       <li role="menuitem" ng-class="{disabled:alreadyViewingWithinSchoology()}"><a ng-click="viewWithinSchoology()">View Within Schoology (Permanent Link to This Job)</a></li>
       <li role="menuitem" ng-class="{disabled:alreadyOutsideSchoology()}"><a ng-click="viewOutsideSchoology()" >View Outside Schoology</a></li>
     </ul>
@@ -26,10 +20,10 @@
 <div><span class="label label-info" ng-repeat="category in job.categories" style="margin-right:5px">{{category.text}}</span></div>
         <br/>
 <p class="lead">{{job.description}}</p>
-<p ng-show="job.location">Location: {{job.location}}</p>
+<p ng-show="job.location">Location: {{job.location}} <a class="btn btn-default btn-sm" href="http://maps.google.com/?q={{job.location}}" target="_map"><i class="glyphicon glyphicon-map-marker"></i> Map</a></p>
 
 <div ng-repeat="eachDate in dateOptions">
-    <h3>{{eachDate | date}}</h3>
+    <h3>{{eachDate | date : 'fullDate'}}</h3>
 
     <div ng-repeat="task in job.tasks" style="margin-left:1em;">
         <h3>{{task.name}}</h3>
@@ -55,7 +49,7 @@
             </span>
     <span style="margin-right:1em;">&nbsp;{{slot.startTime | date:'hh:mm a'}}<span ng-show="slot.startTime!=slot.endTime"> - {{slot.endTime | date:'hh:mm a'}}</span></span>
 
-    <div class="progress progress-inline" ng-style="{width: slot.needed*32 + 'px'}" style="display:inline-block;margin-bottom:-4px">
+    <div class="progress progress-inline clickable" ng-style="{width: slot.needed*32 + 'px'}" style="display:inline-block;margin-bottom:-4px" ng-click="showSignUps(task, slot, eachDate)">
         <div class="progress-bar" role="progressbar" ng-class="{'progress-bar-success':slotCompleted(slot, eachDate),'progress-bar-empty':slotCompletePercent(slot, eachDate) == 0}" ng-style="{width:slotCompletePercent(slot, eachDate) + '%'}">
             {{slotSignupCount(slot, eachDate)}}/{{slot.needed}}
         </div>
@@ -69,6 +63,8 @@
               description="{{job.description}}"
               btn-text="Add to Calendar">
           </addtocalendar>
+
+          <div class="signUpList" ng-show="slot.signUps.length"><span class="label label-info" ng-repeat="signUp in slotSignUpsOnDate(slot, eachDate)">{{signUp.fullName}}</span></div>
 
         </div>
     </div>

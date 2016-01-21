@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "dependencies": {
     "angular": "^1.4.7",
-    "bootstrap": "^3.3.0",
     "angular-animate": "^1.4.7",
     "angular-cookies": "^1.4.7",
     "angular-messages": "^1.4.7",
@@ -13,7 +12,7 @@
     "moment": "~2.10.6",
     "lodash": "~3.10.1",
     "fontawesome": "~4.2.0",
-    "angular-bootstrap": "~0.14.2",
+    "angular-bootstrap": "~1.1.0",
     "ng-tags-input": "~2.1.1",
     "comma-separated-values": "~3.6.1",
     "FileSaver": "*",
@@ -27,6 +26,6 @@
   "resolutions": {
     "angular": "^1.4.7",
     "lodash": "~3.10.1",
-    "angular-bootstrap": "~0.14.2"
+    "angular-bootstrap": "~1.1.0"
   }
 }

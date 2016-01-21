@@ -29,7 +29,7 @@ angular.module 'volunteerTrackerHtmlApp'
         date = moment(data, 'M/D/YYYY', true) if !date.isValid()
         date = moment(data, 'M/D', true) if !date.isValid()
         if (date.isValid())
-          if (date.year() == 0 || date.year() == 2015)
+          if (date.year() == 0)
             date.year(moment().year())
           else if (date.year() < 100)
             date.add(2000, 'year')

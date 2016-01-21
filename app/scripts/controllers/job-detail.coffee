@@ -8,7 +8,7 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'JobDetailCtrl', ($scope, $filter, $window, userService, job, jobService, volunteerUtils, session) ->
+  .controller 'JobDetailCtrl', ($scope, $filter, $window, $uibModal, userService, job, jobService, volunteerUtils, session) ->
     $scope.job = job.data
     userId = session.userAccount.id.toString();
 
@@ -23,12 +23,20 @@ angular.module('volunteerTrackerHtmlApp')
         registeredCount:signUpsOnDate.length
       }
 
+    isInRepeatingScheme = (tmpDate) ->
+      dayOfWeek = tmpDate.day();
+      dayOfWeek = 7 if dayOfWeek == 0
+      (recur.type!='custom-weekly' || !recur.daysOfWeek || recur.daysOfWeek[dayOfWeek])
+
     $scope.dateOptions = [$scope.job.date]
     if ($scope.job.recurrence?.type && $scope.job.date)
+      recur = $scope.job.recurrence
       tmpDate = moment($scope.job.date)
-      endDate = if ($scope.job.recurrence.endDate) then moment($scope.job.recurrence.endDate) else tmpDate.clone().add(40, $scope.job.recurrence.type)
-      $scope.dateOptions.push(tmpDate.format('YYYY-MM-DD')) while ((tmpDate = tmpDate.add(1, $scope.job.recurrence.type)) <= endDate)
-      exceptions = $scope.job.recurrence.exceptions?.split(/\s*,\s*/) || []
+      endDate = if (recur.endDate) then moment(recur.endDate) else tmpDate.clone().add(40, recur.type)
+      stepType = recur.type
+      stepType = 'day' if recur.type == 'custom-weekly'
+      ($scope.dateOptions.push(tmpDate.format('YYYY-MM-DD')) if isInRepeatingScheme(tmpDate)) while ((tmpDate = tmpDate.add(1, stepType)) <= endDate)
+      exceptions = recur.exceptions?.split(/\s*,\s*/) || []
       _.pull($scope.dateOptions, moment(eachException, 'MM/DD/YYYY').format('YYYY-MM-DD')) for eachException in exceptions
 
     #$scope.timeSlotGroups = _.groupBy($scope.job.timeSlots, 'name')
@@ -50,12 +58,12 @@ angular.module('volunteerTrackerHtmlApp')
     $scope.slotCompleted = (slot, date) ->
       return $scope.slotCompletePercent(slot, date) >= 100
 
-    $scope.toggle = (slot, date) ->
+    $scope.toggle = (slot, date, optionalMessage) ->
       myIndex = $scope.myStatus(slot, date)
       slot.locked = true
       promise = null;
       if (myIndex != -1)
-        return if (!confirm('Are you sure you want to remove yourself for this job?'))
+        return if (!confirm(optionalMessage || 'Are you sure you want to remove yourself for this job?'))
         signUp = slot.signUps[myIndex]
         promise = jobService.updateSignUp({id:signUp.id, deleted:true}).then( (updatedSignUp) ->
           slot.signUps.splice(myIndex, 1))
@@ -66,7 +74,23 @@ angular.module('volunteerTrackerHtmlApp')
       promise.catch( (err) -> alert('There was an error while saving your changes, please reload and try again'))
       .finally -> slot.locked = false
 
+    $scope.slotSignUpsOnDate = (slot, date) ->
+      signUps = _.filter(slot.signUps, (signUp)->signUp.date==date && !signUp.deleted)
 
+    $scope.showSignUps = (task, slot, eachDate) ->
+      modalInstance = $uibModal.open({
+        animation: true,
+        templateUrl: 'views/signup-list.html',
+        controller: 'SignupListCtrl',
+        scope:$scope.$new(false),
+#        size: 'lg',
+        resolve: {
+          job: $scope.job
+          task: task
+          whichDate: {date:eachDate} # without wrapping it in an object it tries to find a provider by name
+          slot: slot
+        }
+      })
     $scope.downloadIcs = ->
       job = $scope.job
       filename = $scope.job.name + 'ics'

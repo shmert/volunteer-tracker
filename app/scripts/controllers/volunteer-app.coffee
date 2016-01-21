@@ -16,6 +16,14 @@ angular.module 'volunteerTrackerHtmlApp'
     )
     $scope.isAdmin =-> session.schoologyAccount.admin
 
+    $scope.isAdminOfAtLeastOneGroup =-> $scope.isAdmin() || session.userAccount.adminOfCategories.length;
+
+    $scope.backupSchoologyAccount =-> session.schoologyAccountBackup
+
+    $scope.isActive = (path) ->
+      return true if (path == '/' && $location.path() == '/');
+      return path == $location.path()
+
     $scope.isAdminForJob = (job) ->
       return true if $scope.isAdmin()
       userCategories = _.values(session.userAccount.adminOfCategories)

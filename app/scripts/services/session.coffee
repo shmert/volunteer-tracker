@@ -12,6 +12,8 @@ angular.module 'volunteerTrackerHtmlApp'
     # eg {admin: true, uid: 7562241, name: null}
     @schoologyAccount = null;
     @userAccount = null;
+    @schoologyAccountBackup = null;
+    @userAccountBackup = null;
 
     that = this
 
@@ -31,18 +33,22 @@ angular.module 'volunteerTrackerHtmlApp'
 
     @switchUser = (userId) ->
       $http.get(REST_URL + '/users/' + userId, {params:{su:true}}).success (user) ->
+        that.userAccountBackup - that.userAccount if !that.userAccountBackup
         that.userAccount = user
         $rootScope.$broadcast('su', user)
         $http.get(REST_URL + '/schoology-account').success (acctResponse) ->
+          that.schoologyAccountBackup = that.schoologyAccount if !that.schoologyAccountBackup
           that.schoologyAccount = acctResponse
 
 
     @stopSwitchUser = ->
       $http.get(REST_URL + '/stop-switch-user').success (user) ->
         that.userAccount = user
+        that.userAccountBackup = null
         $rootScope.$broadcast('su', user)
         $http.get(REST_URL + '/schoology-account').success (acctResponse) ->
           that.schoologyAccount = acctResponse
+          that.schoologyAccountBackup = null
 
     return this
 

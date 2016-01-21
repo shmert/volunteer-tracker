@@ -46,7 +46,7 @@ angular.module 'volunteerTrackerHtmlApp'
       date: $scope.job.date,
       private:true
       categories: [],
-      recurrence: {type: ''},
+      recurrence: {type: '',daysOfWeek:{1:true,2:true,3:true,4:true,5:true}},
       tasks: [
         {
           id: null,

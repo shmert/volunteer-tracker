@@ -102,5 +102,25 @@ button.dummy {
 }
 
 .btn-signup {
-  width: 8em;
+  width: 100px;
+}
+.clickable:hover, .clickable:active {
+  cursor:pointer;
+}
+
+.signUpList {
+  margin:3px 3px 3px 105px;
+}
+.signUpList .label {
+  margin-right:5px;
+  font-size:80%;
+  font-weight:normal;
+}
+.signUpList .label:first-child {
+  margin-left:12px;
+}
+
+.btn-group .dayOfWeek {
+  margin:0;
+  padding:2px 5px;
 }

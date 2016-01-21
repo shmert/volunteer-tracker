@@ -1,18 +1,10 @@
-<div class="header">
-  <ul class="nav nav-pills">
-    <li><a href="#/">Home</a></li>
-
-    <li><a href="#/job-list">Job List</a></li>
-    <li class="active"><a href="#/admin">Admin</a></li>
-    <li><a ng-click="reportProblem()">Report a Problem</a></li>
-  </ul>
-</div>
+<div class="volunteer-nav"></div>
 
 <h1>Volunteer Tracker Administration</h1>
 
 <div>
   <button ng-click="add()" class="btn btn-warning"><i class="glyphicon glyphicon-plus"></i> Add Job</button>
-  <a href="#admin/addIndividualTime" ng-show="isAdmin()" class="btn btn-warning"><i
+  <a href="#admin/addIndividualTime" ng-show="isAdminOfAtLeastOneGroup()" class="btn btn-warning"><i
     class="glyphicon glyphicon-plus"></i> Add Individual Time</a>
 </div>
 

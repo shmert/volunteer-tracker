@@ -59,6 +59,21 @@ angular.module('volunteerTrackerHtmlApp')
       startingDay: 1
     };
 
+    $scope.dayOfWeekOptions = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+
+    $scope.findUsers = (q) ->
+      userService.quickSearch(q).then (found) ->
+        return found.data
+
+    $scope.addSlot = (slot) ->
+      slot._tmpSignup = {name:null};
+
+    $scope.choosePersonForNewSignup = (slot, tmpSignUp) ->
+      promise = jobService.updateSignUp({userId:tmpSignUp.id,date:date,verified:false, timeSlotId:slot.id}).then (updatedSignUp) ->
+        slot.signUps.push(updatedSignUp.data);
+
+
     $scope.didChangeSlotNeeded = (slot) ->
       slot.neededMax = Math.max(slot.neededMax || 0, slot.needed) if slot.neededMax and slot.needed
 
@@ -97,8 +112,9 @@ angular.module('volunteerTrackerHtmlApp')
 
     $scope.queryCategories = (q) ->
       url = REST_URL + '/groups'
-      url = REST_URL + '/groups-mine' if !$scope.isAdmin()
-      $http.get(url, {params:{q:q,},withCredentials:true}).then (response)-> _.map(response.data, 'title')
+      url = REST_URL + '/groups-mine-admin' if !$scope.isAdmin()
+      $http.get(url, {params:{q:q,},withCredentials:true}).then (response)->
+        _.map(response.data, 'title')
 
 
     $scope.composeMessage = ->

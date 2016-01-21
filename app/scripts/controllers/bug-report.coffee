@@ -8,7 +8,7 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module 'volunteerTrackerHtmlApp'
-  .controller 'BugReportCtrl', ($scope, $location, $http, $modal, session, REST_URL) ->
+  .controller 'BugReportCtrl', ($scope, $location, $http, $uibModal, session, REST_URL) ->
     $scope.sending = false
     $scope.problemReport = {} if !$scope.problemReport
     $scope.problemReport.email = session.userAccount?.primary_email;
