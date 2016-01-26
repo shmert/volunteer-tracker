@@ -13,24 +13,4 @@
     <!-- /input-group -->
 </form>
 
-<table class="table table-striped" ng-show="users.length">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Section/Group</th>
-        <th>&nbsp;</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="user in users track by user.id">
-        <td>
-            {{user.fullName}}
-        </td>
-        <td>{{user.sectionName}}{{user.groupName}}</td>
-        <td>
-            <a href="#/admin/users/{{user.id}}" class="btn btn-primary">Edit</a>
-        </td>
-    </tr>
-    </tbody>
-
-</table>
+<div class="user-table" users="users"></div>

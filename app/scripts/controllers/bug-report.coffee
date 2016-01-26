@@ -19,7 +19,7 @@ angular.module 'volunteerTrackerHtmlApp'
     $scope.cancelUrl = $scope.cancelUrl.substring($scope.cancelUrl.indexOf('#') + 1)
 
     $scope.submit = ->
-      payload = $scope.problemReport
+      payload = $scope.problemReport + JSON.stringify(session.errors)
       $scope.sending = true
       $http.post(REST_URL + '/bug-report', $scope.problemReport).then ->
         alert('Your bug report has been sent!')

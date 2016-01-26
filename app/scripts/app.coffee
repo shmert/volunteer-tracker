@@ -19,14 +19,14 @@ angular
     'jshor.angular-addtocalendar'
     'ngTagsInput'
   ])
-  .run ($rootScope, jobService) ->
+  .run ($rootScope, jobService, session) ->
     $rootScope.$on('su', (event, u) ->
         $rootScope.user = u
         $rootScope.$emit('save')
     )
     $rootScope.$on('$routeChangeError', (event, error) ->
       if (error.$$route.controller=='JobDetailCtrl')
-        alert('Could not load job ' + error.params.id + ', it may have been deleted from the database.');
+        session.logAndReportError(error, 'Could not load job ' + error.params.id + ', it may have been deleted from the database.')
     )
 
   .config ($compileProvider) ->

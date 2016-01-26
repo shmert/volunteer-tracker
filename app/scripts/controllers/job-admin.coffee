@@ -8,7 +8,7 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'JobAdminCtrl', ($scope, $location, $filter, $http, $uibModal, jobService, job, REST_URL, userService) ->
+  .controller 'JobAdminCtrl', ($scope, $location, $filter, $http, $uibModal, jobService, job, REST_URL, userService, session) ->
     $scope.job = job.data
     $scope.job.date = new Date($scope.job.date) if typeof($scope.job.date) == 'string'
     $scope.job.recurrence.endDate = new Date($scope.job.recurrence.endDate) if typeof($scope.job.recurrence.endDate) == 'string'
@@ -19,10 +19,12 @@ angular.module('volunteerTrackerHtmlApp')
 
 
     invalidSummary = (form) ->
+      # form.$error.required[0].$name = "Job Name", eg.
       array = '';
-      array += (k + ': ' + v) for k, v of form.$error
+      for k, v of form.$error
+        name = v[0].$name || 'one or more fields';
+        array += (k + ' error ' + name)
       return array
-
 
     $scope.addTask = ->
       maxId = 0
@@ -66,14 +68,6 @@ angular.module('volunteerTrackerHtmlApp')
       userService.quickSearch(q).then (found) ->
         return found.data
 
-    $scope.addSlot = (slot) ->
-      slot._tmpSignup = {name:null};
-
-    $scope.choosePersonForNewSignup = (slot, tmpSignUp) ->
-      promise = jobService.updateSignUp({userId:tmpSignUp.id,date:date,verified:false, timeSlotId:slot.id}).then (updatedSignUp) ->
-        slot.signUps.push(updatedSignUp.data);
-
-
     $scope.didChangeSlotNeeded = (slot) ->
       slot.neededMax = Math.max(slot.neededMax || 0, slot.needed) if slot.neededMax and slot.needed
 
@@ -96,7 +90,9 @@ angular.module('volunteerTrackerHtmlApp')
       $scope.$emit('save');
       jobService.push($scope.job).then( (saved) ->
         $location.path('/job-detail/' + saved.data.id)
-      ).catch( (err) -> alert(err.data) )
+      ).catch( (err) ->
+        session.logAndReportError(err)
+      )
       #alert('Not saving, because that\'s not implemented yet') #FIX!!!
 
     $scope.notDeleted = (o) -> !o.deleted
@@ -107,7 +103,9 @@ angular.module('volunteerTrackerHtmlApp')
       $scope.$emit('save');
       jobService.push($scope.job).then( (saved) ->
         $location.path('/job-list')
-      ).catch( (err) -> alert(err.data) )
+      ).catch( (err) ->
+        session.logAndReportError(err)
+      )
 
 
     $scope.queryCategories = (q) ->
@@ -141,5 +139,5 @@ angular.module('volunteerTrackerHtmlApp')
         $http.post(REST_URL + '/messages', payload).then ->
           alert('Message was sent to ' + recipientIds.length + ' recipient(s)')
         ,(error) ->
-          alert('Unable to send your message: ' + error.data);
+          session.logAndReportError(error, 'Unable to send your message: ' + error.data);
 

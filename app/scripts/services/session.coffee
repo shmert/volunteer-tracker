@@ -14,6 +14,7 @@ angular.module 'volunteerTrackerHtmlApp'
     @userAccount = null;
     @schoologyAccountBackup = null;
     @userAccountBackup = null;
+    @errors = []
 
     that = this
 
@@ -30,6 +31,22 @@ angular.module 'volunteerTrackerHtmlApp'
       $location.path('not-logged-in');
       throw err;
     )
+
+    @logAndReportError = (err, optionalMessage) ->
+      errorString = err?.data || err?.data || err
+      errorString = JSON.stringify(errorString) if typeof errorString == 'object'
+      alert(optionalMessage || errorString)
+      @errors.push(errorString)
+      report = {
+        email: that.userAccount?.primary_email
+        user:that.userAccount?.name_display
+        userId:that.userAccount?.id
+        date:new Date().getTime()
+        notes:errorString
+      }
+      $http.post(REST_URL + '/bug-report', report) # fire and forget :/
+
+
 
     @switchUser = (userId) ->
       $http.get(REST_URL + '/users/' + userId, {params:{su:true}}).success (user) ->

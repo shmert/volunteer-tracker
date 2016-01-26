@@ -23,11 +23,6 @@ angular.module('volunteerTrackerHtmlApp')
         registeredCount:signUpsOnDate.length
       }
 
-    isInRepeatingScheme = (tmpDate) ->
-      dayOfWeek = tmpDate.day();
-      dayOfWeek = 7 if dayOfWeek == 0
-      (recur.type!='custom-weekly' || !recur.daysOfWeek || recur.daysOfWeek[dayOfWeek])
-
     $scope.dateOptions = [$scope.job.date]
     if ($scope.job.recurrence?.type && $scope.job.date)
       recur = $scope.job.recurrence
@@ -35,7 +30,14 @@ angular.module('volunteerTrackerHtmlApp')
       endDate = if (recur.endDate) then moment(recur.endDate) else tmpDate.clone().add(40, recur.type)
       stepType = recur.type
       stepType = 'day' if recur.type == 'custom-weekly'
-      ($scope.dateOptions.push(tmpDate.format('YYYY-MM-DD')) if isInRepeatingScheme(tmpDate)) while ((tmpDate = tmpDate.add(1, stepType)) <= endDate)
+      isInRepeatingScheme = ->
+        dayOfWeek = tmpDate.day();
+        dayOfWeek = 7 if dayOfWeek == 0
+        (recur.type!='custom-weekly' || !recur.daysOfWeek || recur.daysOfWeek[dayOfWeek])
+      while ( (tmpDate = tmpDate.add(1, stepType)) < endDate)
+        if (isInRepeatingScheme())
+          $scope.dateOptions.push(tmpDate.format('YYYY-MM-DD'))
+#      ($scope.dateOptions.push(tmpDate.format('YYYY-MM-DD')) if isInRepeatingScheme(tmpDate, recur)) while ((tmpDate = tmpDate.add(1, stepType)) <= endDate)
       exceptions = recur.exceptions?.split(/\s*,\s*/) || []
       _.pull($scope.dateOptions, moment(eachException, 'MM/DD/YYYY').format('YYYY-MM-DD')) for eachException in exceptions
 
@@ -71,8 +73,9 @@ angular.module('volunteerTrackerHtmlApp')
         promise = jobService.updateSignUp({userId:userId,date:date,verified:false, timeSlotId:slot.id}).then (updatedSignUp) ->
           slot.signUps.push(updatedSignUp.data);
       $scope.$emit('save')
-      promise.catch( (err) -> alert('There was an error while saving your changes, please reload and try again'))
-      .finally -> slot.locked = false
+      promise.catch( (err) ->
+        session.logAndReportError(err, 'There was an error while saving your changes, please reload and try again')
+      ).finally -> slot.locked = false
 
     $scope.slotSignUpsOnDate = (slot, date) ->
       signUps = _.filter(slot.signUps, (signUp)->signUp.date==date && !signUp.deleted)
@@ -117,8 +120,8 @@ angular.module('volunteerTrackerHtmlApp')
     $scope.viewWithinSchoology = ->
       top.location.href = $scope.publicUrl();
 
-    $scope.alreadyViewingWithinSchoology = ->
-      top.location.href == $scope.publicUrl();
+#    $scope.alreadyViewingWithinSchoology = ->
+#      top.location.href == $scope.publicUrl(); # throws JS exception: Blocked a frame with origin...
 
     $scope.viewOutsideSchoology = ->
       if(window != top)
