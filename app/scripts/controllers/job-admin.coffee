@@ -8,7 +8,7 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'JobAdminCtrl', ($scope, $location, $filter, $http, $uibModal, jobService, job, REST_URL, userService, session) ->
+  .controller 'JobAdminCtrl', ($scope, $location, $filter, $http, $uibModal, jobService, job, REST_URL, userService, session, messageSender) ->
     $scope.job = job.data
     $scope.job.date = new Date($scope.job.date) if typeof($scope.job.date) == 'string'
     $scope.job.recurrence.endDate = new Date($scope.job.recurrence.endDate) if typeof($scope.job.recurrence.endDate) == 'string'
@@ -115,29 +115,4 @@ angular.module('volunteerTrackerHtmlApp')
         _.map(response.data, 'title')
 
 
-    $scope.composeMessage = ->
-      publicUrl = "https://creativeartscharter.schoology.com/apps/286928878/run/group/49660907?destination=https%3A%2F%2Fcreativeartscharter.org%2Fapps%2Fvolunteer%2F%23%2Fjob-detail%2F" + $scope.job.id;
-      modalInstance = $uibModal.open({
-        animation: true,
-        templateUrl: 'views/message-compose.html',
-        controller: 'MessageComposeCtrl',
-        size: 'lg',
-        resolve: {
-          job: $scope.job
-          message: {subject:$scope.job.name, body:'\n\n\nView the job at <' + publicUrl + '>', recipients:({text:task.name} for task in $scope.job.tasks)}
-        }
-      }).result.then (msg) ->
-        recipientIds = []
-        checkedRecipients = _.pluck(msg.recipients, 'text')
-        recipientIds.push(signUp.userId) for signUp in timeSlot.signUps for timeSlot in task.timeSlots for task in $scope.job.tasks when checkedRecipients.indexOf(task.name)!=-1
-        return alert('No recipients were specified') if !recipientIds.length
-        payload =
-          subject:msg.subject
-          message:msg.body
-          recipient_ids:_.uniq(recipientIds)
-
-        $http.post(REST_URL + '/messages', payload).then ->
-          alert('Message was sent to ' + recipientIds.length + ' recipient(s)')
-        ,(error) ->
-          session.logAndReportError(error, 'Unable to send your message: ' + error.data);
 

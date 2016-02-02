@@ -7,10 +7,10 @@
     <div class="form-group">
 
       <div class="form-group">
-        <label>Recipient Tasks</label>
-        <tags-input min-length="2" ng-model="message.recipients" placeholder="Add…" add-from-autocomplete-only="true"
-                    replace-spaces-with-dashes="false">
-          <auto-complete source="queryRecipients($query)"></auto-complete>
+        <label>Recipients</label>
+        <tags-input min-length="3" ng-model="message.recipients" placeholder="Add…" add-from-autocomplete-only="true"
+                    replace-spaces-with-dashes="false" display-property="fullName">
+          <auto-complete source="findUsers($query)"></auto-complete>
         </tags-input>
 
       </div>
@@ -25,6 +25,6 @@
   </form>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Close</button>
+  <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Cancel</button>
   <button type="button" class="btn btn-primary" ng-click="send()">Send via Schoology</button>
 </div>

@@ -2,17 +2,21 @@
 
 
 <h1>{{job.name}}
-    <a ng-show="isAdminForJob(job)" role="button" class="btn btn-warning" href="#/job-admin/{{job.id}}"><i class="glyphicon glyphicon-edit"></i> Administer Job</a>
-    <a ng-show="isAdminForJob(job)" role="button" class="btn btn-warning" ng-click="export()"><i class="glyphicon glyphicon-download"></i> Export Signup Data</a>
-    <!--<a ng-show="true" role="button" class="btn btn-default" ng-click="downloadIcs()"><i class="glyphicon glyphicon-calendar"></i> Save to Calendar</a>-->
+  <a ng-show="isAdminForJob(job)" role="button" class="btn btn-warning" href="#/job-admin/{{job.id}}"><i class="glyphicon glyphicon-edit"></i> Administer Job</a>
+  <!--<a ng-show="true" role="button" class="btn btn-default" ng-click="downloadIcs()"><i class="glyphicon glyphicon-calendar"></i> Save to Calendar</a>-->
 
   <div class="btn-group" uib-dropdown is-open="viewButton.isopen">
     <button id="viewOptionsButton" type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="disabled">
-      View Options <span class="caret"></span>
+      <i class="glyphicon glyphicon-share"></i> Share <span class="caret"></span>
     </button>
     <ul uib-dropdown-menu role="menu" aria-labelledby="viewOptionsButton">
-      <li role="menuitem"><a ng-click="viewWithinSchoology()">View Within Schoology (Permanent Link to This Job)</a></li>
-      <li role="menuitem"><a ng-click="viewOutsideSchoology()" >View Outside Schoology</a></li>
+      <!--<li role="menuitem"><a ng-click="showUrl(false)"><i class="glyphicon glyphicon-link"></i> Show Full URL</a></li>-->
+      <li role="menuitem"><a ng-click="showUrl(true)"><i class="glyphicon glyphicon-link"></i> Show Shortened URL</a></li>
+      <li role="menuitem"><a ng-click="composeJobMessage()"><i class="glyphicon glyphicon-envelope"></i> Contact All Volunteers</a></li>
+      <li role="menuitem" ng-show="isAdminForJob(job"><a ng-click="export()"><i class="glyphicon glyphicon-download"></i> Export Signup Data</a></li>
+
+      <!--<li role="menuitem"><a ng-click="viewWithinSchoology()"><i class="glyphicon glyphicon-modal-window"></i> View Within Schoology (Permanent Link to This Job)</a></li>-->
+      <!--<li role="menuitem"><a ng-click="viewOutsideSchoology()" ><i class="glyphicon glyphicon-new-window"></i> View Outside Schoology</a></li>-->
     </ul>
   </div>
 
@@ -23,7 +27,9 @@
 <p ng-show="job.location">Location: {{job.location}} <a class="btn btn-default btn-sm" href="http://maps.google.com/?q={{job.location}}" target="_map"><i class="glyphicon glyphicon-map-marker"></i> Map</a></p>
 
 <div ng-repeat="eachDate in dateOptions">
-    <h3>{{eachDate | date : 'fullDate'}}</h3>
+    <h3>{{eachDate | date : 'fullDate'}}
+      <a ng-show="dateOptions.length > 1" role="button" class="btn btn-default btn-sm" ng-click="composeDateMessage(eachDate)" title="Contact this day's volunteers"><i class="glyphicon glyphicon-envelope"></i></a>
+    </h3>
 
     <div ng-repeat="task in job.tasks" style="margin-left:1em;">
         <h3>{{task.name}}</h3>
@@ -49,9 +55,9 @@
             </span>
     <span style="margin-right:1em;">&nbsp;{{slot.startTime | date:'hh:mm a'}}<span ng-show="slot.startTime!=slot.endTime"> - {{slot.endTime | date:'hh:mm a'}}</span></span>
 
-    <div class="progress progress-inline clickable" ng-style="{width: slot.needed*32 + 'px'}" style="display:inline-block;margin-bottom:-4px" ng-click="showSignUps(task, slot, eachDate)">
+    <div class="progress progress-inline clickable" ng-style="{width: (slot.neededMax || slot.needed)*32 + 'px'}" style="display:inline-block;margin-bottom:-4px" ng-click="showSignUps(task, slot, eachDate)">
         <div class="progress-bar" role="progressbar" ng-class="{'progress-bar-success':slotCompleted(slot, eachDate),'progress-bar-empty':slotCompletePercent(slot, eachDate) == 0}" ng-style="{width:slotCompletePercent(slot, eachDate) + '%'}">
-            {{slotSignupCount(slot, eachDate)}}/{{slot.needed}}
+            {{slotSignupCount(slot, eachDate)}}/{{slot.neededMax || slot.needed}}
         </div>
     </div>
           <addtocalendar
@@ -64,7 +70,21 @@
               btn-text="Add to Calendar">
           </addtocalendar>
 
-          <div class="signUpList" ng-show="slot.signUps.length"><span class="label label-info" ng-repeat="signUp in slotSignUpsOnDate(slot, eachDate)">{{signUp.fullName}}</span></div>
+          <div class="signUpList" ng-show="slot.signUps.length">
+            <span class="label label-info"
+                  ng-repeat="signUp in slotSignUpsOnDate(slot, eachDate)"
+                  uib-dropdown>
+              <span uib-dropdown-toggle>{{signUp.fullName}} <span class="caret"></span></span>
+              <ul uib-dropdown-menu>
+                <li ng-show="signUp.userId==userId">
+                  <a
+                     ng-disabled="slot.locked"
+                     ng-click="toggle(slot, eachDate)"><i class="glyphicon glyphicon-remove"></i> Remove</a>
+                </li>
+                <li ng-show="signUp.userId!=userId"><a ng-click="composeSingleSignUpMessage(signUp)"><i class="glyphicon glyphicon-envelope"></i> Send Message</a></li>
+              </ul>
+            </span>
+          </div>
 
         </div>
     </div>

@@ -8,9 +8,10 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'JobDetailCtrl', ($scope, $filter, $window, $uibModal, userService, job, jobService, volunteerUtils, session) ->
+  .controller 'JobDetailCtrl', ($scope, $filter, $window, $q, $uibModal, userService, job, jobService, volunteerUtils, session, urlShortener, messageSender) ->
     $scope.job = job.data
     userId = session.userAccount.id.toString();
+    $scope.userId = userId
 
     dateOptionFor = (moment) ->
       formattedDate = moment.format('YYYY-MM-DD')
@@ -53,12 +54,12 @@ angular.module('volunteerTrackerHtmlApp')
       return signUpsOnDate.length
 
     # what percent complete is this slot on the currently selected date
-    $scope.slotCompletePercent = (slot, date) ->
+    $scope.slotCompletePercent = (slot, date, neededOverride) ->
       signUpsOnDate = _.filter(slot.signUps, (signUp)->signUp.date==date && !signUp.deleted)
-      return Math.min(100.1, signUpsOnDate.length / slot.needed * 100)
+      return Math.min(100.1, signUpsOnDate.length / (neededOverride || slot.neededMax || slot.needed) * 100)
 
     $scope.slotCompleted = (slot, date) ->
-      return $scope.slotCompletePercent(slot, date) >= 100
+      return $scope.slotCompletePercent(slot, date, slot.needed) >= 100 # don't use neededMax
 
     $scope.toggle = (slot, date, optionalMessage) ->
       myIndex = $scope.myStatus(slot, date)
@@ -77,8 +78,56 @@ angular.module('volunteerTrackerHtmlApp')
         session.logAndReportError(err, 'There was an error while saving your changes, please reload and try again')
       ).finally -> slot.locked = false
 
+    allSignUps = ->
+      result = []
+      result.push.apply( result, timeSlot.signUps ) for timeSlot in task.timeSlots for task in $scope.job.tasks
+      return result
+
     $scope.slotSignUpsOnDate = (slot, date) ->
       signUps = _.filter(slot.signUps, (signUp)->signUp.date==date && !signUp.deleted)
+
+    $scope.composeJobMessage = ->
+      allRecipients = _.map(allSignUps(), (s)-> {id:s.userId,fullName:s.fullName})
+      composeMessage(allRecipients, $scope.job.name)
+
+    $scope.composeDateMessage = (date) ->
+      allRecipients = _.chain(allSignUps()).filter((s)->s.date==date).map((s)-> {id:s.userId,fullName:s.fullName}).value();
+      composeMessage(allRecipients, $scope.job.name)
+
+    $scope.composeSingleSignUpMessage = (signUp) ->
+      composeMessage([{id:signUp.userId, fullName:signUp.fullName}], $scope.job.name)
+
+    composeMessage = (recipients, subject) ->
+      recipients = _.uniq(recipients, 'id')
+      url = $scope.publicUrl()
+      urlPromise = urlShortener.shorten(url, $scope.job.name.replace('[^a-zA-Z0-9]', ''))
+      urlPromise.then (shortenedUrl) ->
+        $uibModal.open({
+          animation: true,
+          templateUrl: 'views/message-compose.html',
+          controller: 'MessageComposeCtrl',
+          size: 'lg',
+          resolve: {
+            job: $scope.job
+            message: {
+              subject:subject,
+              body:'\n\n\nView the job at <' + shortenedUrl + '>',
+              recipients:recipients
+            }
+          }
+        }).result
+      .then (msg) ->
+        recipientIds = _.pluck(msg.recipients, 'id')
+        return alert('No recipients were specified') if !recipientIds.length
+        payload =
+          subject:msg.subject || $scope.job.name
+          message:msg.body
+          recipient_ids:recipientIds
+
+        messageSender.sendWithFeedback(payload)
+      .catch (e) ->
+        return typeof e == 'string' # cancel or escape key press most likely
+        session.logAndReportError(e, 'Error composing / sending message for ' + $scope.job.name)
 
     $scope.showSignUps = (task, slot, eachDate) ->
       modalInstance = $uibModal.open({
@@ -116,6 +165,23 @@ angular.module('volunteerTrackerHtmlApp')
 
     $scope.publicUrl = ->
       "https://creativeartscharter.schoology.com/apps/286928878/run/group/49660907?destination=https%3A%2F%2Fcreativeartscharter.org%2Fapps%2Fvolunteer%2F%23%2Fjob-detail%2F" + $scope.job.id;
+
+    $scope.showUrl = (shorten) ->
+      url = $scope.publicUrl()
+      if (shorten)
+        urlPromise = urlShortener.shorten(url, $scope.job.name.replace('[^a-zA-Z0-9]', ''))
+      else
+        urlPromise = $q.resolve(url)
+      urlPromise.then (urlToShow) ->
+        newScope = $scope.$new(false)
+        newScope.job = $scope.job
+        newScope.url = urlToShow
+        newScope.copy = (text) -> window.clipboard.copy
+        $uibModal.open({
+          animation: true,
+          templateUrl: 'views/modal-url-display.html',
+          scope: newScope,
+        })
 
     $scope.viewWithinSchoology = ->
       top.location.href = $scope.publicUrl();
