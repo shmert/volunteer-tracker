@@ -32,6 +32,8 @@ angular.module('volunteerTrackerHtmlApp')
         return 'Every ' + moment(job.date).format('dddd')
       else if (job.recurrence.type == 'month')
         return 'Every Month'
+      else if (job.recurrence.type == 'custom-weekly')
+        return 'Every Week'
 
     $scope.percentDone = (job) ->
       return volunteerUtils.percentDone(job)

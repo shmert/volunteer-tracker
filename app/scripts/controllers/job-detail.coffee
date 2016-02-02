@@ -111,7 +111,7 @@ angular.module('volunteerTrackerHtmlApp')
             job: $scope.job
             message: {
               subject:subject,
-              body:'\n\n\nView the job at <' + shortenedUrl + '>',
+              body:'\n\n\nView the job at ' + shortenedUrl + '',
               recipients:recipients
             }
           }

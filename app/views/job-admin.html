@@ -24,7 +24,7 @@
   <div class="form-group">
     <label for="date">Date</label>
 
-    <input class="dateField date-field" id="date" ng-model="job.date" placeholder="mm/dd/yyyy"/>
+    <input class="dateField date-field" id="date" ng-model="job.date" placeholder="mm/dd/yyyy" required id="Date" name="Date"/>
     <small ng-show="job.date"> ({{job.date | date}})</small>
     <!--
     <p class="input-group"  style="width:12em;">
@@ -44,8 +44,8 @@
   </div>
 
   <div class="form-group">
-    <label for="location">Location</label>
-    <input class="form-control" id="location" ng-model="job.location" placeholder="Optional location/address of job"/>
+    <label for="location">Street Address</label>
+    <input class="form-control" id="location" ng-model="job.location" placeholder="Optional street address of job"/>
   </div>
 
   <div class="form-group">
@@ -127,7 +127,7 @@
             <th>People Needed</th>
             <th>Start Time</th>
             <th>End Time</th>
-            <th>&nbsp;</th>
+            <th colspan="2">Hrs Credit</th>
           </tr>
           </thead>
           <tbody>
@@ -138,9 +138,15 @@
               <small> to</small>
               <input type="number" min="0" max="99" class="form-control-static integer" ng-model="slot.neededMax"
                      ng-change="didChangeSlotNeeded(slot)" placeholder="{{slot.needed}}"/></td>
-            <td><input type="text" class="time-field form-control" ng-model="slot.startTime"
-                       ng-required="!slot.deleted"/></td>
-            <td><input type="text" class="time-field form-control" ng-model="slot.endTime" ng-required="!slot.deleted"/>
+            <td>
+              <input type="text" class="time-field form-control" ng-model="slot.startTime"
+                      ng-change="didChangeHrsCredit(slot)" ng-required="!slot.deleted"/></td>
+            <td>
+              <input type="text" class="time-field form-control" ng-model="slot.endTime"
+                     ng-change="didChangeHrsCredit(slot)" ng-required="!slot.deleted"/>
+            </td>
+            <td>
+              <input type="number" min="0" max="40" class="number-field form-control-static hour-field" ng-model="slot.hrsCreditOverride" placeholder="{{hrsCredit(slot)}}" ng-change="didChangeHrsCredit(slot)"/>
             </td>
             <td style="white-space: nowrap">
               <button type="button" ng-click="removeSlot(task, slot)" class="btn btn-default" title="Remove this shift">
@@ -150,7 +156,7 @@
             </td>
           </tr>
           <tr ng-repeat-end>
-            <td colspan="4" style="border-top:none;">
+            <td colspan="4" style="border-top:none;" ng-show="slot.signUps.length">
               <strong>Signups:</strong>
                           <span ng-repeat="signup in slot.signUps">
                             <a class="label label-primary" href="mailto:{{allUsers[signup.userId].email}}">{{allUsers[signup.userId].fullName}}</a>

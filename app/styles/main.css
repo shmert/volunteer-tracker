@@ -89,6 +89,9 @@ input.ng-dirty.ng-invalid {
 input.time-field {
   width:6.5em;
 }
+input.hour-field {
+  width:4em;
+}
 input.integer {
   width:3em;
 }

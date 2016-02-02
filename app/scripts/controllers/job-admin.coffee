@@ -71,13 +71,23 @@ angular.module('volunteerTrackerHtmlApp')
     $scope.didChangeSlotNeeded = (slot) ->
       slot.neededMax = Math.max(slot.neededMax || 0, slot.needed) if slot.neededMax and slot.needed
 
+    $scope.didChangeHrsCredit = (slot) ->
+      slot.hrsCredit = $scope.hrsCredit(slot);
+
+    $scope.hrsCredit = (slot) ->
+      return slot.hrsCreditOverride || hrsCreditDefault(slot);
+
+    hrsCreditDefault = (slot) ->
+      return null if !slot.startTime || !slot.endTime;
+      return Math.max(1, slot.endTime.getHours() - slot.startTime.getHours());
+
     $scope.duplicateSlot = (task, index) ->
       return alert('Please fix validation errors first: ' + invalidSummary($scope.form)) if $scope.form.$invalid
       oldSlot = task.timeSlots[index]
-      oldStart = moment(oldSlot.startTime, 'H:mm')
-      oldEnd = moment(oldSlot.endTime, 'H:mm')
-      newEnd = oldEnd.add(oldEnd.diff(oldStart)).format('H:mm')
-      newSlot = {name:oldSlot.name, needed:oldSlot.needed, startTime:oldSlot.endTime, endTime:newEnd,signUps:[]}
+      oldStart = moment(oldSlot.startTime)
+      oldEnd = moment(oldSlot.endTime)
+      newEnd = oldEnd.add(oldEnd.diff(oldStart)).toDate()
+      newSlot = {name:oldSlot.name, needed:oldSlot.needed, neededMax:oldSlot.neededMax, startTime:oldSlot.endTime, endTime:newEnd, hrsCreditOverride:oldSlot.hrsCreditOverride, signUps:[]}
       task.timeSlots.splice(index+1, 0, newSlot)
 
     $scope.save = ->
