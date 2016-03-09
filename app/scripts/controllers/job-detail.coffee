@@ -73,6 +73,15 @@ angular.module('volunteerTrackerHtmlApp')
       else
         promise = jobService.updateSignUp({userId:userId,date:date,verified:false, timeSlotId:slot.id}).then (updatedSignUp) ->
           slot.signUps.push(updatedSignUp.data);
+        if (!session.userAccount.phone && $session.userAccount.profile_info.phone && !session.userAccount.doNotAskForPhone)
+          promise = promise.then ->
+            cell = window.prompt('Please provide your cell phone # for other people to contact you')
+            if ( cell )
+              session.userAccount.phone = cell
+              userService.updateUser(session.userAccount).then(
+                -> alert('Your account has been updated, thanks!'),
+                (e) -> session.logAndReportError(e)
+              )
       $scope.$emit('save')
       promise.catch( (err) ->
         session.logAndReportError(err, 'There was an error while saving your changes, please reload and try again')
@@ -96,6 +105,11 @@ angular.module('volunteerTrackerHtmlApp')
 
     $scope.composeSingleSignUpMessage = (signUp) ->
       composeMessage([{id:signUp.userId, fullName:signUp.fullName}], $scope.job.name)
+
+    $scope.composeSingleSlotMessage = (slot, eachDate) ->
+      signUps = $scope.slotSignUpsOnDate(slot, eachDate)
+      recipients = _.map(signUps, (s) -> {id:s.userId, fullName:s.fullName})
+      composeMessage(recipients, $scope.job.name)
 
     composeMessage = (recipients, subject) ->
       recipients = _.uniq(recipients, 'id')
@@ -128,6 +142,13 @@ angular.module('volunteerTrackerHtmlApp')
       .catch (e) ->
         return typeof e == 'string' # cancel or escape key press most likely
         session.logAndReportError(e, 'Error composing / sending message for ' + $scope.job.name)
+
+    $scope.callPersonWithId = (id) ->
+      userService.findById(id).then (response) ->
+        user = response.data;
+        alert(user.name_display + ': ' + (user.phone || user.profile_info.phone || '[No phone on file]'))
+      , (error) ->
+        session.logAndReportError(error, 'Could not locate info for this user')
 
     $scope.showSignUps = (task, slot, eachDate) ->
       modalInstance = $uibModal.open({

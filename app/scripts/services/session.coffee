@@ -33,7 +33,7 @@ angular.module 'volunteerTrackerHtmlApp'
     )
 
     @logAndReportError = (err, optionalMessage) ->
-      errorString = err?.data || err?.data || err
+      errorString = err?.data?.message || err?.data || err
       errorString = JSON.stringify(errorString) if typeof errorString == 'object'
       alert(optionalMessage || errorString)
       @errors.push(errorString)
@@ -42,7 +42,7 @@ angular.module 'volunteerTrackerHtmlApp'
         user:that.userAccount?.name_display
         userId:that.userAccount?.id
         date:new Date().getTime()
-        notes:errorString
+        notes:'Auto-generated bug report\n\n' + errorString
       }
       $http.post(REST_URL + '/bug-report', report) # fire and forget :/
 

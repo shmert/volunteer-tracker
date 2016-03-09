@@ -35,6 +35,9 @@ angular.module 'volunteerTrackerHtmlApp'
     @fetchById = (ids) ->
       $http.get(REST_URL + '/users-by-id', {params:{ids:ids.join(',')}})
 
+    @updateUser = (user) ->
+      $http.put(REST_URL + '/users/' + user.id, user)
+
     @save = (u) ->
       payload = {
         id:u.id

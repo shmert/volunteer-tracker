@@ -82,8 +82,12 @@
                      ng-click="toggle(slot, eachDate)"><i class="glyphicon glyphicon-remove"></i> Remove</a>
                 </li>
                 <li ng-show="signUp.userId!=userId"><a ng-click="composeSingleSignUpMessage(signUp)"><i class="glyphicon glyphicon-envelope"></i> Send Message</a></li>
+                <li><a ng-click="callPersonWithId(signUp.userId)"><i class="glyphicon glyphicon-phone-alt"></i> Call</a></li>
               </ul>
             </span>
+            <a
+              ng-show="slotSignUpsOnDate(slot, eachDate).length"
+              ng-click="composeSingleSlotMessage(slot, eachDate)" title="Send a message to these recipients"><i class="glyphicon glyphicon-envelope"></i></a>
           </div>
 
         </div>

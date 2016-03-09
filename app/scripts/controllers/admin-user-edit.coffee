@@ -8,12 +8,16 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module 'volunteerTrackerHtmlApp'
-  .controller 'AdminUserEditCtrl', ($scope, $window, $http, $location, REST_URL, userService, user, session) ->
+  .controller 'AdminUserEditCtrl', ($scope, $window, $http, $location, REST_URL, jobService, userService, user, session) ->
     $scope.user = user.data;
     $scope.user.targetHours = 20 if $scope.user.targetHours == undefined
     $scope.user.adminOfCategories = _.chain($scope.user.adminOfCategories).indexBy().mapValues(->true).value();
     $scope.newUser = null; # set by typeahead input, then cleared on selection
     $scope.linkedUsers = [] # will be replaced by ajax call
+    $scope.jobs = null # will be loaded asynchronously
+
+    jobService.findByUserId($scope.user.id).then (found) -> $scope.jobs = found.data
+
 
     userService.fetchById(_.keys($scope.user.linkedUsers)).success (array) ->
       $scope.linkedUsers = array
@@ -47,4 +51,7 @@ angular.module 'volunteerTrackerHtmlApp'
         session.logAndReportError(err, "An error occurred while saving this user")
       )
 #        alert("Error while saving! " + err.data) )
+
+    $scope.showUsersJob = ->
+      $location.path('/job-list').search('user', $scope.user.id).search('showAll', 'true')
 

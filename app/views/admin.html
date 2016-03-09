@@ -23,3 +23,21 @@ List of all jobs and their signup status.
   <p>Manage any groups you are an administrator of.</p>
 
 </div>
+
+<h3>Schoology Sync</h3>
+<p>The app pulls data from Schoology into its own database. This must be periodically refreshed, when users are added or assigned to new groups. Use the button below to perform this sync operation.</p>
+
+<p>
+  <button type="button" ng-click="syncWithSchoology()" class="btn btn-primary" ng-disabled="syncingNow">Sync With Schoology</button>
+</p>
+
+<p>
+  Last sync: {{lastSync}}
+
+<div class="progress" ng-if="syncingNow">
+  <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+    <span class="sr-only">Syncing Now</span>
+  </div>
+</div>
+
+</p>

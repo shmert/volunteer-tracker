@@ -25,7 +25,7 @@ angular.module 'volunteerTrackerHtmlApp'
       $http.post(REST_URL + '/messages', payload).then ->
         alert('Message was sent to ' + payload.recipient_ids.length + ' recipient(s)')
       ,(error) ->
-        session.logAndReportError(error, 'Unable to send your message: ' + error.data);
+        session.logAndReportError(error, 'Unable to send your message: ' + (error.data?.message || error?.data));
 
 
     return this

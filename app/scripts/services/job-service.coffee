@@ -19,6 +19,9 @@ angular.module 'volunteerTrackerHtmlApp'
     this.myJobs = (params)->
       $http.get(REST_URL + '/jobs', {params:{upcoming:'false', for:'me'}})
 
+    this.findByUserId = (userId)->
+      $http.get(REST_URL + '/jobs', {params:{upcoming:'false', userId:userId}})
+
     this.findById = (id) ->
       $http.get(REST_URL + '/jobs/' + id)
       #dummyJobs[id]
