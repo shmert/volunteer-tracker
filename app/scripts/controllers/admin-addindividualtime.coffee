@@ -8,17 +8,24 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module 'volunteerTrackerHtmlApp'
-.controller 'AdminAddindividualtimeCtrl', ($scope, userService, users, jobService, $location, $q) ->
+.controller 'AdminAddindividualtimeCtrl', ($scope, userService, users, jobService, $location, $q, $http, session, REST_URL) ->
   $scope.userOptions = users
+
+  u = session.userAccount;
 
   $scope.job = {
     volunteers: [
-      {user: null}
+      {user: {"id":u.id,"roleId":null,"firstName":u.name_first,"lastName":u.name_last,"fullName":u.name_display}},
+      {user:null}
     ]
   }
 
   $scope.findUsers = (q) ->
-    userService.quickSearch(q).then (found) ->
+#    return $q.defer([session.userAccount]).promise if (false && !$scope.isAdmin())
+#
+    linkedTo = null;
+    linkedTo = session.userAccount.id if !$scope.isAdmin()
+    userService.quickSearch(q, {linkedTo:linkedTo}).then (found) ->
       return found.data
 
   $scope.ensureEmptyVolunteerSlotExists = ->
@@ -29,11 +36,17 @@ angular.module 'volunteerTrackerHtmlApp'
     $scope.job.volunteers.splice($index, 1)
     $scope.ensureEmptyVolunteerSlotExists()
 
+  $scope.queryCategories = (q) ->
+    url = REST_URL + '/groups-mine'
+    $http.get(url, {params:{q:q,},withCredentials:true}).then (response)->
+      _.map(response.data, 'title')
+
   $scope.save = ->
 
-    signUps = _.map( $scope.job.volunteers, (v)->{userId:v.user?.id, date:$scope.job.date, verified:true})
+    signUps = _.map( $scope.job.volunteers, (v)->{userId:v.user?.id, date:$scope.job.date, verified:$scope.isAdmin(), fullName:v.user?.fullName})
     signUps.pop()
 
+    return alert('Please choose at least one group / class') if $scope.job.categories.length == 0
     return alert('Please choose at least one volunteer') if signUps.length == 0
 
     startTime = moment('8:00:00', 'HH:mm:ss').toDate()
@@ -45,8 +58,8 @@ angular.module 'volunteerTrackerHtmlApp'
       name: $scope.job.description,
       date: $scope.job.date,
       private:true
-      categories: [],
-      recurrence: {type: '',daysOfWeek:{1:true,2:true,3:true,4:true,5:true}},
+      categories: $scope.job.categories,
+      recurrence: {type:'', daysOfWeek:{1:true,2:true,3:true,4:true,5:true}},
       tasks: [
         {
           id: null,
@@ -58,6 +71,8 @@ angular.module 'volunteerTrackerHtmlApp'
               needed:signUps.length
               startTime:startTime
               endTime:endTime
+              hrsCredit: $scope.job.hours
+              hrsCreditOverride: $scope.job.hours
             }
           ]
 
@@ -65,8 +80,10 @@ angular.module 'volunteerTrackerHtmlApp'
       ]
 
     }
-    jobService.push(newJob)
-    $location.path('/admin')
+    jobService.push(newJob).then ->
+      alert('Your time has been posted. Thank you!')
+      $location.path('/admin')
+    , (e)-> session.logAndReportError(e)
 
   $scope.jobCount = ->
     return jobService.allJobs().length

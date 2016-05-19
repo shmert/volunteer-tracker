@@ -11,7 +11,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="job in jobs | filter:$root.q | filter:notDeletedFilter" ng-click="showJobDetail(job)">
+    <tr ng-repeat="job in jobs | filter:$root.q | filter:notDeletedFilter" ng-click="showJobDetail(job)" class="clickable">
         <td><a ng-click="showJobDetail(job)">{{job.name}}</a></td>
         <td title="Starting {{job.date|date}}">{{dateDisplayFor(job)}}</td>
         <td><span class="label label-info" ng-repeat="category in job.categories" style="margin-right:5px">{{category.text}}</span></td>

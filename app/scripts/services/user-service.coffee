@@ -29,8 +29,9 @@ angular.module 'volunteerTrackerHtmlApp'
     @findByGroupId = (id) ->
       $http.get(REST_URL + '/groups/' + id + '/users')
 
-    @quickSearch = (q) ->
-      $http.get(REST_URL + '/users', {params:{q:q}})
+    @quickSearch = (q, config) ->
+      config = {onlyMine:false} if !config
+      $http.get(REST_URL + '/users', {params:{q:q, linkedTo:config.linkedTo}})
 
     @fetchById = (ids) ->
       $http.get(REST_URL + '/users-by-id', {params:{ids:ids.join(',')}})

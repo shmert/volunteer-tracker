@@ -12,6 +12,8 @@ angular.module('volunteerTrackerHtmlApp')
     $scope.job = job.data
     userId = session.userAccount.id.toString();
     $scope.userId = userId
+    $scope.nowString = moment().format('YYYY-MM-DD');
+    $scope.showingOldDateOptions = true;
 
     dateOptionFor = (moment) ->
       formattedDate = moment.format('YYYY-MM-DD')
@@ -26,6 +28,7 @@ angular.module('volunteerTrackerHtmlApp')
 
     $scope.dateOptions = [$scope.job.date]
     if ($scope.job.recurrence?.type && $scope.job.date)
+      $scope.showingOldDateOptions = false;
       recur = $scope.job.recurrence
       tmpDate = moment($scope.job.date)
       endDate = if (recur.endDate) then moment(recur.endDate) else tmpDate.clone().add(40, recur.type)
@@ -43,6 +46,9 @@ angular.module('volunteerTrackerHtmlApp')
       _.pull($scope.dateOptions, moment(eachException, 'MM/DD/YYYY').format('YYYY-MM-DD')) for eachException in exceptions
 
     #$scope.timeSlotGroups = _.groupBy($scope.job.timeSlots, 'name')
+
+    $scope.shouldShowDate = (date) ->
+      return $scope.showingOldDateOptions || date >= $scope.nowString;
 
     # am i signed up for this slot on the currently selected date?
     $scope.myStatus = (slot, date) ->

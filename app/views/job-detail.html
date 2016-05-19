@@ -26,7 +26,12 @@
 <p class="lead">{{job.description}}</p>
 <p ng-show="job.location">Location: {{job.location}} <a class="btn btn-default btn-sm" href="http://maps.google.com/?q={{job.location}}" target="_map"><i class="glyphicon glyphicon-map-marker"></i> Map</a></p>
 
-<div ng-repeat="eachDate in dateOptions">
+<div ng-show="dateOptions[0].length > 1 && dateOptions[0] < nowString">
+    <button ng-click="showingOldDateOptions=!showingOldDateOptions" ng-show="!showingOldDateOptions" class="btn btn-sm btn-default">Include Past Occurrences</button>
+    <button ng-click="showingOldDateOptions=!showingOldDateOptions" ng-show="showingOldDateOptions" class="btn btn-sm btn-default">Hide Past Occurrences</button>
+</div>
+
+<div ng-repeat="eachDate in dateOptions | filter:shouldShowDate track by eachDate">
     <h3>{{eachDate | date : 'fullDate'}}
       <a ng-show="dateOptions.length > 1" role="button" class="btn btn-default btn-sm" ng-click="composeDateMessage(eachDate)" title="Contact this day's volunteers"><i class="glyphicon glyphicon-envelope"></i></a>
     </h3>
@@ -71,7 +76,7 @@
           </addtocalendar>
 
           <div class="signUpList" ng-show="slot.signUps.length">
-            <span class="label label-info"
+            <span class="label label-info clickable"
                   ng-repeat="signUp in slotSignUpsOnDate(slot, eachDate)"
                   uib-dropdown>
               <span uib-dropdown-toggle>{{signUp.fullName}} <span class="caret"></span></span>
@@ -87,7 +92,10 @@
             </span>
             <a
               ng-show="slotSignUpsOnDate(slot, eachDate).length"
-              ng-click="composeSingleSlotMessage(slot, eachDate)" title="Send a message to these recipients"><i class="glyphicon glyphicon-envelope"></i></a>
+              ng-click="composeSingleSlotMessage(slot, eachDate)"
+              title="Send a message to these recipients"
+              class="clickable"
+              ><i class="glyphicon glyphicon-envelope"></i></a>
           </div>
 
         </div>

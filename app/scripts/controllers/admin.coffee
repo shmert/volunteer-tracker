@@ -8,8 +8,9 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module('volunteerTrackerHtmlApp')
-.controller 'AdminCtrl', ($scope, $location, $http, REST_URL) ->
+.controller 'AdminCtrl', ($scope, $location, $http, REST_URL, session) ->
   $scope.syncingNow = false
+  $scope.myUserId = session.userAccount.id;
 
   $scope.lastSync = 'Calculating...'
 

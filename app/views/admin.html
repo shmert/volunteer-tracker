@@ -1,43 +1,54 @@
 <div class="volunteer-nav"></div>
 
-<h1>Volunteer Tracker Administration</h1>
+<h1>Volunteer Tracker Settings / Admin</h1>
+
 
 <div>
-  <button ng-click="add()" class="btn btn-warning"><i class="glyphicon glyphicon-plus"></i> Add Job</button>
-  <a href="#admin/addIndividualTime" ng-show="isAdminOfAtLeastOneGroup()" class="btn btn-warning"><i
+  <h3>My Account</h3>
+  <a href="#profile-edit" class="btn btn-primary"><i class="glyphicon glyphicon-user"></i> Edit My Account</a>
+</div>
+
+<div>
+  <h3>Time / Job Entry</h3>
+  <button ng-click="add()" ng-show="isAdminOfAtLeastOneGroup()" class="btn btn-warning"><i class="glyphicon glyphicon-plus"></i> Add Job</button>
+  <a href="#admin/addIndividualTime" class="btn btn-warning"><i
     class="glyphicon glyphicon-plus"></i> Add Individual Time</a>
 </div>
 
-<h3>Sign Ups <a href="#admin/signups" class="btn btn-primary">Go</a></h3>
-List of all jobs and their signup status.
+<div ng-show="isAdminOfAtLeastOneGroup()"><h3>Sign Ups <a href="#admin/signups" class="btn btn-primary">Go</a></h3>
+  List of all jobs and their signup status.
+</div>
 
-
-<div ng-show="isAdmin()"><h3>Users <a class="btn btn-primary" href="#/admin/users">Go</a></h3>
+<div ng-show="isAdmin()">
+  <h3>Users <a class="btn btn-primary" href="#/admin/users">Go</a></h3>
 
   <p>See a list of all users, and their progress towards volunteer target hours.</p>
 
+  <!-- FIX! edit my phone -->
 </div>
 
-<div><h3>Groups <a class="btn btn-primary" href="#/admin/groups">Go</a></h3>
+<div ng-show="isAdminOfAtLeastOneGroup()"><h3>Groups <a class="btn btn-primary" href="#/admin/groups">Go</a></h3>
 
   <p>Manage any groups you are an administrator of.</p>
 
 </div>
 
-<h3>Schoology Sync</h3>
-<p>The app pulls data from Schoology into its own database. This must be periodically refreshed, when users are added or assigned to new groups. Use the button below to perform this sync operation.</p>
+<div ng-show="isAdmin()">
+  <h3>Schoology Sync</h3>
 
-<p>
-  <button type="button" ng-click="syncWithSchoology()" class="btn btn-primary" ng-disabled="syncingNow">Sync With Schoology</button>
-</p>
+  <p>The app pulls data from Schoology into its own database. This must be periodically refreshed, when users are added or assigned to new groups. Use the button below to perform this sync operation.</p>
 
-<p>
-  Last sync: {{lastSync}}
+  <p>
+    <button type="button" ng-click="syncWithSchoology()" class="btn btn-primary" ng-disabled="syncingNow">Sync With Schoology</button>
+  </p>
 
+  <p>
+    Last sync: {{lastSync}}
+  </p>
+</div>
 <div class="progress" ng-if="syncingNow">
   <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
     <span class="sr-only">Syncing Now</span>
   </div>
 </div>
 
-</p>
