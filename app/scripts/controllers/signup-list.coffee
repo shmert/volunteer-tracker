@@ -8,7 +8,7 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module 'volunteerTrackerHtmlApp'
-  .controller 'SignupListCtrl', ($scope, $uibModalInstance, userService, jobService, job, task, slot, whichDate) ->
+  .controller 'SignupListCtrl', ($scope, $uibModalInstance, session, userService, jobService, job, task, slot, whichDate) ->
     $scope.task = task
     $scope.slot = slot
     date = whichDate.date
@@ -23,7 +23,9 @@ angular.module 'volunteerTrackerHtmlApp'
     $scope.rows[i] = {signUp:signUps[i]} for i in [0..(needed-1)]
 
     $scope.findUsers = (q) ->
-      userService.quickSearch(q).then (found) ->
+      config = {}
+      config.linkedTo = session.userAccount.id if !$scope.isAdminForJob($scope.job)
+      userService.quickSearch(q, config).then (found) ->
         return found.data
 
     $scope.newSignUp = (row) ->
@@ -32,6 +34,12 @@ angular.module 'volunteerTrackerHtmlApp'
         slot.signUps.push(updatedSignUp.data);
         row.signUp = updatedSignUp.data;
         row.newUser = null;
+
+    $scope.canRemove = (signUp) ->
+      return false if !signUp;
+      return $scope.isAdminForJob($scope.job) ||
+          signUp.userId.toString() == session.userAccount.id.toString() ||
+          session.userAccount.linkedUsers[signUp.userId];
 
     $scope.clearRow = (row) ->
       slot.locked = true

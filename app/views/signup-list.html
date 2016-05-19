@@ -7,25 +7,24 @@
 </div>
 <div class="modal-body">
 
-  <ol ng-show="isAdminForJob(job)">
+  <ol>
     <li ng-repeat="row in rows">
-      <input ng-show="!row.signUp" class="form-control" ng-model="row.newUser" typeahead-on-select="newSignUp(row)"
+      <input ng-show="!row.signUp"
+             class="form-control"
+             ng-model="row.newUser"
+             typeahead-on-select="newSignUp(row)"
              uib-typeahead="u as u.fullName for u in findUsers($viewValue)"
              typeahead-min-length="3"
              style="display:inline;"
               />
       <div ng-show="row.signUp">
         {{row.signUp.fullName}}
-        <button type="button" ng-click="clearRow(row)" class="btn btn-danger btn-xs">&times;</button>
+        <button type="button"
+                ng-click="clearRow(row)"
+                ng-show="canRemove(row.signUp)"
+                class="btn btn-danger btn-xs">&times;</button>
       </div>
     </li>
-  </ol>
-
-  <ol ng-show="!isAdminForJob(job)">
-    <li ng-repeat="row in rows">
-      {{row.signUp.fullName || 'n/a'}}
-    </li>
-
   </ol>
 
 </div>

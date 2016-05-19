@@ -79,7 +79,7 @@ angular.module('volunteerTrackerHtmlApp')
       else
         promise = jobService.updateSignUp({userId:userId,date:date,verified:false, timeSlotId:slot.id}).then (updatedSignUp) ->
           slot.signUps.push(updatedSignUp.data);
-        if (!session.userAccount.phone && $session.userAccount.profile_info.phone && !session.userAccount.doNotAskForPhone)
+        if (!session.userAccount.phone && session.userAccount.profile_info.phone && !session.userAccount.doNotAskForPhone)
           promise = promise.then ->
             cell = window.prompt('Please provide your cell phone # for other people to contact you')
             if ( cell )
@@ -235,6 +235,7 @@ angular.module('volunteerTrackerHtmlApp')
             'Date',
             'Volunteer',
             'Email',
+            'Phone',
             'Verified',
             'Start Time',
             'End Time']
@@ -243,7 +244,8 @@ angular.module('volunteerTrackerHtmlApp')
               task.name
               moment(signUp.date).format('MM/DD/YYYY')
               usersById[signUp.userId]?.fullName
-              usersById[signUp.userId]?.email
+              usersById[signUp.userId]?.email || ''
+              usersById[signUp.userId]?.phone || ''
               signUp.verified
               moment(timeSlot.startTime).format('hh:mm A')
               moment(timeSlot.endTime).format('hh:mm A')

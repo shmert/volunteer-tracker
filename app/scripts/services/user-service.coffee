@@ -30,7 +30,7 @@ angular.module 'volunteerTrackerHtmlApp'
       $http.get(REST_URL + '/groups/' + id + '/users')
 
     @quickSearch = (q, config) ->
-      config = {onlyMine:false} if !config
+      config = {} if !config
       $http.get(REST_URL + '/users', {params:{q:q, linkedTo:config.linkedTo}})
 
     @fetchById = (ids) ->

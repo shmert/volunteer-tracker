@@ -52,6 +52,13 @@ angular
         resolve:{
           job:($route, jobService)->jobService.findById $route.current.params.id
         }
+      .when '/job-signup-report/:id',
+        templateUrl: 'views/job-signup-report.html?v=20150519'
+        controller: 'JobSignupReportCtrl'
+        controllerAs: 'jobSignupReport'
+        resolve:{
+          job:($route, jobService)->jobService.findById $route.current.params.id
+        }
       .when '/job-list',
         templateUrl: 'views/job-list.html?v=20150519'
         controller: 'JobListCtrl'
