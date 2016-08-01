@@ -8,7 +8,7 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'MainCtrl', ($scope, $filter, volunteerUtils, myJobs, session) ->
+  .controller 'MainCtrl', ($scope, $filter, $location, volunteerUtils, myJobs, session) ->
     $scope.showingCompletedJobs = false
 
     $scope.session = session
@@ -62,6 +62,9 @@ angular.module('volunteerTrackerHtmlApp')
     $scope.isAdminForGroupId = (groupId) ->
       return true if $scope.isAdmin();
       _.indexOf(session.userAccount.adminOfCategories, groupId) != -1;
+
+    $scope.showMyJobs = ->
+      $location.path('/job-list').search('user', session.userAccount.id).search('showAll', 'true')
 
     $scope.resetData = ->
       return if !confirm('Are you sure you want to reset? All your changes will be lost')

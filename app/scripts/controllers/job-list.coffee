@@ -14,7 +14,12 @@ angular.module('volunteerTrackerHtmlApp')
 
 
     $scope.fetch = ->
-      jobService.allJobs({upcoming:!$scope.data.showAll,filterByCategory:true,userId:$location.search().user}).success (jobs)->
+      param = {
+        upcoming: !$scope.data.showAll,
+        filterByCategory: true,
+        userId: $location.search().user
+      }
+      jobService.allJobs(param).success (jobs)->
         $scope.jobs = jobs;
 
 

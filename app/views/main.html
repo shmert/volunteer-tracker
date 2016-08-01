@@ -4,7 +4,7 @@
     <div>
         <h2>Your volunteer hours: {{completeVerified + completeUnverified | number:1}} of {{target}} done!</h2>
 
-        <div class="progress" title="{{progressBarTitle()}}">
+        <div class="progress clickable" title="{{progressBarTitle()}}" ng-click="showMyJobs()">
             <div class="progress-bar progress-bar-primary" role="progressbar" ng-style="{width:percentCompleteVerified + '%'}">
                 {{(percentCompleteVerified + percentCompleteUnverified) | number:0}}%
             </div>

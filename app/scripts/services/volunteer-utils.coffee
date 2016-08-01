@@ -31,11 +31,14 @@ angular.module('volunteerTrackerHtmlApp')
 
 
   durationOf: (timeSlot) ->
-    end = moment(new Date(timeSlot.endTime))
-    start = moment(new Date(timeSlot.startTime))
-    if (!end.isValid() || !start.isValid())
-      console.log('Invalid start/end date in timeSlot ' + timeSlot.id + ': ' + timeSlot.startTime + ' to ' + timeSlot.endTime)
-      return 1
-    return end.diff(start, 'minutes') / 60
+    result = timeSlot.hrsCreditOverride || timeSlot.hrsCredit;
+    if !result
+      end = moment(new Date(timeSlot.endTime))
+      start = moment(new Date(timeSlot.startTime))
+      if (!end.isValid() || !start.isValid())
+        console.log('Invalid start/end date in timeSlot ' + timeSlot.id + ': ' + timeSlot.startTime + ' to ' + timeSlot.endTime)
+        return 1
+      result = end.diff(start, 'minutes') / 60
+    return result;
 
 }
