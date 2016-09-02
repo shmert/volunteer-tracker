@@ -9,4 +9,4 @@
 ###
 angular.module 'volunteerTrackerHtmlApp'
   .constant 'REST_URL', "http://localhost/directory/rest/index.php"
-  #.constant 'REST_URL', "https://creativeartscharter.org/apps/directory/rest/index.php"
+  #.constant 'REST_URL', "https://apps.creativeartscharter.org/apps/rest/index.php"

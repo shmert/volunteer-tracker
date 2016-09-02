@@ -21,7 +21,7 @@ angular.module('volunteerTrackerHtmlApp')
     $scope.syncingNow = true
     $scope.lastSync = 'Syncing now… (you can leave the page and come back)';
     start = new Date()
-    $http.get('https://creativeartscharter.org/apps/directory/update-mysql.php', {withCredentials: false}).then(->
+    $http.get('https://apps.creativeartscharter.org/apps/update-mysql.php', {withCredentials: false}).then(->
       elapsed = new Date().getMilliseconds() - start.getMilliseconds();
       $http.post(REST_URL + '/globals', {lastSchoologySync: start}).then(
         (response) ->
