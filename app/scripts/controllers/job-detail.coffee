@@ -191,7 +191,7 @@ angular.module('volunteerTrackerHtmlApp')
       cal.download(filename);
 
     $scope.publicUrl = ->
-      "https://creativeartscharter.schoology.com/apps/286928878/run/group/49660907?destination=https%3A%2F%2Fcreativeartscharter.org%2Fapps%2Fvolunteer%2F%23%2Fjob-detail%2F" + $scope.job.id;
+      "https://creativeartscharter.schoology.com/apps/286928878/run/group/49660907?destination=https%3A%2F%2Fapps.creativeartscharter.org%2Fapps%2Fvolunteer%2F%23%2Fjob-detail%2F" + $scope.job.id;
 
     $scope.showUrl = (shorten) ->
       url = $scope.publicUrl()
