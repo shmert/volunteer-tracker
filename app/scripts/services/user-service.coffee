@@ -31,7 +31,7 @@ angular.module 'volunteerTrackerHtmlApp'
 
     @quickSearch = (q, config) ->
       config = {} if !config
-      $http.get(REST_URL + '/users', {params:{q:q, linkedTo:config.linkedTo}})
+      $http.get(REST_URL + '/users', {params:{q:q, linkedTo:config.linkedTo, admin:config.admin}})
 
     @fetchById = (ids) ->
       $http.get(REST_URL + '/users-by-id', {params:{ids:ids.join(',')}})
