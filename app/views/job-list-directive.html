@@ -11,8 +11,9 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="job in jobs | filter:$root.q | filter:notDeletedFilter" ng-click="showJobDetail(job)" class="clickable">
-        <td><a ng-click="showJobDetail(job)">{{job.name}}</a></td>
+    <tr ng-repeat="job in jobs | filter:$root.q | filter:notDeletedFilter" ng-click="didClickJob(job)" class="clickable">
+        <td ng-show="selected"><label class="checkbox-inline"><input type="checkbox" class="checkbox" ng-model="selected[job.id]"/>&nbsp;{{job.name}}</label></td>
+        <td ng-show="!selected"><a ng-click="didClickJob(job)">{{job.name}}</a></td>
         <td title="Starting {{job.date|date}}">{{dateDisplayFor(job)}}</td>
         <td><span class="label label-info" ng-repeat="category in job.categories" style="margin-right:5px">{{category.text}}</span></td>
         <td>

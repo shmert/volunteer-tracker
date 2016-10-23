@@ -12,6 +12,7 @@ angular.module 'volunteerTrackerHtmlApp'
     templateUrl: 'views/job-list-directive.html'
     scope:{
       jobs:'=jobs'
+      selected:'=selected'
     }
     link: (scope, element, attrs) ->
       $scope = scope
@@ -30,6 +31,7 @@ angular.module 'volunteerTrackerHtmlApp'
       $scope.percentDone = (job) ->
         return volunteerUtils.percentDone(job)
 
-      $scope.showJobDetail = (job) ->
-        $location.path('/job-detail/' + job.id)
+      $scope.didClickJob = (job) ->
+        $location.path('/job-detail/' + job.id) if !$scope.selected
+        $scope.selected[job.id] = !$scope.selected[job.id] if $scope.selected
 

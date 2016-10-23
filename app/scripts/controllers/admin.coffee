@@ -13,9 +13,17 @@ angular.module('volunteerTrackerHtmlApp')
   $scope.myUserId = session.userAccount.id;
 
   $scope.lastSync = 'Calculating...'
+  $scope.apiStatus = {status:'label-warning', msg:'Checking Schoology API status...'};
+
 
   $scope.add = ->
     $location.path('/job-add')
+
+  $scope.errorTest = ->
+    $http.get(REST_URL + '/error-test').then(
+      (response) -> window.alert('Got a valid response: ' + response),
+      (error) -> window.alert('Got an error: ' + error);
+    )
 
   $scope.syncWithSchoology = ->
     $scope.syncingNow = true
@@ -37,7 +45,14 @@ angular.module('volunteerTrackerHtmlApp')
 
   $http.get(REST_URL + '/globals').then(
     (response) ->
-      $scope.lastSync = response.data.lastSchoologySync || '?'
+      $scope.lastSync = moment(new Date(response.data.lastSchoologySync)).format("dddd, MMMM Do YYYY, h:mm:ss a") || '?'
   , (response) ->
     console.log('Cannot get lastSchoologySync: ' + response.data)
+  )
+
+  $http.get(REST_URL + '/api-test').then(
+    (response) ->
+      $scope.apiStatus = {status:'label-success', msg:'Schoology API connection is OK'};
+    , (response) ->
+      $scope.apiStatus = {status:'label-danger', msg:'Schoology API connection is not working! ' + JSON.stringify(response.data?.message)};
   )
