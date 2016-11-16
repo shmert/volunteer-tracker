@@ -8,12 +8,15 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module 'volunteerTrackerHtmlApp'
-  .controller 'VolunteerAppCtrl', ($scope, session, $location) ->
+  .controller 'VolunteerAppCtrl', ($scope, session, $location, $http, REST_URL) ->
     $scope.loggedIn = false;
     $scope.$on('loggedIn', (loggedIn) ->
       $scope.loggedIn = loggedIn
       console.log('Showing main app content') if (loggedIn)
     )
+
+    $scope.apiStatus = {status:'label-warning', msg:'Checking Schoology API status...'};
+
     $scope.isAdmin =-> session.schoologyAccount.admin
 
     $scope.isAdminOfAtLeastOneGroup =-> $scope.isAdmin() || session.userAccount.adminOfCategories.length;
@@ -37,3 +40,12 @@ angular.module 'volunteerTrackerHtmlApp'
         notes: ''
       }
       $location.path('bug-report')
+
+    $http.get(REST_URL + '/api-test').then(
+      (response) ->
+        $scope.apiStatus = {status:'label-success', msg:'Schoology API connection is OK'};
+      , (response) ->
+        $scope.apiStatus = {status:'label-danger', msg:'Schoology API connection is not working! ' + JSON.stringify(response.data?.message)};
+        if response.status == -1
+          window.location.href = REST_URL + '/check-api-authorization?app_url=' + encodeURIComponent(window.location.href)
+    )

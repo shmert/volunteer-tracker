@@ -50,7 +50,7 @@
 <div ng-show="isAdmin()">
     <h3>Misc</h3>
 
-    <p><a class="btn btn-primary" href="admin/volunteer-roundup">Volunteer Roundup</a></p>
+    <p><a class="btn btn-primary" href="#/admin/volunteer-roundup">Volunteer Roundup</a></p>
 
   <p>
     Last sync: {{lastSync}}
@@ -63,9 +63,6 @@
   </div>
 </div>
 
-<div class="apiTest label" ng-class="apiStatus.status">
-  {{apiStatus.msg}}
-</div>
 
 <div class="errorTest" ng-if="isAdmin()">
     <button type="button" ng-click="errorTest()" class="btn btn-primary">Submit sample bug report</button>

@@ -13,7 +13,6 @@ angular.module('volunteerTrackerHtmlApp')
   $scope.myUserId = session.userAccount.id;
 
   $scope.lastSync = 'Calculating...'
-  $scope.apiStatus = {status:'label-warning', msg:'Checking Schoology API status...'};
 
 
   $scope.add = ->
@@ -50,9 +49,4 @@ angular.module('volunteerTrackerHtmlApp')
     console.log('Cannot get lastSchoologySync: ' + response.data)
   )
 
-  $http.get(REST_URL + '/api-test').then(
-    (response) ->
-      $scope.apiStatus = {status:'label-success', msg:'Schoology API connection is OK'};
-    , (response) ->
-      $scope.apiStatus = {status:'label-danger', msg:'Schoology API connection is not working! ' + JSON.stringify(response.data?.message)};
-  )
+
