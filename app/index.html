@@ -5,8 +5,8 @@
     <title>Volunteer Tracker v1.1.0</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
@@ -31,9 +31,12 @@
 
 <div class="footer text-center hidden-print" style="margin-top:12em;">
     <small>VolunteerTracker v1.1.0 - Please contact <a href="mailto:sam@360works.com">sam@360works.com</a> with any questions, feedback, or bug reports.</small>
-    <small>
+    <small ng-show="false">
         <div class="apiTest label" ng-class="apiStatus.status">
-          {{apiStatus.msg}}
+            {{apiStatus.msg}}
+        <span ng-show="apiStatus.status=='label-danger'">
+            <a href="https://apps.creativeartscharter.org/apps/rest/index.php/api-test">Click Here</a> to allow access.
+        </span>
         </div>
     </small>
 </div>
@@ -42,21 +45,21 @@
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
 <script>
     /*
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+     (function (i, s, o, g, r, a, m) {
+     i['GoogleAnalyticsObject'] = r;
+     i[r] = i[r] || function () {
+     (i[r].q = i[r].q || []).push(arguments)
+     }, i[r].l = 1 * new Date();
+     a = s.createElement(o),
+     m = s.getElementsByTagName(o)[0];
+     a.async = 1;
+     a.src = g;
+     m.parentNode.insertBefore(a, m)
+     })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-    ga('create', 'UA-XXXXX-X');
-    ga('send', 'pageview');
-    */
+     ga('create', 'UA-XXXXX-X');
+     ga('send', 'pageview');
+     */
 </script>
 
 <!-- build:js(.) scripts/oldieshim.js -->

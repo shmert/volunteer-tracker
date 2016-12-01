@@ -45,7 +45,8 @@ angular.module 'volunteerTrackerHtmlApp'
       (response) ->
         $scope.apiStatus = {status:'label-success', msg:'Schoology API connection is OK'};
       , (response) ->
-        $scope.apiStatus = {status:'label-danger', msg:'Schoology API connection is not working! ' + JSON.stringify(response.data?.message)};
+        $scope.apiStatus = {status:'label-danger', msg:'Schoology API connection is not authorized! '};
         if response.status == -1
-          window.location.href = REST_URL + '/check-api-authorization?app_url=' + encodeURIComponent(window.location.href)
+          window.console.log('Schoology API is not working correctly.');
+#          window.location.href = REST_URL + '/check-api-authorization?app_url=' + encodeURIComponent(window.location.href)
     )
