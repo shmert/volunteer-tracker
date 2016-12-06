@@ -31,13 +31,12 @@
 
 <div class="footer text-center hidden-print" style="margin-top:12em;">
     <small>VolunteerTracker v1.1.0 - Please contact <a href="mailto:sam@360works.com">sam@360works.com</a> with any questions, feedback, or bug reports.</small>
-    <small ng-show="false">
-        <div class="apiTest label" ng-class="apiStatus.status">
-            {{apiStatus.msg}}
+    <br/>
+    <small>
+        {{apiStatus.msg}}
         <span ng-show="apiStatus.status=='label-danger'">
-            <a href="https://apps.creativeartscharter.org/apps/rest/index.php/api-test">Click Here</a> to allow access.
+            <a href="https://apps.creativeartscharter.org/apps/rest/index.php/check-api-authorization">Click Here</a> to allow API access.
         </span>
-        </div>
     </small>
 </div>
 

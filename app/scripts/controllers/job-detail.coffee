@@ -118,6 +118,8 @@ angular.module('volunteerTrackerHtmlApp')
       composeMessage(recipients, $scope.job.name)
 
     composeMessage = (recipients, subject) ->
+      if ($scope.apiStatus.status != 'label-success')
+        return alert('You must approve API access by clicking the link on the bottom of the page first.');
       recipients = _.uniq(recipients, 'id')
       url = $scope.publicUrl()
       urlPromise = urlShortener.shorten(url, $scope.job.name.replace('[^a-zA-Z0-9]', ''))

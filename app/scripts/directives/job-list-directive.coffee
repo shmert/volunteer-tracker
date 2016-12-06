@@ -9,10 +9,10 @@
 angular.module 'volunteerTrackerHtmlApp'
   .directive 'jobListDirective', ($location, $filter, volunteerUtils) ->
     restrict: 'EA'
-    templateUrl: 'views/job-list-directive.html'
+    templateUrl: 'views/job-list-directive.html?v=2016-12-05'
     scope:{
       jobs:'=jobs'
-      selected:'=selected'
+      selected:'=selectedJobs'
       hideSearch:'=hideSearch'
     }
     link: (scope, element, attrs) ->
