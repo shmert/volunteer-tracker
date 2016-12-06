@@ -46,22 +46,20 @@
     Last sync: {{lastSync}}
   </p>
 </div>
+<div class="progress" ng-if="syncingNow">
+  <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+    <span class="sr-only">Syncing Now</span>
+  </div>
+</div>
+
 
 <div ng-show="isAdmin()">
     <h3>Misc</h3>
 
     <p><a class="btn btn-primary" href="#/admin/volunteer-roundup">Volunteer Roundup</a></p>
 
-  <p>
-    Last sync: {{lastSync}}
-  </p>
 </div>
 
-<div class="progress" ng-if="syncingNow">
-  <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
-    <span class="sr-only">Syncing Now</span>
-  </div>
-</div>
 
 
 <div class="errorTest" ng-if="isAdmin()">

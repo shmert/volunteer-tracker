@@ -8,7 +8,7 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module 'volunteerTrackerHtmlApp'
-  .controller 'AdminVolunteerRoundupCtrl', ($scope, jobService) ->
+  .controller 'AdminVolunteerRoundupCtrl', ($scope, jobService, REST_URL, $http) ->
     $scope.filter = {
       dateFrom:new Date(),
       dateTo:window.moment().add(1, 'year').toDate()
@@ -17,6 +17,8 @@ angular.module 'volunteerTrackerHtmlApp'
     $scope.selected = {};
 
     $scope.search = ->
+      $scope.jobs = null;
+      $scope.filter['categories[]'] = $scope.filter.categories;
       jobService.findByFilter($scope.filter).then(
         (response) =>
           $scope.jobs = response.data
@@ -24,6 +26,13 @@ angular.module 'volunteerTrackerHtmlApp'
         , (error) =>
           window.alert('Could not fetch jobs: ' + error);
       )
+
+    $scope.queryCategories = (q) ->
+      url = REST_URL + '/groups'
+      url = REST_URL + '/groups-mine-admin' if !$scope.isAdmin()
+      $http.get(url, {params:{q:q,},withCredentials:true}).then (response)->
+        _.map(response.data, 'title')
+
 
     $scope.generate = ->
       $scope.showingGenerated = true;

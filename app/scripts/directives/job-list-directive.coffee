@@ -13,6 +13,7 @@ angular.module 'volunteerTrackerHtmlApp'
     scope:{
       jobs:'=jobs'
       selected:'=selected'
+      hideSearch:'=hideSearch'
     }
     link: (scope, element, attrs) ->
       $scope = scope

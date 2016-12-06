@@ -1,6 +1,4 @@
-
-
-<input type="search" class="form-control" ng-model="$root.q" placeholder="Search" style="width:12em;">
+<input ng-hide="hideSearch" type="search" class="form-control" ng-model="$root.q" placeholder="Search" style="width:12em;">
 <table class="table table-striped table-hover">
     <thead>
     <tr>
@@ -12,8 +10,8 @@
     </thead>
     <tbody>
     <tr ng-repeat="job in jobs | filter:$root.q | filter:notDeletedFilter" ng-click="didClickJob(job)" class="clickable">
-        <td ng-show="selected"><label class="checkbox-inline"><input type="checkbox" class="checkbox" ng-model="selected[job.id]"/>&nbsp;{{job.name}}</label></td>
-        <td ng-show="!selected"><a ng-click="didClickJob(job)">{{job.name}}</a></td>
+        <td ng-show="selected"><label class="checkbox-inline"><input type="checkbox" class="checkbox" ng-checked="selected[job.id]"/>&nbsp;{{job.name}}</label></td>
+        <td ng-show="!selected"><a>{{job.name}}</a></td>
         <td title="Starting {{job.date|date}}">{{dateDisplayFor(job)}}</td>
         <td><span class="label label-info" ng-repeat="category in job.categories" style="margin-right:5px">{{category.text}}</span></td>
         <td>

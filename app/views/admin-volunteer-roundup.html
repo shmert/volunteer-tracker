@@ -1,7 +1,7 @@
 <div class="volunteer-nav"></div>
 
 <div ng-if="!showingGenerated">
-    <form role="form" ng-submit="search()" name="roundupForm" class="form form-inline">
+    <form role="form" ng-submit="search()" name="roundupForm" class="form">
         <div class="form-group">
             <label class="control-label" for="dateFrom">Date From</label>
             <input class="dateField date-field" id="dateFrom" ng-model="filter.dateFrom" placeholder="mm/dd/yyyy" required name="Date From"/>
@@ -13,12 +13,20 @@
             <input class="dateField date-field" id="dateTo" ng-model="filter.dateTo" placeholder="mm/dd/yyyy" required name="Date To"/>
         </div>
 
-        <button type="submit" class="btn btn-primary">Search Date Range</button>
+        <div class="form-group">
+            <label class="control-label">Group</label>
+            <tags-input ng-model="filter.categories" placeholder="Restrict…" add-from-autocomplete-only="true"
+                        replace-spaces-with-dashes="false">
+              <auto-complete source="queryCategories($query)" load-on-focus="true" load-on-empty="true" max-results-to-show="25" min-length="1"></auto-complete>
+            </tags-input>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Find Jobs</button>
     </form>
 
     <h3>Found Jobs</h3>
 
-    <job-list-directive jobs="jobs" selected="selected"></job-list-directive>
+    <job-list-directive jobs="jobs" hide-search="true" selected="selected"></job-list-directive>
 
     <button type="button" ng-click="generate()" class="btn btn-primary">Generate Roundup</button>
 
