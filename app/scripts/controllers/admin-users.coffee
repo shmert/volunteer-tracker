@@ -9,15 +9,21 @@
   Sample user: {id: 53, fullName: 'Fitz Three', linkedUsers:{123:true}, targetHours:40}
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'AdminUsersCtrl', ($scope, $uibModal, $location, volunteerUtils, allJobs, userService, session) ->
+  .controller 'AdminUsersCtrl', ($scope, $uibModal, $location, $http, REST_URL, volunteerUtils, allJobs, userService, session) ->
     $scope.q = ''
     $scope.users = [];
     $scope.selected = {}
     $scope.selectionKeys = []
     $scope.selectionDidChange = -> $scope.selectionKeys = _.chain($scope.selected).pick((v) -> v).keys().value()
 
+    $scope.queryCategories = (q) ->
+      url = REST_URL + '/groups'
+      url = REST_URL + '/groups-mine-admin' if !$scope.isAdmin()
+      $http.get(url, {params:{q:q,},withCredentials:true}).then (response)->
+        _.map(response.data, 'title')
+
     $scope.search = ->
-      userService.quickSearch($scope.q, {admin:true}).success (response) ->
+      userService.quickSearch($scope.q, {admin:true, groups:$scope.groups}).success (response) ->
         #response.unshift($scope.users[userId]) for userId in $scope.selectionKeys # fix! only add if userId is not in response
         $scope.users = response;
         #$scope.users.unshift(selected) for selected in _.values($scope.selected) when not _.contains($scope.users, selected)

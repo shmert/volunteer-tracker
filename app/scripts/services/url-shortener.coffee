@@ -12,7 +12,9 @@ angular.module 'volunteerTrackerHtmlApp'
   accessTokenBitly = 'fad780834fedf61d89f157ebc280ed6ada449c69'
   cache = {}
 
-  @shorten = (shortenMe, title) ->
+  @shorten = (shortenMe, title, alreadyExistingUrl) ->
+    if (alreadyExistingUrl)
+      return $q.when(alreadyExistingUrl);
     return $q.resolve(cache[shortenMe]) if (cache[shortenMe])
     # BIT.LY API
     url = 'https://api-ssl.bitly.com/v3/shorten?access_token=' + accessTokenBitly + '&longUrl=' + encodeURIComponent(shortenMe);

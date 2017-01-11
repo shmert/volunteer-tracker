@@ -8,7 +8,13 @@
 
     <p class="small how-to">Add classes or groups this task is relevant to.</p>
 
-    <tags-input ng-model="job.categories" placeholder="Add…" add-from-autocomplete-only="true"
+    <tags-input
+            ng-model="job.categories"
+            placeholder="Type the first few letters of a class or group…"
+            add-from-autocomplete-only="true"
+            class="required"
+            min-tags="1"
+            required
                 replace-spaces-with-dashes="false">
       <auto-complete source="queryCategories($query)" load-on-focus="true" load-on-empty="true" max-results-to-show="25" min-length="1"></auto-complete>
     </tags-input>
@@ -19,7 +25,7 @@
   <div class="form-group">
     <label>Date</label>
 
-    <input class="dateField date-field" id="date" ng-model="job.date" placeholder="m/d/y" required/>
+    <input class="form-control dateField date-field" id="date" ng-model="job.date" placeholder="m/d/y" required/>
   </div>
 
   <div class="form-group">
@@ -49,7 +55,7 @@
   <br/>
 
   <div>
-    <button ng-click="cancel()" class="btn btn-danger">Cancel</button>
+    <!--<button ng-click="cancel()" class="btn btn-danger">Cancel</button>-->
     <button type="submit" ng-class="{disabled:oneOffJobForm.$invalid}" class="btn btn-primary">Save</button>
   </div>
 </form>

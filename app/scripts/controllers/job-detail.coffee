@@ -122,7 +122,7 @@ angular.module('volunteerTrackerHtmlApp')
         return alert('You must approve API access by clicking the link on the bottom of the page first.');
       recipients = _.uniq(recipients, 'id')
       url = $scope.publicUrl()
-      urlPromise = urlShortener.shorten(url, $scope.job.name.replace('[^a-zA-Z0-9]', ''))
+      urlPromise = urlShortener.shorten(url, $scope.job.name.replace('[^a-zA-Z0-9]', ''), $scope.job.shortUrl)
       urlPromise.then (shortenedUrl) ->
         $uibModal.open({
           animation: true,
@@ -198,7 +198,7 @@ angular.module('volunteerTrackerHtmlApp')
     $scope.showUrl = (shorten) ->
       url = $scope.publicUrl()
       if (shorten)
-        urlPromise = urlShortener.shorten(url, $scope.job.name.replace('[^a-zA-Z0-9]', ''))
+        urlPromise = urlShortener.shorten(url, $scope.job.name.replace('[^a-zA-Z0-9]', ''), $scope.job.shortUrl)
       else
         urlPromise = $q.resolve(url)
       urlPromise.then (urlToShow) ->

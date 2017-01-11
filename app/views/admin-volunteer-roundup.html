@@ -1,46 +1,59 @@
 <div class="volunteer-nav"></div>
 
 <div ng-if="!showingGenerated">
-    <form role="form" ng-submit="search()" name="roundupForm" class="form">
-        <div class="form-group">
-            <label class="control-label" for="dateFrom">Date From</label>
-            <input class="dateField date-field" id="dateFrom" ng-model="filter.dateFrom" placeholder="mm/dd/yyyy" required name="Date From"/>
+    <div class="well">
+        <form role="form" ng-submit="search()" name="roundupForm" class="form">
+            <div class="form-group">
+                <label class="control-label" for="dateFrom">Date From</label>
+                <input class="dateField date-field form-control" id="dateFrom" ng-model="filter.dateFrom" placeholder="mm/dd/yyyy" required name="Date From"/>
 
-        </div>
+            </div>
 
-        <div class="form-group">
-            <label class="control-label">Date To</label>
-            <input class="dateField date-field" id="dateTo" ng-model="filter.dateTo" placeholder="mm/dd/yyyy" required name="Date To"/>
-        </div>
+            <div class="form-group">
+                <label class="control-label">Date To</label>
+                <input class="dateField date-field form-control" id="dateTo" ng-model="filter.dateTo" placeholder="mm/dd/yyyy" required name="Date To"/>
+            </div>
 
-        <div class="form-group">
-            <label class="control-label">Group</label>
-            <tags-input ng-model="filter.categories" placeholder="Restrict…" add-from-autocomplete-only="true"
-                        replace-spaces-with-dashes="false">
-              <auto-complete source="queryCategories($query)" load-on-focus="true" load-on-empty="true" max-results-to-show="25" min-length="1"></auto-complete>
-            </tags-input>
-        </div>
+            <div class="form-group">
+                <label class="control-label">Group</label>
+                <tags-input ng-model="filter.categories" placeholder="Restrict…" add-from-autocomplete-only="true"
+                            replace-spaces-with-dashes="false">
+                    <auto-complete source="queryCategories($query)" load-on-focus="true" load-on-empty="true" max-results-to-show="25" min-length="1"></auto-complete>
+                </tags-input>
+            </div>
 
-        <button type="submit" class="btn btn-primary">Find Jobs</button>
-    </form>
-
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i> Filter Jobs</button>
+        </form>
+    </div>
     <h3>Found Jobs</h3>
 
     <job-list-directive jobs="jobs" hide-search="true" selected-jobs="selected"></job-list-directive>
 
-    <button type="button" ng-click="generate()" class="btn btn-primary">Generate Roundup</button>
+    <button type="button" ng-click="generate()" class="btn btn-primary">Generate Roundup for Checked Jobs</button>
 
 </div>
 
 
-<div ng-if="showingGenerated" class="panel panel-default">
+<div ng-if="showingGenerated" class="panel panel-default roundup">
     <div class="panel-body">
         <div ng-repeat="j in jobs">
             <div ng-if="selected[j.id]"><h3>{{j.name}}: {{j.date | date}}</h3>
                 <p>{{j.description}}</p>
+                <p ng-show="j.shortUrl">
+                    <a href="{{j.shortUrl}}">{{j.shortUrl}}</a>
+                </p>
+                <br/>
             </div>
         </div>
 
+        <p><em>The Volunteer Roundup is usually published on Fridays. Questions & submissions to: mbowen@creativeartscharter.org<br/>
+            Melissa Bowen, CACS mom and FA Volunteer Coordinator </em></p>
+
+        <br/>
+        <br/>
+
+        <hr/>
+        <br/>
         <button type="button" ng-click="close()" class="btn btn-primary">Close</button>
     </div>
 </div>

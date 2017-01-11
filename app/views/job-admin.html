@@ -24,7 +24,7 @@
   <div class="form-group">
     <label for="date">Date</label>
 
-    <input class="dateField date-field" id="date" ng-model="job.date" placeholder="mm/dd/yyyy" required id="Date" name="Date"/>
+    <input class="dateField date-field form-control" id="date" ng-model="job.date" placeholder="mm/dd/yyyy" required id="Date" name="Date"/>
     <small ng-show="job.date"> ({{job.date | date}})</small>
     <!--
     <p class="input-group"  style="width:12em;">
@@ -92,7 +92,7 @@
     <div class="col-sm-3">
       <div class="form-group">
         <label for="endDate">End On</label>
-        <input class="dateField date-field" id="endDate" ng-model="job.recurrence.endDate" placeholder="mm/dd/yyyy"/>
+        <input class="dateField date-field form-control" id="endDate" ng-model="job.recurrence.endDate" placeholder="mm/dd/yyyy"/>
 
       </div>
     </div>
