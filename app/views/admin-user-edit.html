@@ -11,6 +11,11 @@
     </div>
 
     <div class="form-group">
+        <label>Target Hours (family)</label>
+        <input disabled type="text" min="0" max="1000" class="form-control" value="{{targetHoursFamily()}}" style="width:6em;" placeholder="20"/>
+    </div>
+
+    <div class="form-group">
         <label>Admin of Categories / Classes</label>
         <p class="small how-to">Which classes or groups can this user edit tasks for?</p>
         <div class="checkbox" ng-repeat="g in user.groups">

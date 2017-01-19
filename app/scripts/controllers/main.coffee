@@ -35,7 +35,6 @@ angular.module('volunteerTrackerHtmlApp')
         }
 
       $scope.mySignUps = []
-      $scope.target = 20
       $scope.completeUnverified = 0
       $scope.completeVerified = 0
 

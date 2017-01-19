@@ -2,7 +2,7 @@
 
 <div class="jumbotron" style="text-align: center">
     <div>
-        <h2>Your volunteer hours: {{completeVerified + completeUnverified | number:1}} of {{target}} done!</h2>
+        <h2>Your volunteer hours: {{completeVerified + completeUnverified | number:1}} of {{session.userAccount.targetHoursLinked}} done!</h2>
 
         <div class="progress clickable" title="{{progressBarTitle()}}" ng-click="showMyJobs()">
             <div class="progress-bar progress-bar-primary" role="progressbar" ng-style="{width:percentCompleteVerified + '%'}">
@@ -17,7 +17,7 @@
     </p>
 </div>
 <div ng-show="mySignUps.length">
-    <h3>You are signed up for:</h3>
+    <h3>Your family is signed up for:</h3>
     <div class="list-group">
       <a ng-repeat="o in mySignUps | filter:showingCompletedFilter" href="#job-detail/{{o.job.id}}" class="list-group-item" ng-class="{disabled:isInPast(o.signUp.date)}">
         <h4 class="list-group-item-heading">
