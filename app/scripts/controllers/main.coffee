@@ -8,10 +8,16 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'MainCtrl', ($scope, $filter, $location, volunteerUtils, myJobs, session) ->
+  .controller 'MainCtrl', ($scope, $filter, $location, volunteerUtils, userService, myJobs, session) ->
     $scope.showingCompletedJobs = false
 
     $scope.session = session
+
+    $scope.hasLinkedAccounts = _.keys(session.userAccount.linkedUsers).length != 0;
+    userService.fetchById(_.keys(session.userAccount.linkedUsers)).success (array) ->
+      $scope.linkedUsers = array
+      $scope.linkedUsersString = _.map(array, 'fullName').join(', ');
+
 
     recalculate = ->
       handleJob = (job) ->

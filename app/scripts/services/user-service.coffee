@@ -37,6 +37,7 @@ angular.module 'volunteerTrackerHtmlApp'
       $http.get(REST_URL + '/users-by-id', {params:{ids:ids.join(',')}})
 
     @updateUser = (user) ->
+      user.linkedUserIds = _.keys(user.linkedUsers)
       $http.put(REST_URL + '/users/' + user.id, user)
 
     @save = (u) ->
