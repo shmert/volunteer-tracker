@@ -3,6 +3,7 @@
 
 <h1>{{job.name}}
   <a ng-show="isAdminForJob(job)" role="button" class="btn btn-warning" href="#/job-admin/{{job.id}}"><i class="glyphicon glyphicon-edit"></i> Administer Job</a>
+  <a ng-show="isAdminForJob(job)" role="button" class="btn btn-warning" ng-click="duplicate()">Duplicate Job</a>
   <!--<a ng-show="true" role="button" class="btn btn-default" ng-click="downloadIcs()"><i class="glyphicon glyphicon-calendar"></i> Save to Calendar</a>-->
 
   <div class="btn-group" uib-dropdown is-open="viewButton.isopen">
@@ -39,7 +40,7 @@
 
     <div ng-repeat="task in job.tasks" style="margin-left:1em;">
         <h3>{{task.name}}</h3>
-        <p class="lead"> {{task.description}}</p>
+        <p class="lead" style="white-space: pre-wrap"> {{task.description}}</p>
 
         <div ng-repeat="slot in task.timeSlots" style="margin-left:1em;">
             <span class="signup-buttons">

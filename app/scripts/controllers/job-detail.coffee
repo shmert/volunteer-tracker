@@ -8,7 +8,7 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'JobDetailCtrl', ($scope, $filter, $window, $q, $uibModal, userService, job, jobService, volunteerUtils, session, urlShortener, messageSender) ->
+  .controller 'JobDetailCtrl', ($scope, $filter, $window, $location, $q, $uibModal, userService, job, jobService, volunteerUtils, session, urlShortener, messageSender) ->
     $scope.job = job.data
     userId = session.userAccount.id.toString();
     $scope.userId = userId
@@ -228,6 +228,42 @@ angular.module('volunteerTrackerHtmlApp')
     $scope.repeatingDateTime = (date, time) ->
       volunteerUtils.dateTime(moment(date,'YYYY-MM-DD').toDate(), moment(time).toDate())
 
+    appendExportLine = (data, usersById, task, timeSlot, i) ->
+      signUp = timeSlot.signUps[i] || {date:$scope.job.date}
+      data.push(
+        [
+          task.name
+          moment(signUp.date).format('MM/DD/YYYY')
+          usersById[signUp.userId]?.fullName || ''
+          usersById[signUp.userId]?.email || ''
+          usersById[signUp.userId]?.phone || ''
+          signUp.verified || ''
+          moment(timeSlot.startTime).format('hh:mm A')
+          moment(timeSlot.endTime).format('hh:mm A')
+        ]
+      )
+
+    $scope.duplicate = ->
+      return if (!confirm('Are you sure you want to duplicate this job?'))
+      dup = angular.copy($scope.job);
+      dup.id = null;
+      dup.name += ' Copy';
+      dup.date = moment().add(1, 'day').toDate();
+      dup.shortUrl = null;
+      for t in dup.tasks
+        t.id = null;
+        t.jobId = null;
+        for s in t.timeSlots
+          s.id = null;
+          s.jobId = null;
+          s.signUps = [];
+      jobService.push(dup).then( (saved) ->
+        $location.path('/job-admin/' + saved.data.id)
+      ).catch( (err) ->
+        session.logAndReportError(err)
+      )
+
+
     $scope.export = ->
       userService.allUserNames().success (allUsers) ->
         usersById = _.indexBy(allUsers, 'id')
@@ -242,17 +278,8 @@ angular.module('volunteerTrackerHtmlApp')
             'Start Time',
             'End Time']
         ]
-        data.push([
-              task.name
-              moment(signUp.date).format('MM/DD/YYYY')
-              usersById[signUp.userId]?.fullName
-              usersById[signUp.userId]?.email || ''
-              usersById[signUp.userId]?.phone || ''
-              signUp.verified
-              moment(timeSlot.startTime).format('hh:mm A')
-              moment(timeSlot.endTime).format('hh:mm A')
-            ]
-        ) for signUp in timeSlot.signUps for timeSlot in task.timeSlots for task in $scope.job.tasks
+        # FIX! we should iterate over dateOptions also? Only an issue for jobs that aren't fully filled
+        appendExportLine(data, usersById, task, timeSlot, i) for i in [0..Math.max(timeSlot.signUps.length, timeSlot.needed || 0)] for timeSlot in task.timeSlots for task in $scope.job.tasks
         content = new CSV(data).encode();
         blob = new Blob([content ], { type: 'text/plain;charset=utf-8' });
 #        url = (window.URL || window.webkitURL).createObjectURL(blob, {type: 'text/csv'});

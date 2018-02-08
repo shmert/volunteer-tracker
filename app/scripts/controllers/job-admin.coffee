@@ -94,7 +94,7 @@ angular.module('volunteerTrackerHtmlApp')
       return alert('Please fix validation errors first: ' + invalidSummary($scope.form)) if $scope.form.$invalid
       tasksToSave = task for task in $scope.job.tasks when !task.deleted
       return alert('You must add at least one task') if (!tasksToSave)
-      return alert('You must add at least one category') if ($scope.job.categories.length==0)
+      return alert('You must add at least one group/class. Be sure to select from the list, instead of just typing in the name.') if ($scope.job.categories.length==0)
 
       task.timeSlots = $filter('orderBy')(task.timeSlots, ['name','startTime']) for task in $scope.job.tasks
       $scope.$emit('save');
