@@ -26,7 +26,7 @@ angular.module 'volunteerTrackerHtmlApp'
     linkedTo = null;
     linkedTo = session.userAccount.id if !$scope.isAdmin()
     userService.quickSearch(q, {linkedTo:linkedTo}).then (found) ->
-      return found.data
+      return found
 
   $scope.ensureEmptyVolunteerSlotExists = ->
     if ($scope.job.volunteers.length == 0 || $scope.job.volunteers[$scope.job.volunteers.length - 1].user != null)
@@ -49,8 +49,8 @@ angular.module 'volunteerTrackerHtmlApp'
     return alert('Please choose at least one group / class') if $scope.job.categories.length == 0
     return alert('Please choose at least one volunteer') if signUps.length == 0
 
-    startTime = moment('8:00:00', 'HH:mm:ss').toDate()
-    endTime = moment('8:00:00', 'HH:mm:ss').add($scope.job.hours, 'h').toDate()
+    startTime = '08:00';
+    endTime = moment(startTime, 'HH:mm').add($scope.job.hours, 'h').format('HH:mm')
 
 
     newJob = {
@@ -86,4 +86,4 @@ angular.module 'volunteerTrackerHtmlApp'
     , (e)-> session.logAndReportError(e)
 
   $scope.jobCount = ->
-    return jobService.allJobs().length
+    return jobService.allJobs().length # FIX! this is a promise, right?

@@ -9,7 +9,7 @@
 ###
 angular.module 'volunteerTrackerHtmlApp'
   .controller 'GroupsCtrl', ($scope, groups) ->
-    $scope.groups = groups.data;
+    $scope.groups = groups;
     $scope.foo = $scope.groups;
 
     return

@@ -9,6 +9,6 @@
 ###
 angular.module 'volunteerTrackerHtmlApp'
   .controller 'GroupsDetailCtrl', ($scope, group, userService) ->
-    $scope.group = group.data;
-    userService.findByGroupId($scope.group.id).then (response) -> $scope.users = response.data
+    $scope.group = group;
+    userService.findByGroupId($scope.group.id).then (response) -> $scope.users = response
     return

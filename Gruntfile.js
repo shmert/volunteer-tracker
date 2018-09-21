@@ -288,16 +288,16 @@ module.exports = function (grunt) {
     //   dist: {}
     // },
 
-    imagemin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.{png,jpg,jpeg,gif}',
-          dest: '<%= yeoman.dist %>/images'
-        }]
-      }
-    },
+    // imagemin: {
+      // dist: {
+        // files: [{
+          // expand: true,
+          // cwd: '<%= yeoman.app %>/images',
+          // src: '{,*/}*.{png,jpg,jpeg,gif}',
+          // dest: '<%= yeoman.dist %>/images'
+        // }]
+      // }
+    // },
 
     svgmin: {
       dist: {
@@ -342,11 +342,11 @@ module.exports = function (grunt) {
     },
 
     // Replace Google CDN references
-    cdnify: {
-      dist: {
-        html: ['<%= yeoman.dist %>/*.html']
-      }
-    },
+    // cdnify: {
+      // dist: {
+        // html: ['<%= yeoman.dist %>/*.html']
+      // }
+    // },
 
     // Copies remaining files to places other tasks can use
     copy: {
@@ -397,18 +397,18 @@ module.exports = function (grunt) {
       dist: [
         'coffee',
         'copy:styles',
-        'imagemin',
-        'svgmin'
+        // 'imagemin',
+        // 'svgmin'
       ]
     },
 
     // Test settings
-    karma: {
-      unit: {
-        configFile: 'test/karma.conf.coffee',
-        singleRun: true
-      }
-    }
+    // karma: {
+      // unit: {
+        // configFile: 'test/karma.conf.coffee',
+        // singleRun: true
+      // }
+    // }
   });
 
 

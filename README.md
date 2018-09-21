@@ -5,7 +5,7 @@ version 0.11.1.
 
 ## Build & development
 
-Run `grunt` for building and `grunt serve` for preview.
+Run `grunt --force` for building and `grunt serve --force` for preview.
 
 This looks at `http://localhost/directory` during development. 
 

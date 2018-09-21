@@ -22,7 +22,7 @@ angular.module 'volunteerTrackerHtmlApp'
 
   $scope.findUsers = (q) ->
     userService.quickSearch(q).then (found) ->
-      return found.data
+      return found
 
   $scope.queryRecipients = (q) ->
     results = []

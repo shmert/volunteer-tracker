@@ -8,13 +8,13 @@
  # Controller of the volunteerTrackerHtmlApp
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .controller 'JobAdminCtrl', ($scope, $location, $filter, $http, $uibModal, jobService, job, REST_URL, userService, session, messageSender) ->
-    $scope.job = job.data
+  .controller 'JobAdminCtrl', ($scope, $location, $filter, $http, $uibModal, jobService, job, REST_URL, userService, volunteerUtils, session, messageSender) ->
+    $scope.job = job
     $scope.job.date = new Date($scope.job.date) if typeof($scope.job.date) == 'string'
-    $scope.job.recurrence.endDate = new Date($scope.job.recurrence.endDate) if typeof($scope.job.recurrence.endDate) == 'string'
-    ts.startTime = new Date(ts.startTime) for ts in task.timeSlots for task in $scope.job.tasks
-    ts.endTime = new Date(ts.endTime) for ts in task.timeSlots for task in $scope.job.tasks
-    userService.allUserNames().success (allUsers) ->
+    $scope.job.recurrence.endDate = new Date($scope.job.recurrence.endDate) if $scope.job.recurrence && typeof($scope.job.recurrence.endDate) == 'string'
+#    ts.startTime = new Date(ts.startTime) for ts in task.timeSlots for task in $scope.job.tasks
+#    ts.endTime = new Date(ts.endTime) for ts in task.timeSlots for task in $scope.job.tasks
+    userService.allUserNames().then (allUsers) ->
       $scope.allUsers = _.indexBy(allUsers, 'id')
 
 
@@ -66,7 +66,7 @@ angular.module('volunteerTrackerHtmlApp')
 
     $scope.findUsers = (q) ->
       userService.quickSearch(q).then (found) ->
-        return found.data
+        return found
 
     $scope.didChangeSlotNeeded = (slot) ->
       slot.neededMax = Math.max(slot.neededMax || 0, slot.needed) if slot.neededMax and slot.needed
@@ -79,14 +79,14 @@ angular.module('volunteerTrackerHtmlApp')
 
     hrsCreditDefault = (slot) ->
       return null if !slot.startTime || !slot.endTime;
-      return Math.max(1, slot.endTime.getHours() - slot.startTime.getHours());
+      return Math.max(1, volunteerUtils.timeParser(slot.endTime)?.get('hours') - volunteerUtils.timeParser(slot.startTime)?.get('hours'));
 
     $scope.duplicateSlot = (task, index) ->
       return alert('Please fix validation errors first: ' + invalidSummary($scope.form)) if $scope.form.$invalid
       oldSlot = task.timeSlots[index]
-      oldStart = moment(oldSlot.startTime)
-      oldEnd = moment(oldSlot.endTime)
-      newEnd = oldEnd.add(oldEnd.diff(oldStart)).toDate()
+      oldStart = volunteerUtils.timeParser(oldSlot.startTime)
+      oldEnd = volunteerUtils.timeParser(oldSlot.endTime)
+      newEnd = oldEnd.add(oldEnd.diff(oldStart)).format('HH:mm')
       newSlot = {name:oldSlot.name, needed:oldSlot.needed, neededMax:oldSlot.neededMax, startTime:oldSlot.endTime, endTime:newEnd, hrsCreditOverride:oldSlot.hrsCreditOverride, signUps:[]}
       task.timeSlots.splice(index+1, 0, newSlot)
 
@@ -99,7 +99,7 @@ angular.module('volunteerTrackerHtmlApp')
       task.timeSlots = $filter('orderBy')(task.timeSlots, ['name','startTime']) for task in $scope.job.tasks
       $scope.$emit('save');
       jobService.push($scope.job).then( (saved) ->
-        $location.path('/job-detail/' + saved.data.id)
+        $location.path('/job-detail/' + saved.id)
       ).catch( (err) ->
         session.logAndReportError(err)
       )

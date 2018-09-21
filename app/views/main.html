@@ -24,7 +24,7 @@
         <h4 class="list-group-item-heading">
             <i class="glyphicon glyphicon-calendar"></i>
             {{o.job.name}} <!--/ {{o.task.name}}-->
-            <small> {{o.signUp.date|date}} {{o.timeSlot.startTime|date:'hh:mm a'}}<span ng-show="o.timeSlot.startTime!=o.timeSlot.endTime"> - {{o.timeSlot.endTime|date:'hh:mm a'}}</span></small>
+            <small> {{o.signUp.date|date}} {{o.timeSlot.startTime|time:'hh:mm a'}}<span ng-show="o.timeSlot.startTime!=o.timeSlot.endTime"> - {{o.timeSlot.endTime|time:'hh:mm a'}}</span></small>
         </h4>
         <p class="list-group-item-text">{{o.timeSlot.name}}</p>
           <div ng-show="o.signUp.userId!=session.userAccount.uid"><em class="text-muted">For another member of your household</em></div>

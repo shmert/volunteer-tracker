@@ -14,7 +14,7 @@ angular.module('volunteerTrackerHtmlApp')
     $scope.session = session
 
     $scope.hasLinkedAccounts = _.keys(session.userAccount.linkedUsers).length != 0;
-    userService.fetchById(_.keys(session.userAccount.linkedUsers)).success (array) ->
+    userService.fetchById(_.keys(session.userAccount.linkedUsers)).then (array) ->
       $scope.linkedUsers = array
       $scope.linkedUsersString = _.map(array, 'fullName').join(', ');
 
@@ -44,10 +44,11 @@ angular.module('volunteerTrackerHtmlApp')
       $scope.completeUnverified = 0
       $scope.completeVerified = 0
 
-      handleJob job for job in myJobs.data
+      handleJob job for job in myJobs
       $scope.mySignUps = $filter('orderBy')($scope.mySignUps, ['signUp.date'])
-      $scope.percentCompleteVerified = Math.round(Math.min(100, $scope.completeVerified / $scope.target * 100));
-      $scope.percentCompleteUnverified = Math.round(Math.min(100, $scope.completeUnverified / $scope.target * 100));
+      targetHrs = session.userAccount.targetHoursLinked
+      $scope.percentCompleteVerified = Math.round(Math.min(100, $scope.completeVerified / targetHrs * 100));
+      $scope.percentCompleteUnverified = Math.round(Math.min(100, $scope.completeUnverified / targetHrs * 100));
 
 
     recalculate()

@@ -21,7 +21,7 @@ angular.module 'volunteerTrackerHtmlApp'
       $scope.filter['categories[]'] = $scope.filter.categories;
       jobService.findByFilter($scope.filter).then(
         (response) =>
-          $scope.jobs = response.data
+          $scope.jobs = response
           $scope.selected[j.id] = true for j in $scope.jobs;
         , (error) =>
           window.alert('Could not fetch jobs: ' + error);

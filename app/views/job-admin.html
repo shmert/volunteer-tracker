@@ -1,198 +1,198 @@
 <br/>
 
 <form role="form" name="form">
-  <div class="form-group">
-    <label for="name">Job Name</label>
-    <input name="Job Name" type="text" class="form-control" required="true" id="name" maxlength="255"
-           placeholder="Description of the task" ng-model="job.name">
-  </div>
+	<div class="form-group">
+		<label for="name">Job Name</label>
+		<input name="Job Name" type="text" class="form-control" required="true" id="name" maxlength="255"
+			   placeholder="Description of the task" ng-model="job.name">
+	</div>
 
 
-  <div class="form-group">
-    <label>Groups / Classes</label>
+	<div class="form-group">
+		<label>Groups / Classes</label>
 
-    <p class="small how-to">Add classes or groups this task is relevant to. Users who can administer these
-      classes/groups will be able to edit this task.</p>
+		<p class="small how-to">Add classes or groups this task is relevant to. Users who can administer these
+			classes/groups will be able to edit this task.</p>
 
-    <tags-input ng-model="job.categories" placeholder="Add…" add-from-autocomplete-only="true"
-                replace-spaces-with-dashes="false">
-      <auto-complete source="queryCategories($query)" load-on-focus="true" load-on-empty="true" max-results-to-show="25" min-length="1"></auto-complete>
-    </tags-input>
+		<tags-input ng-model="job.categories" placeholder="Add…" add-from-autocomplete-only="true"
+					replace-spaces-with-dashes="false" select-first-match="true">
+			<auto-complete source="queryCategories($query)" load-on-focus="true" load-on-empty="true" max-results-to-show="25" min-length="1"></auto-complete>
+		</tags-input>
 
-  </div>
+	</div>
 
-  <div class="form-group">
-    <label for="date">Date</label>
+	<div class="form-group">
+		<label for="date">Date</label>
 
-    <input class="dateField date-field form-control" id="date" ng-model="job.date" placeholder="mm/dd/yyyy" required id="Date" name="Date"/>
-    <small ng-show="job.date"> ({{job.date | date}})</small>
-    <!--
-    <p class="input-group"  style="width:12em;">
-      <input id="date" type="date" class="form-control" datepicker-popup="yyyy-MM-dd" datepicker-options="datePickerOptions" ng-model="job.date" is-open="opened" ng-required="true" close-text="Close" />
-      <span class="input-group-btn">
-        <button type="button" class="btn btn-default" ng-click="openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-      </span>
-    </p>
-    -->
+		<input class="dateField date-field form-control" id="date" ng-model="job.date" placeholder="mm/dd/yyyy" required id="Date" name="Date"/>
+		<small ng-show="job.date"> ({{job.date | date}})</small>
+		<!--
+        <p class="input-group"  style="width:12em;">
+          <input id="date" type="date" class="form-control" datepicker-popup="yyyy-MM-dd" datepicker-options="datePickerOptions" ng-model="job.date" is-open="opened" ng-required="true" close-text="Close" />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+        </p>
+        -->
 
-  </div>
+	</div>
 
-  <div class="form-group">
-    <label for="description">Description</label>
-    <textarea class="form-control" id="description" ng-model="job.description" rows="3"
-              placeholder="Optional description of job"></textarea>
-  </div>
+	<div class="form-group">
+		<label for="description">Description</label>
+		<textarea class="form-control" id="description" ng-model="job.description" rows="3"
+				  placeholder="Optional description of job"></textarea>
+	</div>
 
-  <div class="form-group">
-    <label for="location">Street Address</label>
-    <input class="form-control" id="location" ng-model="job.location" placeholder="Optional street address of job"/>
-  </div>
+	<div class="form-group">
+		<label for="location">Street Address</label>
+		<input class="form-control" id="location" ng-model="job.location" placeholder="Optional street address of job"/>
+	</div>
 
-  <div class="form-group">
-    <label>Repeating</label>
+	<div class="form-group">
+		<label>Repeating</label>
 
-    <div class="radio">
-      <label>
-        <input type="radio" name="recurRadio" id="recurRadio0" value="" ng-model="job.recurrence.type">
-        Non-Repeating (Single Occurrence)
-      </label>
-    </div>
-    <div class="radio">
-      <label>
-        <input type="radio" name="recurRadio" id="recurRadio1" value="day" ng-model="job.recurrence.type">
-        Every Day
-      </label>
-    </div>
-    <div class="radio">
-      <label>
-        <input type="radio" name="recurRadio" id="recurRadio2" value="week" ng-model="job.recurrence.type">
-        Every Week
+		<div class="radio">
+			<label>
+				<input type="radio" name="recurRadio" id="recurRadio0" value="" ng-model="job.recurrence.type">
+				Non-Repeating (Single Occurrence)
+			</label>
+		</div>
+		<div class="radio">
+			<label>
+				<input type="radio" name="recurRadio" id="recurRadio1" value="day" ng-model="job.recurrence.type">
+				Every Day
+			</label>
+		</div>
+		<div class="radio">
+			<label>
+				<input type="radio" name="recurRadio" id="recurRadio2" value="week" ng-model="job.recurrence.type">
+				Every Week
 
-      </label>
-    </div>
-    <div class="radio">
-      <label>
-        <input type="radio" name="recurRadio" id="recurRadio3" value="month" ng-model="job.recurrence.type">
-        Every Month
-      </label>
-    </div>
-    <div class="radio">
-      <label>
-        <input type="radio" name="recurRadio" id="recurRadio4" value="custom-weekly" ng-model="job.recurrence.type">
-        Every
-        <div class="btn-group">
-          <label class="btn btn-default btn-xs dayOfWeek" ng-model="job.recurrence.daysOfWeek[$index+1]" uib-btn-checkbox ng-repeat="d in dayOfWeekOptions" ng-disabled="job.recurrence.type!='custom-weekly'">{{d}}</label>
-        </div>
+			</label>
+		</div>
+		<div class="radio">
+			<label>
+				<input type="radio" name="recurRadio" id="recurRadio3" value="month" ng-model="job.recurrence.type">
+				Every Month
+			</label>
+		</div>
+		<div class="radio">
+			<label>
+				<input type="radio" name="recurRadio" id="recurRadio4" value="custom-weekly" ng-model="job.recurrence.type">
+				Every
+				<div class="btn-group">
+					<label class="btn btn-default btn-xs dayOfWeek" ng-model="job.recurrence.daysOfWeek[$index+1]" uib-btn-checkbox ng-repeat="d in dayOfWeekOptions" ng-disabled="job.recurrence.type!='custom-weekly'">{{d}}</label>
+				</div>
 
-      </label>
-    </div>
-  </div>
+			</label>
+		</div>
+	</div>
 
-  <div class="row" ng-show="job.recurrence.type">
-    <div class="col-sm-3">
-      <div class="form-group">
-        <label for="endDate">End On</label>
-        <input class="dateField date-field form-control" id="endDate" ng-model="job.recurrence.endDate" placeholder="mm/dd/yyyy"/>
+	<div class="row" ng-show="job.recurrence.type">
+		<div class="col-sm-3">
+			<div class="form-group">
+				<label for="endDate">End On</label>
+				<input class="dateField date-field form-control" id="endDate" ng-model="job.recurrence.endDate" placeholder="mm/dd/yyyy"/>
 
-      </div>
-    </div>
-    <div class="col-sm-9">
-      <div class="form-group">
-        <label for="exceptions">Except On</label>
-        <input class="form-control" id="exceptions" ng-model="job.recurrence.exceptions"
-               placeholder="e.g. 1/23/2015, 2/14/2015"/>
-      </div>
-    </div>
-  </div>
+			</div>
+		</div>
+		<div class="col-sm-9">
+			<div class="form-group">
+				<label for="exceptions">Except On</label>
+				<input class="form-control" id="exceptions" ng-model="job.recurrence.exceptions"
+					   placeholder="e.g. 1/23/2015, 2/14/2015"/>
+			</div>
+		</div>
+	</div>
 
-  <h3>Task Definitions</h3>
+	<h3>Task Definitions</h3>
 
 
-  <table class="table">
-    <thead>
-    <tr>
-      <th class="col-xs-2">Task Name</th>
-      <th class="col-xs-10">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="task in job.tasks | filter:notDeleted">
-      <td><input type="text" ng-model="task.name" placeholder="Task name"/></td>
-      <td>
+	<table class="table">
+		<thead>
+		<tr>
+			<th class="col-xs-2">Task Name</th>
+			<th class="col-xs-10">Description</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr ng-repeat="task in job.tasks | filter:notDeleted">
+			<td><input type="text" ng-model="task.name" placeholder="Task name"/></td>
+			<td>
         <textarea ng-model="task.description" style="width:100%" rows="4"
-                  placeholder="Detailed description of the task including where to go, etc. This will be sent to volunteers in a reminder email"></textarea>
-        <table class="table table-condensed">
-          <thead>
-          <tr>
-            <th>People Needed</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th colspan="2">Hrs Credit</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr ng-repeat-start="slot in task.timeSlots | filter:notDeleted">
-            <td valign="middle">
-              <input type="number" min="1" max="99" class="form-control-static integer" ng-model="slot.needed"
-                     ng-change="didChangeSlotNeeded(slot)" ng-required="!slot.deleted"/>
-              <small> to</small>
-              <input type="number" min="0" max="99" class="form-control-static integer" ng-model="slot.neededMax"
-                     ng-change="didChangeSlotNeeded(slot)" placeholder="{{slot.needed}}"/></td>
-            <td>
-              <input type="text" class="time-field form-control" ng-model="slot.startTime"
-                      ng-change="didChangeHrsCredit(slot)" ng-required="!slot.deleted"/></td>
-            <td>
-              <input type="text" class="time-field form-control" ng-model="slot.endTime"
-                     ng-change="didChangeHrsCredit(slot)" ng-required="!slot.deleted"/>
-            </td>
-            <td>
-              <input type="number" min="0" max="40" step="0.25" class="number-field form-control-static hour-field" ng-model="slot.hrsCreditOverride" placeholder="{{hrsCredit(slot)}}" ng-change="didChangeHrsCredit(slot)"/>
-            </td>
-            <td style="white-space: nowrap">
-              <button type="button" ng-click="removeSlot(task, slot)" class="btn btn-default" title="Remove this shift">
-                <i class="glyphicon glyphicon-trash"></i></button>
-              <button type="button" ng-click="duplicateSlot(task, $index)" class="btn btn-default"
-                      title="Duplicate this shift"><i class="fa fa-files-o"></i></button>
-            </td>
-          </tr>
-          <tr ng-repeat-end>
-            <td colspan="4" style="border-top:none;" ng-show="slot.signUps.length">
-              <strong>Signups:</strong>
-                          <span ng-repeat="signup in slot.signUps">
+				  placeholder="Detailed description of the task including where to go, etc. This will be sent to volunteers in a reminder email"></textarea>
+				<table class="table table-condensed">
+					<thead>
+					<tr>
+						<th>People Needed</th>
+						<th>Start Time</th>
+						<th>End Time</th>
+						<th colspan="2">Hrs Credit</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat-start="slot in task.timeSlots | filter:notDeleted">
+						<td valign="middle" style="white-space: nowrap">
+							<input type="number" min="1" max="99" class="form-control-static integer" ng-model="slot.needed"
+								   ng-change="didChangeSlotNeeded(slot)" ng-required="!slot.deleted"/>
+							<small> to</small>
+							<input type="number" min="0" max="99" class="form-control-static integer" ng-model="slot.neededMax"
+								   ng-change="didChangeSlotNeeded(slot)" placeholder="{{slot.needed}}"/></td>
+						<td>
+							<input type="text" class="time-field form-control" ng-model="slot.startTime"
+								   ng-change="didChangeHrsCredit(slot)" ng-required="!slot.deleted"/></td>
+						<td ng-class="{'has-error':sf.endTime.$invalid}">
+							<input type="text" class="time-field form-control" ng-model="slot.endTime"
+								   ng-change="didChangeHrsCredit(slot)" ng-required="!slot.deleted" min="slot.startTime"/>
+						</td>
+						<td>
+							<input type="number" min="0" max="40" step="0.25" class="number-field form-control-static hour-field" ng-model="slot.hrsCreditOverride" placeholder="{{hrsCredit(slot)}}" ng-change="didChangeHrsCredit(slot)"/>
+						</td>
+						<td style="white-space: nowrap">
+							<button type="button" ng-click="removeSlot(task, slot)" class="btn btn-default" title="Remove this shift">
+								<i class="glyphicon glyphicon-trash"></i></button>
+							<button type="button" ng-click="duplicateSlot(task, $index)" class="btn btn-default"
+									title="Duplicate this shift"><i class="fa fa-files-o"></i></button>
+						</td>
+					</tr>
+					<tr ng-repeat-end>
+						<td colspan="4" style="border-top:none;" ng-show="slot.signUps.length">
+							<strong>Signups:</strong>
+							<span ng-repeat="signup in slot.signUps">
                             <a class="label label-primary" href="mailto:{{allUsers[signup.userId].email}}">{{allUsers[signup.userId].fullName}}</a>
                           </span>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="5">
-              <button type="button" class="btn btn-success" ng-click="addSlot(task)"><i
-                class="glyphicon glyphicon-plus"></i> Add Shift
-              </button>
-            </td>
-          </tr>
-          </tbody>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5">
+							<button type="button" class="btn btn-success" ng-click="addSlot(task)"><i
+								class="glyphicon glyphicon-plus"></i> Add Shift
+							</button>
+						</td>
+					</tr>
+					</tbody>
 
-        </table>
+				</table>
 
-      </td>
-    </tr>
-
-
-    </tbody>
-    <tfoot>
-    <tr>
-      <td colspan="2">
-        <button type="button" class="btn btn-success" ng-click="addTask()"><i class="glyphicon glyphicon-plus"></i> Add
-          Task
-        </button>
-      </td>
-    </tr>
-
-    </tfoot>
-  </table>
+			</td>
+		</tr>
 
 
-  <button type="button" class="btn btn-primary" ng-click="save()">Save Changes</button>
-  <button type="button" class="btn btn-danger" ng-click="delete()">Delete</button>
+		</tbody>
+		<tfoot>
+		<tr>
+			<td colspan="2">
+				<button type="button" class="btn btn-success" ng-click="addTask()"><i class="glyphicon glyphicon-plus"></i> Add
+					Task
+				</button>
+			</td>
+		</tr>
+
+		</tfoot>
+	</table>
+
+
+	<button type="button" class="btn btn-primary" ng-click="save()">Save Changes</button>
+	<button type="button" class="btn btn-danger" ng-click="delete()">Delete</button>
 
 </form>

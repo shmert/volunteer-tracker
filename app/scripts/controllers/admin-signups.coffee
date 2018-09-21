@@ -9,15 +9,21 @@
 ###
 angular.module 'volunteerTrackerHtmlApp'
   .controller 'AdminSignupsCtrl', ($scope, $window, jobService, userService, volunteerUtils) ->
-    jobService.allJobs({upcoming:false,showPrivate:true}).then((response) -> $scope.allJobs = response.data)
+#    jobService.allJobs({upcoming:false,showPrivate:true}).then((response) -> $scope.allJobs = response)
     $scope.timeSlots = []
     #$scope.timeSlots.push(timeSlot) for timeSlot in job.timeSlots for job in jobService.allJobs()
+
+    $scope.filter = {showPreviousYear:false};
 
     $scope.percentDone = (job) ->
       return volunteerUtils.percentDone(job);
 
+    $scope.search = () ->
+      jobService.allJobs({upcoming:false,showPrivate:true,showPreviousYear: $scope.filter.showPreviousYear}).then (jobs) ->
+        $scope.allJobs = jobs
+
     $scope.exportJobSignUps =->
-      userService.allUserNames().success (allUsers) ->
+      userService.allUserNames().then (allUsers) ->
         usersById = _.indexBy(allUsers, 'id')
         data = [
           [
@@ -35,8 +41,8 @@ angular.module 'volunteerTrackerHtmlApp'
               moment(signUp.date).format('MM/DD/YYYY')
               usersById[signUp.userId]?.fullName
               signUp.verified
-              moment(timeSlot.startTime).format('hh:mm A')
-              moment(timeSlot.endTime).format('hh:mm A')
+              volunteerUtils.timeParser(timeSlot.startTime).format('hh:mm A')
+              volunteerUtils.timeParser(timeSlot.endTime).format('hh:mm A')
             ]
         ) for signUp in timeSlot.signUps for timeSlot in task.timeSlots for task in job.tasks for job in $scope.allJobs
         content = new CSV(data).encode();
@@ -52,3 +58,5 @@ angular.module 'volunteerTrackerHtmlApp'
 
         document.body.removeChild(a)
         $window.URL.revokeObjectURL(url);
+
+    $scope.search();

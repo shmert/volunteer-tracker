@@ -9,8 +9,8 @@
  # Filter in the volunteerTrackerHtmlApp.
 ###
 angular.module('volunteerTrackerHtmlApp')
-  .filter 'time', ->
+  .filter 'time', (volunteerUtils) ->
     (input) ->
       return '' if not input
-      return moment(input, 'H:mm').format('h:mm A')
+      return volunteerUtils.timeParser(input)?.format('h:mm A')
 

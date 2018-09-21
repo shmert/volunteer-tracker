@@ -1,47 +1,55 @@
 'use strict'
 
 ###*
+  # Holds internal state as HH:mm (24-hour). Displays to user as 12-hour AM/PM notation.
  # @ngdoc directive
  # @name volunteerTrackerHtmlApp.directive:timeField
  # @description
  # # timeField
 ###
 angular.module 'volunteerTrackerHtmlApp'
-.directive 'timeField', ($filter) ->
-#    restrict: 'EA'
-#    template: '<div></div>'
-  require: 'ngModel'
-  restrict: 'C'
-  link: (scope, element, attrs, ctrl) ->
-    element.bind('blur', ->
-      ctrl.$viewValue = if ctrl.$modelValue then $filter('date') ctrl.$modelValue, 'h:mm a' else ''
-      ctrl.$render()
-    )
-    element.attr('placeholder', 'h:mm') if !element.attr('placeholder')
+	.directive 'timeField', ($filter, volunteerUtils) ->
+		{
+		require: 'ngModel'
+		restrict: 'C'
+		scope:{
+			min:'=min' # one-way bind
+		}
+		link: (scope, element, attrs, ngModel) ->
+#			element.bind('blur', ->
+#				ngModel.$viewValue = if ngModel.$modelValue then moment(ngModel.$modelValue, 'HH:mm').format('h:mm a') else ''
+#				ngModel.$render()
+#			)
+			element.attr('placeholder', 'h:mm') if !element.attr('placeholder')
 
-    ctrl.$parsers.push (data) ->
-      if (!data)
-        return undefined
-      if angular.isDate(data)
-        ctrl.$setValidity('date', true)
-        return data
-      #View -> Model
-      # console.log data
-      date = moment(data, 'Ha', true)
-      date = moment(data, 'H a', true) if !date.isValid()
-      date = moment(data, 'H:mm a', true) if !date.isValid()
-      if (!date.isValid()) # no AM/PM, interpolate
-        date = moment(data, 'H', true)
-        date = moment(data, 'H:mm', true) if !date.isValid()
-        if (date.hour() < 8)
-          date.add('hour', 12)
-      #        date = moment(data, 'M/D/YYYY', true) if !date.isValid()
-      ctrl.$setValidity 'date', date.isValid()
-      if date.isValid()
-        return date.toDate()
-        # FIX! would be nice to re-format the time on blur
-      else undefined
-    ctrl.$formatters.push (data) ->
-#Model -> View
-      $filter('date') data, 'hh:mm a'
-    return
+			ngModel.$parsers.push (data) ->
+				if (!data)
+					return undefined
+				else if angular.isDate(data)
+					ngModel.$setValidity('date', true)
+					return moment(data).format('HH:mm');
+				else if angular.isString(data)
+					date = moment(data, 'H a', true)
+					date = moment(data, 'H:mm a', true) if !date.isValid()
+					if (!date.isValid()) # no AM/PM, interpolate
+						date = moment(data, 'H', true)
+						date = moment(data, 'H:mm', true) if !date.isValid()
+						if (date.hour() < 8)
+							date.add(12, 'hour')
+					ngModel.$setValidity 'date', date.isValid()
+					if date.isValid()
+						return date.format('HH:mm')
+				else
+					undefined
+			ngModel.$formatters.push (data) ->
+				if (!data)
+					return null;
+				else
+					return volunteerUtils.timeParser(data)?.format('h:mm a');
+
+			ngModel.$validators.min = (value) ->
+				return ngModel.$isEmpty(value) || !scope.min || volunteerUtils.timeParser(scope.min)?.toDate() < volunteerUtils.timeParser(value)?.toDate();
+
+
+			return
+		}

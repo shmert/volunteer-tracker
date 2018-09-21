@@ -13,7 +13,7 @@ angular.module 'volunteerTrackerHtmlApp'
     $scope.slot = slot
     date = whichDate.date
     $scope.date = date;
-    userService.allUserNames().success (allUsers) ->
+    userService.allUserNames().then (allUsers) ->
       $scope.allUsers = _.indexBy(allUsers, 'id')
 
 
@@ -26,13 +26,13 @@ angular.module 'volunteerTrackerHtmlApp'
       config = {}
       config.linkedTo = session.userAccount.id if !$scope.isAdminForJob($scope.job)
       userService.quickSearch(q, config).then (found) ->
-        return found.data
+        return found
 
     $scope.newSignUp = (row) ->
       newUser = row.newUser
       promise = jobService.updateSignUp({userId:newUser.id,date:date,verified:false, timeSlotId:slot.id}).then (updatedSignUp) ->
-        slot.signUps.push(updatedSignUp.data);
-        row.signUp = updatedSignUp.data;
+        slot.signUps.push(updatedSignUp);
+        row.signUp = updatedSignUp;
         row.newUser = null;
 
     $scope.canRemove = (signUp) ->

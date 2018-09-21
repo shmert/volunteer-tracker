@@ -25,7 +25,7 @@
 </h1>
 <div><span class="label label-info" ng-repeat="category in job.categories" style="margin-right:5px">{{category.text}}</span></div>
         <br/>
-<p class="lead">{{job.description}}</p>
+<p class="lead" style="white-space: pre-wrap">{{job.description}}</p>
 <p ng-show="job.location">Location: {{job.location}} <a class="btn btn-default btn-sm" href="http://maps.google.com/?q={{job.location}}" target="_map"><i class="glyphicon glyphicon-map-marker"></i> Map</a></p>
 
 <div ng-show="dateOptions[0].length > 1 && dateOptions[0] < nowString">
@@ -40,7 +40,7 @@
 
     <div ng-repeat="task in job.tasks" style="margin-left:1em;">
         <h3>{{task.name}}</h3>
-        <p class="lead" style="white-space: pre-wrap"> {{task.description}}</p>
+        <p class="lead" style="white-space: pre-wrap">{{task.description}}</p>
 
         <div ng-repeat="slot in task.timeSlots" style="margin-left:1em;">
             <span class="signup-buttons">
@@ -60,7 +60,7 @@
                     <i class="glyphicon glyphicon-ok"></i> You're On!
                 </button>
             </span>
-    <span style="margin-right:1em;">&nbsp;{{slot.startTime | date:'hh:mm a'}}<span ng-show="slot.startTime!=slot.endTime"> - {{slot.endTime | date:'hh:mm a'}}</span></span>
+    <span style="margin-right:1em;">&nbsp;{{slot.startTime | time:'hh:mm a'}}<span ng-show="slot.startTime!=slot.endTime"> - {{slot.endTime | time:'hh:mm a'}}</span></span>
 
     <div class="progress progress-inline clickable" ng-style="{width: (slot.neededMax || slot.needed)*32 + 'px'}" style="display:inline-block;margin-bottom:-4px" ng-click="showSignUps(task, slot, eachDate)">
         <div class="progress-bar" role="progressbar" ng-class="{'progress-bar-success':slotCompleted(slot, eachDate),'progress-bar-empty':slotCompletePercent(slot, eachDate) == 0}" ng-style="{width:slotCompletePercent(slot, eachDate) + '%'}">

@@ -13,10 +13,10 @@ angular.module 'volunteerTrackerHtmlApp'
     $scope.linkedUsers = [] # will be replaced by ajax call
 
     userService.findById(session.userAccount.id).then (found) ->
-      $scope.user = found.data;
+      $scope.user = found;
       $scope.user.phone = $scope.user.profile_info.phone if !$scope.user.phone # use schoology phone if none specified
     .then ()->
-      userService.fetchById(_.keys($scope.user.linkedUsers)).success (array) ->
+      userService.fetchById(_.keys($scope.user.linkedUsers)).then (array) ->
         $scope.linkedUsers = array
 
     $scope.save = () ->
@@ -32,7 +32,7 @@ angular.module 'volunteerTrackerHtmlApp'
 
     $scope.findUsers = (q) ->
       userService.quickSearch(q).then (found) ->
-        return _.filter(found.data, (u)->
+        return _.filter(found, (u)->
               u.id.toString() != $scope.user.id.toString())
 
     $scope.removeLinkedUser = (index) ->

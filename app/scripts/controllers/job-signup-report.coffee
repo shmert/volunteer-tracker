@@ -9,9 +9,9 @@
 ###
 angular.module 'volunteerTrackerHtmlApp'
 .controller 'JobSignupReportCtrl', ($scope, userService, job)->
-  $scope.job = job.data;
+  $scope.job = job;
 
-  userService.allUserNames().success (allUsers) ->
+  userService.allUserNames().then (allUsers) ->
     usersById = _.indexBy(allUsers, 'id')
     data = []
     data.push([

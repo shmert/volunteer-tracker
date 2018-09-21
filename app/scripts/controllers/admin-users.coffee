@@ -23,7 +23,7 @@ angular.module('volunteerTrackerHtmlApp')
         _.map(response.data, 'title')
 
     $scope.search = ->
-      userService.quickSearch($scope.q, {admin:true, groups:$scope.groups}).success (response) ->
+      userService.quickSearch($scope.q, {admin:true, groups:$scope.groups}).then (response) ->
         #response.unshift($scope.users[userId]) for userId in $scope.selectionKeys # fix! only add if userId is not in response
         $scope.users = response;
         #$scope.users.unshift(selected) for selected in _.values($scope.selected) when not _.contains($scope.users, selected)

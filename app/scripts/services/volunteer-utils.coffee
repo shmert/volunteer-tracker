@@ -29,6 +29,15 @@ angular.module('volunteerTrackerHtmlApp')
     return dateOrString if !dateOrString || (angular.isDate(dateOrString))
     return new Date(dateOrString)
 
+  timeParser: (data) ->
+	  return null if !data
+	  return data if moment.isMoment(data)
+	  return moment(data) if angular.isDate(data)
+	  m = moment(data, 'YYYY-MM-DDTHH:mm:ss.000Z', true)
+	  m = moment(data, 'HH:mm', true) if !m.isValid()
+	  m = moment(data, 'H a', true) if !m.isValid()
+	  return m if m.isValid()
+	  return null
 
   durationOf: (timeSlot) ->
     result = timeSlot.hrsCreditOverride || timeSlot.hrsCredit;

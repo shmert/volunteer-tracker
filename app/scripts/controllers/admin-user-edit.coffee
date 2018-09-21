@@ -9,14 +9,14 @@
 ###
 angular.module 'volunteerTrackerHtmlApp'
   .controller 'AdminUserEditCtrl', ($scope, $window, $http, $location, REST_URL, jobService, userService, user, session) ->
-    $scope.user = user.data;
+    $scope.user = user;
     $scope.user.targetHours = 20 if $scope.user.targetHours == undefined
     $scope.user.adminOfCategories = _.chain($scope.user.adminOfCategories).indexBy().mapValues(->true).value();
     $scope.newUser = null; # set by typeahead input, then cleared on selection
     $scope.linkedUsers = [] # will be replaced by ajax call
     $scope.jobs = null # will be loaded asynchronously
 
-    jobService.findByUserId($scope.user.id).then (found) -> $scope.jobs = found.data
+    jobService.findByUserId($scope.user.id).then (found) -> $scope.jobs = found
 
     $scope.transientLinkedHours = 0;
     $scope.oldTargetHours = $scope.user.targetHours;
@@ -25,7 +25,7 @@ angular.module 'volunteerTrackerHtmlApp'
       return ($scope.user.targetHours || 20) - $scope.oldTargetHours + $scope.transientLinkedHours + ($scope.user.targetHoursLinked || 0);
 
 
-    userService.fetchById(_.keys($scope.user.linkedUsers)).success (array) ->
+    userService.fetchById(_.keys($scope.user.linkedUsers)).then (array) ->
       $scope.linkedUsers = array
 
     $scope.queryCategories = (q) -> $http.get(
@@ -39,7 +39,7 @@ angular.module 'volunteerTrackerHtmlApp'
 
     $scope.findUsers = (q) ->
       userService.quickSearch(q).then (found) ->
-        return _.filter(found.data, (u)->
+        return _.filter(found, (u)->
                 u.id.toString() != $scope.user.id.toString())
 
     $scope.didChooseLinkedUser = ->

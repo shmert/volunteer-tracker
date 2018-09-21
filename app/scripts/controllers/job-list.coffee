@@ -19,7 +19,7 @@ angular.module('volunteerTrackerHtmlApp')
         filterByCategory: true,
         userId: $location.search().user
       }
-      jobService.allJobs(param).success (jobs)->
+      jobService.allJobs(param).then (jobs)->
         $scope.jobs = jobs;
 
 

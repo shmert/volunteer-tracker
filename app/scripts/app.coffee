@@ -33,6 +33,9 @@ angular
   .config ($compileProvider) ->
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
 
+  .config ($locationProvider) ->
+    $locationProvider.hashPrefix('')
+
   .config ($routeProvider, $httpProvider) ->
     $httpProvider.defaults.withCredentials = true;
 
@@ -68,7 +71,7 @@ angular
         templateUrl: 'views/job-admin.html?v=' + APP_VERSION
         controller: 'JobAdminCtrl'
         resolve:{
-          job: -> {data:{id:null, name:'', recurrence:{type:'',daysOfWeek:{1:true,2:true,3:true,4:true,5:true}}, timeSlots:[], tasks:[{name:null,description:null,timeSlots:[{signUps:[],needed:1,startTime:moment('8:00:00', 'HH:mm:ss').toDate(),endTime:moment('9:00:00', 'HH:mm:ss').toDate()}]}], categories:[]}}
+          job: -> {id:null, name:'', recurrence:{type:'',daysOfWeek:{1:true,2:true,3:true,4:true,5:true}}, timeSlots:[], tasks:[{name:null,description:null,timeSlots:[{signUps:[],needed:1,startTime:'08:00',endTime:'9:00'}]}], categories:[]}
         }
       .when '/job-admin/:id',
         templateUrl: 'views/job-admin.html?v=' + APP_VERSION

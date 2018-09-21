@@ -15,7 +15,7 @@ describe 'Service: jobService', ->
 
   it 'should save new jobs', () ->
     jobDate = new Date('2015-01-23 04:56:07 PM')
-    endTime = moment('8:00:00', 'HH:mm:ss').add(5, 'h').format('HH:mm:ss')
+    endTime = moment('8:00:00', 'HH:mm:ss').add(5, 'h').format('HH:mm')
     newJob = {
       id: null,
       name: 'JobServiceTest',

@@ -19,14 +19,14 @@ angular.module 'volunteerTrackerHtmlApp'
     that = this
 
     console.log('Getting schoology account')
-    $http.get(REST_URL + '/schoology-account').success( (acctResponse) ->
-      that.schoologyAccount = acctResponse
-      console.log('Getting user record for ' + acctResponse.uid)
-      $http.get(REST_URL + '/users/' + acctResponse.uid).success (userResponse) ->
-        that.userAccount = userResponse
-        console.log('Login complete: ' + userResponse)
+    $http.get(REST_URL + '/schoology-account').then( (o) ->
+      that.schoologyAccount = o.data
+      console.log('Getting user record for ' + that.schoologyAccount.uid)
+      $http.get(REST_URL + '/users/' + that.schoologyAccount.uid).then (userResponse) ->
+        that.userAccount = userResponse.data;
+        console.log('Login complete: ' + that.userAccount)
         $rootScope.$broadcast('loggedIn', true)
-    ).error((err) ->
+    ).catch((err) ->
       #alert('Please log in to Schoology again')
       $location.path('not-logged-in');
       throw err;
@@ -49,22 +49,22 @@ angular.module 'volunteerTrackerHtmlApp'
 
 
     @switchUser = (userId) ->
-      $http.get(REST_URL + '/users/' + userId, {params:{su:true}}).success (user) ->
+      $http.get(REST_URL + '/users/' + userId, {params:{su:true}}).then (response) ->
         that.userAccountBackup - that.userAccount if !that.userAccountBackup
-        that.userAccount = user
-        $rootScope.$broadcast('su', user)
-        $http.get(REST_URL + '/schoology-account').success (acctResponse) ->
+        that.userAccount = response.data
+        $rootScope.$broadcast('su', that.userAccount)
+        $http.get(REST_URL + '/schoology-account').then (acctResponse) ->
           that.schoologyAccountBackup = that.schoologyAccount if !that.schoologyAccountBackup
-          that.schoologyAccount = acctResponse
+          that.schoologyAccount = acctResponse.data
 
 
     @stopSwitchUser = ->
-      $http.get(REST_URL + '/stop-switch-user').success (user) ->
-        that.userAccount = user
+      $http.get(REST_URL + '/stop-switch-user').then (response) ->
+        that.userAccount = response.data
         that.userAccountBackup = null
-        $rootScope.$broadcast('su', user)
-        $http.get(REST_URL + '/schoology-account').success (acctResponse) ->
-          that.schoologyAccount = acctResponse
+        $rootScope.$broadcast('su', that.userAccount)
+        $http.get(REST_URL + '/schoology-account').then (acctResponse) ->
+          that.schoologyAccount = acctResponse.data
           that.schoologyAccountBackup = null
 
     return this
