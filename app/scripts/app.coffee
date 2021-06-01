@@ -38,6 +38,8 @@ angular
 
   .config ($routeProvider, $httpProvider) ->
     $httpProvider.defaults.withCredentials = true;
+    $httpProvider.defaults.headers.common.sessionId = new URLSearchParams(window.location.search).get('sessionId') || new URLSearchParams(window.location.hash).get('sessionId');
+    console.log('Configuring $httpProvider with sessionId ' + $httpProvider.defaults.headers.common.sessionId);
 
     $routeProvider
       .when '/',
